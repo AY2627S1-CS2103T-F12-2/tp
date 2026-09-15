@@ -24,7 +24,8 @@ public class RemarkCommandParser implements Parser {
                     RemarkCommand.MESSAGE_USAGE), pe);
         }
 
-        Remark remark = argMultimap.getValue(PREFIX_REMARK).orElse("");
+        String remarkText = argMultimap.getValue(PREFIX_REMARK).orElse("");
+        Remark remark = new Remark(remarkText);
 
         return new RemarkCommand(index, remark);
     }
