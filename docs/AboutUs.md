@@ -51,7 +51,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Responsibilities: Dev Ops + Threading
 
 ### Wu Yonggang
-
+ 
 <img src="images/yonggang142.png" width="200px">
 
 [[github](https://github.com/Yonggang142)]
