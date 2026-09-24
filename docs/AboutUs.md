@@ -11,13 +11,13 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Papangkorn Wangchochedkun
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/papangkorn-pann.jpg" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[homepage](https://google.com)]
+[[github](https://github.com/Papangkorn-Pann/)]
+[[portfolio](team/papangkorn-pann.md)]
 
 * Role: Project Advisor
 
