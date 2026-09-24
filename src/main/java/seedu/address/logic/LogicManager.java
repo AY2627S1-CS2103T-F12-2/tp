@@ -45,10 +45,13 @@ public class LogicManager implements Logic {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
         CommandResult commandResult;
+        //Parse string into command type
         Command command = addressBookParser.parseCommand(commandText);
+        //Execute command
         commandResult = command.execute(model);
 
         try {
+            //Save changes made
             storage.saveAddressBook(model.getAddressBook());
         } catch (AccessDeniedException e) {
             throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);

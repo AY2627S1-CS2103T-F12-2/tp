@@ -31,11 +31,11 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Team Lead
 * Responsibilities: UI
 
-### Johnny Doe
+### Keisha Anne Bulaon Robles
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/wellbakedquiche.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](https://github.com/wellbakedquiche)] [[portfolio](team/johndoe.md)]
 
 * Role: Developer
 * Responsibilities: Data
@@ -47,15 +47,20 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/of89p)]
 [[portfolio](team/johndoe.md)]
 
+### Claire Phay
+
+<img src="images/clairep246.png" width="200px">
+
+[[github](http://github.com/clairep246)]
+
 * Role: Developer
 * Responsibilities: Dev Ops + Threading
 
-### James Doe
+### Wu Yonggang
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/yonggang142.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](https://github.com/Yonggang142)]
 
 * Role: Developer
 * Responsibilities: UI
