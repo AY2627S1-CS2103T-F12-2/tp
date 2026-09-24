@@ -11,19 +11,22 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### Claire 
-
-<img src="images/clairep246.png" width="200px">
-
-[[github](https://github.com/clairep246)]
-
-
-### Jane Doe
+### John Doe
 
 <img src="images/johndoe.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[homepage](http://www.comp.nus.edu.sg/~damithch)]
+[[github](https://github.com/johndoe)]
 [[portfolio](team/johndoe.md)]
+
+* Role: Project Advisor
+
+### Claire Phay 
+
+<img src="images/clairep246.png" width="200px">
+
+[[github](http://github.com/clairep246)]
+
 
 * Role: Team Lead
 * Responsibilities: UI
