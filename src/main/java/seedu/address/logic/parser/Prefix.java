@@ -22,7 +22,7 @@ public class Prefix {
 
     @Override
     public int hashCode() {
-         return prefix == null ? 0 : prefix.hashCode();
+        return prefix == null ? 0 : prefix.hashCode();
     }
 
     @Override

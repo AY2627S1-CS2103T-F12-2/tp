@@ -5,12 +5,21 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Remark;
 
+/**
+ * Parses input arguments and creates a {@code RemarkCommand}.
+ */
 public class RemarkCommandParser implements Parser {
+    /**
+     * Parses the given arguments and returns a {@code RemarkCommand}.
+     *
+     * @param args the user input arguments
+     * @return a remark command
+     * @throws ParseException if the user input does not conform to the expected format
+     */
     public RemarkCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
