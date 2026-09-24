@@ -11,41 +11,38 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Papangkorn Wangchochedkun
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/papangkorn-pann.jpg" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[homepage](https://google.com)]
+[[github](https://github.com/Papangkorn-Pann/)]
+[[portfolio](team/papangkorn-pann.md)]
 
-* Role: Project Advisor
+* Role: Developer
+* Responsibilities: Backend
 
-### Jane Doe
+### Keisha Anne Bulaon Robles
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/wellbakedquiche.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Team Lead
-* Responsibilities: UI
-
-### Johnny Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
+[[github](https://github.com/wellbakedquiche)] [[portfolio](team/johndoe.md)]
 
 * Role: Developer
 * Responsibilities: Data
 
-### Jean Doe
+### Terence Teo
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/of89p.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/of89p)]
 [[portfolio](team/johndoe.md)]
+
+### Claire Phay
+
+<img src="images/clairep246.png" width="200px">
+
+[[github](http://github.com/clairep246)]
 
 * Role: Developer
 * Responsibilities: Dev Ops + Threading
