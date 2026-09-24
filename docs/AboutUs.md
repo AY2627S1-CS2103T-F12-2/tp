@@ -40,6 +40,13 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Developer
 * Responsibilities: Data
 
+### Terence Teo
+
+<img src="images/of89p.png" width="200px">
+
+[[github](http://github.com/of89p)]
+[[portfolio](team/johndoe.md)]
+
 ### Claire Phay
 
 <img src="images/clairep246.png" width="200px">
