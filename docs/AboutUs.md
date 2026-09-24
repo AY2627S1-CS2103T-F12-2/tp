@@ -31,7 +31,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Team Lead
 * Responsibilities: UI
 
-### Keisha Anne Robles
+### Keisha Anne Bulaon Robles
 
 <img src="images/wellbakedquiche.png" width="200px">
 
