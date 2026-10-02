@@ -1,8 +1,8 @@
-[![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
+[![Java CI](https://github.com/AY2627S1-CS2103T-F12-2/tp/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/AY2627S1-CS2103T-F12-2/tp/actions/workflows/gradle.yml)
 
 ![Ui](docs/images/Ui.png)
 
-* This is **a sample project for Software Engineering (SE) students**.<br>
+* This is **an address book for investment bankers**.<br>
   Example usages:
   * as a starting point of a course project (as opposed to writing everything from scratch)
   * as a case study
@@ -16,4 +16,3 @@
 **Acknowledgement**
 
 * This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
-
