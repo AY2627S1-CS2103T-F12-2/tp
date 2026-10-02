@@ -270,27 +270,35 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
+* is an investment banker working in a fast-paced industry
+* has a large number of industry contacts (e.g. private equity buyers, accountants, lawyers)
+* needs a centralised place to record details about each contact, such as their company, role, specialisation and where they met
+* needs to keep track of past interactions and upcoming follow-ups with contacts
+* handles sensitive contact information and prefers it to be stored locally rather than in the cloud
+* often needs to export contact and interaction logs for status reports or client presentations
 * prefers desktop apps over other types of applications
-* can type fast
-* prefers typing to mouse interactions
+* can type fast and prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: Manage contacts faster than with a typical mouse-driven GUI application.
 
+**Value proposition**: Manage contacts and log interactions locally faster than with a typical mouse-driven GUI application. Log interactions
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …                                    | I want to …                 | So that I can…                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …   | I want to …                                          | So that I can…                                                   |
+|----------|----------|------------------------------------------------------|------------------------------------------------------------------|
+| `* * *`  | new user | view a user guide                                    | understand how to use ContactFind                                |
+| `* *`    | new user | learn about the main functions                       | navigate through the features                                    |
+| `* *`    | new user | start using the app without much setup               | begin managing my contacts quickly                               |
+| `* * *`  | user     | add a new contact                                    | keep track of people I meet                                      |
+| `* * *`  | user     | record essential information such as email and phone number | identify and reach people in my contacts easily           |
+| `* * *`  | user     | update a contact's information                       | keep my contacts manageable and up to date                       |
+| `* * *`  | user     | set a follow-up date for a contact                   | avoid missing follow-ups with clients                            |
+| `* * *`  | user     | find a contact by name, company or role              | quickly identify relevant contacts                               |
+| `* *`    | user     | categorise contacts                                  | keep my contacts organised                                       |
+| `* *`    | user     | assign one contact to multiple categories            | represent contacts with different areas of expertise             |
 
 *{More to be added}*
 
@@ -298,14 +306,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: Delete a contact**
 
 **MSS**
 
 1.  User requests to list persons
-2.  AddressBook shows a list of persons
+2.  ContactFind shows a list of persons
 3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+4.  ContactFind deletes the person
 
     Use case ends.
 
@@ -317,7 +325,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3a. The given index is invalid.
 
-    * 3a1. AddressBook shows an error message.
+    * 3a1. ContactFind shows an error message.
 
       Use case resumes at step 2.
 
@@ -381,18 +389,70 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *{More to be added}*
 
+**Use case: Edit a contact**
+
+**MSS**
+
+1. User requests to list persons
+2. ContactFind shows a list of persons
+3. User requests to edit a specific person's information
+4. ContactFind updates the information for that person
+
+**Extensions**
+
+* 2a. The list is empty.
+
+  Use case ends.
+
+* 3a The given information to update is invalid
+
+    * 3a1. ContactFind shows an error message
+
+      Use case resumes at step 2.
+
+* 3b. The given index is invalid.
+
+    * 3b1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `25` or above installed.
 2.  Should be able to hold up to 1000 persons without noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4. Any command being executed through the CLI should complete within 100 miliseconds with up to 1000 persons in the address book.
+5. The application should be ready to use within 5 seconds of launch on a typical modern computer with a mainstream OS.
+6. The system should be usable by a new user without any training or prior experience with the system.
+7. The application must store all data in a human-readable format.
+8. The application store all data on local disk, and not on any remote server or cloud service.
+9. The application should not require an internet connection to function.
+10. The data stored locally should not exceed 10MB for 1000 persons in the address book.
+11. RAM usage should not exceed 150MB for 1000 persons in the address book.
+12. Write operations to the data file should be atomic, if the application crashes during a write operation, the data file should not be corrupted.
+13. The application should have zero external dependencies, and should not require any installation of additional software or libraries.
 
 *{More to be added}*
 
-### Glossary
-
-* **Mainstream OS**: Windows, Linux, Unix, or macOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **API (Application Programming Interface)**: A set of specifications, rules, and methods that components use to communicate and interact with each other without exposing internal implementation details.
+* **Architecture**: The high-level structure of the application, defining its major components (`UI`, `Logic`, `Model`, `Storage`) and the rules governing interactions between them.
+* **CLI (Command Line Interface)**: A text-based user interface where users execute operations by typing textual commands instead of interacting via mouse clicks.
+* **Command**: An executable action initiated by the user (such as `add`, `delete`, `undo`, `redo`) that modifies the state of the model or queries stored information.
+* **FXML**: An XML-based markup language provided by JavaFX to define the structure and layout of user interface views separately from application logic.
+* **GUI (Graphical User Interface)**: A visual display interface through which users interact with the app via windows, buttons, text fields, and panels.
+* **JavaFX**: The open-source client application platform and GUI framework used to build the AB-3 desktop interface.
+* **JSON (JavaScript Object Notation)**: A lightweight, human-readable text format used by the `Storage` component to persist address book data and user preferences to disk.
+* **Mainstream OS**: Windows, Linux, Unix, or macOS operating systems capable of running Java standard runtime environments.
+* **MSS (Main Success Scenario)**: The straightforward path in a use case where the user achieves their goal without encountering errors or edge cases.
+* **ObservableList**: A list implementation in JavaFX that notifies attached UI listeners when elements change, enabling real-time UI data binding.
+* **Parser**: A logic component responsible for decomposing and validating raw text commands entered by the user into structured `Command` objects.
+* **PlantUML**: A tool and domain-specific language used to generate software diagrams (such as class, sequence, and activity diagrams) from plain-text descriptions.
+* **Private contact detail**: A contact attribute (e.g., specific tags, unlisted phone number) intended for restricted access rather than general sharing.
+* **Sequence Diagram**: A UML interaction diagram depicting how components and objects interact across time via method invocations.
+* **State**: A snapshot of all active `Person` entries and settings held in memory at a specific point in time.
+* **UiPart**: The base abstract class in the UI layer that encapsulates common behavior for visible GUI elements and links them to corresponding `.fxml` files.
+* **VersionedAddressBook**: An extension of `AddressBook` that maintains a history of past application states (`addressBookStateList`) and a pointer (`currentStatePointer`) to support undo and redo operations.
 
 --------------------------------------------------------------------------------------------------------------------
 
