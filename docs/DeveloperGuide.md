@@ -298,6 +298,41 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
 
+**Use case: Add a person** 
+
+**Preconditions**: User is viewing the contacts page.
+
+**Guarantees**: The new contact and their details are saved in the contact list.
+
+**MSS**
+
+1. User enters contact details (name, number, email, role, company).
+2. User submits details.
+3. AddressBook saves the contact and displays new contact in list.
+Use case ends.
+
+**Extensions**:
+
+* 2a. There is a missing field in the command. 
+
+  * 2a1. System request user to include missing field in command. 
+    
+    Use case ends.
+
+* 2b. The command format is wrong. 
+
+  * 2b1. System displays correct format to use. 
+  * 2b2. System requests for contact details. 
+
+  Use case ends. 
+  
+* 2c. User enters invalid format for certain contact details such as number contains letters.
+
+    * 2c1. System displays correct format for field that was entered wrongly.
+    * 2c2. System requests for contact details. 
+    
+    Use case ends. 
+
 **Use case: Delete a person**
 
 **MSS**
