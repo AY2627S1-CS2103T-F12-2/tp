@@ -317,22 +317,28 @@ Use case ends.
 
   * 2a1. ContactFind informs the user of the missing information and the required format.
   * 2a2. ContactFind requests for contact details
-    
-    Use case ends.
+  * 2a3. User enters new details.
+  Steps 2 - 2a3 repeats until successful. 
+
+    Use case resumes at step 3.
 
 * 2b. The provided command does not follow the required format. 
 
   * 2b1. System displays correct format to use. 
   * 2b2. System requests for contact details. 
+  * 2b3. User enters command again.
+  Steps 2 - 2b3 repeat until successful.
 
-  Use case ends. 
+  Use case resumes at step 3. 
   
 * 2c. One or more details are invalid. 
 
     * 2c1. ContactFind informs the user of the invalid field and its required format.
     * 2c2. ContactFind requests for contact details. 
-    
-    Use case ends. 
+    * 2c3. User enters correct details.
+    Steps 2 to 2c3 repeats until successful.
+  
+    Use case resumes at step 3. 
 
 * 3a. A contact with the same phone number and/or email already exists in the contact list.
 
