@@ -270,27 +270,35 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
+* is an investment banker working in a fast-paced industry
+* has a large number of industry contacts (e.g. private equity buyers, accountants, lawyers)
+* needs a centralised place to record details about each contact, such as their company, role, specialisation and where they met
+* needs to keep track of past interactions and upcoming follow-ups with contacts
+* handles sensitive contact information and prefers it to be stored locally rather than in the cloud
+* often needs to export contact and interaction logs for status reports or client presentations
 * prefers desktop apps over other types of applications
-* can type fast
-* prefers typing to mouse interactions
+* can type fast and prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: Manage contacts faster than with a typical mouse-driven GUI application.
 
+**Value proposition**: Manage contacts and log interactions locally faster than with a typical mouse-driven GUI application. Log interactions
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …                                    | I want to …                 | So that I can…                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …   | I want to …                                          | So that I can…                                                   |
+|----------|----------|------------------------------------------------------|------------------------------------------------------------------|
+| `* * *`  | new user | view a user guide                                    | understand how to use ContactFind                                |
+| `* *`    | new user | learn about the main functions                       | navigate through the features                                    |
+| `* *`    | new user | start using the app without much setup               | begin managing my contacts quickly                               |
+| `* * *`  | user     | add a new contact                                    | keep track of people I meet                                      |
+| `* * *`  | user     | record essential information such as email and phone number | identify and reach people in my contacts easily           |
+| `* * *`  | user     | update a contact's information                       | keep my contacts manageable and up to date                       |
+| `* * *`  | user     | set a follow-up date for a contact                   | avoid missing follow-ups with clients                            |
+| `* * *`  | user     | find a contact by name, company or role              | quickly identify relevant contacts                               |
+| `* *`    | user     | categorise contacts                                  | keep my contacts organised                                       |
+| `* *`    | user     | assign one contact to multiple categories            | represent contacts with different areas of expertise             |
 
 *{More to be added}*
 
@@ -349,10 +357,65 @@ Extensions
    
       Use case resumes at step 2.
 
+**Use case: View usage instructions**
+
+**MSS**
+
+1.  User requests to view usage instructions
+2.  ContactFind shows a help window with a link to the user guide
+3.  User requests to copy the link
+4.  ContactFind copies the link to the clipboard
+5.  User opens the user guide in a browser to read the instructions
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The user enters an unknown command.
+
+    * 1a1. ContactFind shows an error message and suggests using the help command.
+
+      Use case resumes at step 1.
+
+* 2a. The help window is already open.
+
+    * 2a1. ContactFind brings the existing help window to the front.
+
+      Use case resumes at step 3.
+
+**Use case: Set up ContactFind for first use**
+
+**MSS**
+
+1.  User downloads the ContactFind application file
+2.  User launches ContactFind
+3.  ContactFind starts and shows a list of sample contacts
+4.  User requests to clear all sample contacts
+5.  ContactFind deletes all contacts and shows an empty contact list
+
+    User can now start adding their own contacts. Use case ends.
+
+**Extensions**
+
+* 2a. The user's computer does not have the required Java version installed.
+
+    * 2a1. ContactFind fails to launch.
+
+      Use case ends.
+
+* 3a. A data file from a previous use already exists.
+
+    * 3a1. ContactFind loads the existing contacts instead of sample contacts.
+
+      Use case ends.
+
+* 3b. The existing data file is corrupted or in an invalid format.
+
+    * 3b1. ContactFind starts with an empty contact list.
+
+      Use case ends.
 
 *{More to be added}*
-
-      Use case resumes at step 2.
 
 **Use case: Edit a contact**
 
@@ -380,6 +443,7 @@ Extensions
     * 3b1. ContactFind shows an error message.
 
       Use case resumes at step 2.
+
 
 ### Non-Functional Requirements
 
