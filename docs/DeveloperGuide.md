@@ -356,10 +356,24 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 *{More to be added}*
 
-### Glossary
-
-* **Mainstream OS**: Windows, Linux, Unix, or macOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **API (Application Programming Interface)**: A set of specifications, rules, and methods that components use to communicate and interact with each other without exposing internal implementation details.
+* **Architecture**: The high-level structure of the application, defining its major components (`UI`, `Logic`, `Model`, `Storage`) and the rules governing interactions between them.
+* **CLI (Command Line Interface)**: A text-based user interface where users execute operations by typing textual commands instead of interacting via mouse clicks.
+* **Command**: An executable action initiated by the user (such as `add`, `delete`, `undo`, `redo`) that modifies the state of the model or queries stored information.
+* **FXML**: An XML-based markup language provided by JavaFX to define the structure and layout of user interface views separately from application logic.
+* **GUI (Graphical User Interface)**: A visual display interface through which users interact with the app via windows, buttons, text fields, and panels.
+* **JavaFX**: The open-source client application platform and GUI framework used to build the AB-3 desktop interface.
+* **JSON (JavaScript Object Notation)**: A lightweight, human-readable text format used by the `Storage` component to persist address book data and user preferences to disk.
+* **Mainstream OS**: Windows, Linux, Unix, or macOS operating systems capable of running Java standard runtime environments.
+* **MSS (Main Success Scenario)**: The straightforward path in a use case where the user achieves their goal without encountering errors or edge cases.
+* **ObservableList**: A list implementation in JavaFX that notifies attached UI listeners when elements change, enabling real-time UI data binding.
+* **Parser**: A logic component responsible for decomposing and validating raw text commands entered by the user into structured `Command` objects.
+* **PlantUML**: A tool and domain-specific language used to generate software diagrams (such as class, sequence, and activity diagrams) from plain-text descriptions.
+* **Private contact detail**: A contact attribute (e.g., specific tags, unlisted phone number) intended for restricted access rather than general sharing.
+* **Sequence Diagram**: A UML interaction diagram depicting how components and objects interact across time via method invocations.
+* **State**: A snapshot of all active `Person` entries and settings held in memory at a specific point in time.
+* **UiPart**: The base abstract class in the UI layer that encapsulates common behavior for visible GUI elements and links them to corresponding `.fxml` files.
+* **VersionedAddressBook**: An extension of `AddressBook` that maintains a history of past application states (`addressBookStateList`) and a pointer (`currentStatePointer`) to support undo and redo operations.
 
 --------------------------------------------------------------------------------------------------------------------
 
