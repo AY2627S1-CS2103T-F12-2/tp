@@ -296,42 +296,49 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `ContactFind` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Add a person** 
-
-**Preconditions**: User is viewing the contacts page.
+**Use case: Add a person**
 
 **Guarantees**: The new contact and their details are saved in the contact list.
 
 **MSS**
 
-1. User enters contact details (name, number, email, role, company).
-2. User submits details.
-3. AddressBook saves the contact and displays new contact in list.
+1. User requests to add a person and provides the person's details.
+2. ContactFind validates the provided details.
+3. ContactFind adds the person to the contact list.
+4. ContactFind informs the user that the person was successfully added.
+5. ContactFind displays newly added contact.
 Use case ends.
 
 **Extensions**:
 
 * 2a. There is a missing field in the command. 
 
-  * 2a1. System request user to include missing field in command. 
+  * 2a1. ContactFind informs the user of the missing information and the required format.
+  * 2a2. ContactFind requests for contact details
     
     Use case ends.
 
-* 2b. The command format is wrong. 
+* 2b. The provided command does not follow the required format. 
 
   * 2b1. System displays correct format to use. 
   * 2b2. System requests for contact details. 
 
   Use case ends. 
   
-* 2c. User enters invalid format for certain contact details such as number contains letters.
+* 2c. One or more details are invalid. 
 
-    * 2c1. System displays correct format for field that was entered wrongly.
-    * 2c2. System requests for contact details. 
+    * 2c1. ContactFind informs the user of the invalid field and its required format.
+    * 2c2. ContactFind requests for contact details. 
     
     Use case ends. 
+
+* 3a. A contact with the same phone number and/or email already exists in the contact list.
+
+    * 3a.1. AddressBook informs the user that the contact already exists
+  
+    Use case ends.
 
 **Use case: Delete a person**
 
