@@ -321,6 +321,64 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 2.
 
+**Use case: View usage instructions**
+
+**MSS**
+
+1.  User requests to view usage instructions
+2.  ContactFind shows a help window with a link to the user guide
+3.  User requests to copy the link
+4.  ContactFind copies the link to the clipboard
+5.  User opens the user guide in a browser to read the instructions
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The user enters an unknown command.
+
+    * 1a1. ContactFind shows an error message and suggests using the help command.
+
+      Use case resumes at step 1.
+
+* 2a. The help window is already open.
+
+    * 2a1. ContactFind brings the existing help window to the front.
+
+      Use case resumes at step 3.
+
+**Use case: Set up ContactFind for first use**
+
+**MSS**
+
+1.  User downloads the ContactFind application file
+2.  User launches ContactFind
+3.  ContactFind starts and shows a list of sample contacts
+4.  User requests to clear all sample contacts
+5.  ContactFind deletes all contacts and shows an empty contact list
+
+    User can now start adding their own contacts. Use case ends.
+
+**Extensions**
+
+* 2a. The user's computer does not have the required Java version installed.
+
+    * 2a1. ContactFind fails to launch.
+
+      Use case ends.
+
+* 3a. A data file from a previous use already exists.
+
+    * 3a1. ContactFind loads the existing contacts instead of sample contacts.
+
+      Use case ends.
+
+* 3b. The existing data file is corrupted or in an invalid format.
+
+    * 3b1. ContactFind starts with an empty contact list.
+
+      Use case ends.
+
 *{More to be added}*
 
 ### Non-Functional Requirements
