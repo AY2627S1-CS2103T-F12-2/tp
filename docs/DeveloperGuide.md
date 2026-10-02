@@ -270,27 +270,35 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
+* is an investment banker working in a fast-paced industry
+* has a large number of industry contacts (e.g. private equity buyers, accountants, lawyers)
+* needs a centralised place to record details about each contact, such as their company, role, specialisation and where they met
+* needs to keep track of past interactions and upcoming follow-ups with contacts
+* handles sensitive contact information and prefers it to be stored locally rather than in the cloud
+* often needs to export contact and interaction logs for status reports or client presentations
 * prefers desktop apps over other types of applications
-* can type fast
-* prefers typing to mouse interactions
+* can type fast and prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: Manage contacts faster than with a typical mouse-driven GUI application.
 
+**Value proposition**: Manage contacts and log interactions locally faster than with a typical mouse-driven GUI application. Log interactions
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …                                    | I want to …                 | So that I can…                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …   | I want to …                                          | So that I can…                                                   |
+|----------|----------|------------------------------------------------------|------------------------------------------------------------------|
+| `* * *`  | new user | view a user guide                                    | understand how to use ContactFind                                |
+| `* *`    | new user | learn about the main functions                       | navigate through the features                                    |
+| `* *`    | new user | start using the app without much setup               | begin managing my contacts quickly                               |
+| `* * *`  | user     | add a new contact                                    | keep track of people I meet                                      |
+| `* * *`  | user     | record essential information such as email and phone number | identify and reach people in my contacts easily           |
+| `* * *`  | user     | update a contact's information                       | keep my contacts manageable and up to date                       |
+| `* * *`  | user     | set a follow-up date for a contact                   | avoid missing follow-ups with clients                            |
+| `* * *`  | user     | find a contact by name, company or role              | quickly identify relevant contacts                               |
+| `* *`    | user     | categorise contacts                                  | keep my contacts organised                                       |
+| `* *`    | user     | assign one contact to multiple categories            | represent contacts with different areas of expertise             |
 
 *{More to be added}*
 
