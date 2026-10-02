@@ -80,6 +80,7 @@ public class RemarkCommand extends Command {
     public boolean equals(Object other) {
         if (other == this) {
             return true;
+
         }
 
         // instanceof handles nulls
