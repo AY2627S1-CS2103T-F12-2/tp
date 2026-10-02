@@ -353,6 +353,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  Should work on any _mainstream OS_ as long as it has Java `25` or above installed.
 2.  Should be able to hold up to 1000 persons without noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4. Any command being executed through the CLI should complete within 100 miliseconds with up to 1000 persons in the address book.
+5. The application should be ready to use within 5 seconds of launch on a typical modern computer with a mainstream OS.
+6. The system should be usable by a new user without any training or prior experience with the system.
+7. The application must store all data in a human-readable format.
+8. The application store all data on local disk, and not on any remote server or cloud service.
+9. The application should not require an internet connection to function.
+10. The data stored locally should not exceed 10MB for 1000 persons in the address book.
+11. RAM usage should not exceed 150MB for 1000 persons in the address book.
+12. Write operations to the data file should be atomic, if the application crashes during a write operation, the data file should not be corrupted.
+13. The application should have zero external dependencies, and should not require any installation of additional software or libraries.
 
 *{More to be added}*
 
