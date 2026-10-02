@@ -303,6 +303,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 *{More to be added}*
 
 ### Use cases
+(For all use cases below, the **System** is `ContactFind` and the **Actor** is the `user`, unless specified otherwise)
 
 (For all use cases below, the **System** is the `ContactFind` and the **Actor** is the `user`, unless specified otherwise)
 
@@ -375,6 +376,35 @@ Use case ends.
 
     * 3a1. ContactFind shows an error message.
 
+      Use case resumes at step 2.
+
+**Use case: Assign tags to a contact**
+
+MSS
+
+1. User requests to list contacts.
+2. ContactFind shows a list of contacts.
+3. User requests to assign one or more tags (e.g. priority, or specialization) to a specific contact in the list.
+4. ContactFind updates the contact with the specified tag(s).
+
+   Use case ends.
+
+Extensions
+
+* 2a. The contacts list is empty.
+   
+   Use case ends.
+
+* 3a. The given index is invalid.
+
+   * 3a1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+* 3b. The specified tag format or syntax is invalid.
+
+   * 3b1. ContactFind shows an error message.
+   
       Use case resumes at step 2.
 
 **Use case: View usage instructions**
