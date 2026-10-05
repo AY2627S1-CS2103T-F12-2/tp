@@ -13,7 +13,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ### Papangkorn Wangchochedkun
 
-<img src="images/papangkorn-pann.jpg" width="200px">
+<img src="images/papangkorn-pann.png" width="200px">
 
 [[homepage](https://google.com)]
 [[github](https://github.com/Papangkorn-Pann/)]
