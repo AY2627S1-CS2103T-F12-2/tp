@@ -25,9 +25,19 @@ public class Name {
      * @param name A valid name.
      */
     public Name(String name) {
+        this(name, MESSAGE_CONSTRAINTS);
+    }
+
+    /**
+     * Constructs a {@code Name} with a custom validation message.
+     *
+     * @param name A valid name.
+     * @param messageConstraints The message displayed when validation fails.
+     */
+    protected Name(String name, String messageConstraints) {
         name = name.trim();
         requireNonNull(name);
-        checkArgument(isValidName(name), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidName(name), messageConstraints);
         fullName = name;
     }
 
