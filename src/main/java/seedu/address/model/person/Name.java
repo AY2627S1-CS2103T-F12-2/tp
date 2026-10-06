@@ -10,7 +10,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphabetical characters and spaces, should not be blank and must contain first and last name";
+            "Names should only contain alphabetical characters and spaces, should not be blank "
+                    + "and must contain first and last name";
 
     /*
      * A valid name consists of at least a first name and last name, separated by spaces.
