@@ -27,6 +27,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Category;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -37,7 +38,7 @@ public class EditCommand extends Command {
     public static final String COMMAND_WORD = "edit";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the displayed person list. "
+            + "by the value number used in the displayed person list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
@@ -102,8 +103,9 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         Remark updatedRemark = editPersonDescriptor.getRemark().orElse(personToEdit.getRemark());
+        Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedRemark);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedRemark, updatedCategory);
     }
 
     @Override
@@ -124,7 +126,7 @@ public class EditCommand extends Command {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("index", index)
+                .add("value", index)
                 .add("editPersonDescriptor", editPersonDescriptor)
                 .toString();
     }
@@ -140,6 +142,7 @@ public class EditCommand extends Command {
         private Address address;
         private Set<Tag> tags;
         private Remark remark;
+        private Category category;
 
         public EditPersonDescriptor() {}
 
@@ -154,6 +157,7 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setTags(toCopy.tags);
             setRemark(toCopy.remark);
+            setCategory(toCopy.category);
         }
 
         /**
@@ -202,6 +206,15 @@ public class EditCommand extends Command {
         public Optional<Remark> getRemark() {
             return Optional.ofNullable(remark);
         }
+
+        public void setCategory(Category category) {
+            this.category = category;
+        }
+
+        public Optional<Category> getCategory() {
+            return Optional.ofNullable(category);
+        }
+
 
         /**
          * Sets {@code tags} to this object's {@code tags}.

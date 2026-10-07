@@ -4,6 +4,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.CategoryCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Category;
 
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class CategoryCommandParser {
         Index index;
 
         try {
-            //get index
+            //get value
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
             throw new ParseException(
@@ -41,9 +42,15 @@ public class CategoryCommandParser {
                     MESSAGE_INVALID_COMMAND_FORMAT, CategoryCommand.MESSAGE_USAGE));
         }
 
-        String category = argMultimap.getValue(PREFIX_CATEGORY).get();
+        String categoryFieldInput = argMultimap.getValue(PREFIX_CATEGORY).get();
 
-        return new CategoryCommand(index, category);
+        //exception if category is not found within category list
+        try {
+            Category category = Category.valueOf(categoryFieldInput.toUpperCase());
+            return new CategoryCommand(index, category);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException("Invalid Category");
+        }
 
     }
 

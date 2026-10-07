@@ -5,30 +5,34 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.Category;
 import seedu.address.model.person.Person;
 
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 /**
  * Adds a person to a particular category.
  */
 public class CategoryCommand extends Command{
-    public static final String COMMAND_WORD = "cate";
+    public static final String COMMAND_WORD = "category";
 
     public static final String MESSAGE_SUCCESS = "Person has been added to new category: %1$s";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Places the person identified by the index number used in the displayed person list into a category\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1";
+            + ": Places the person identified by the value number used in the displayed person list into a category\n"
+            + "Parameters: INDEX (must be a positive integer) "
+            + PREFIX_CATEGORY + "CATEGORY\n"
+            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CATEGORY + "ROLE";
 
     private final Index targetIndex;
 
-    private final String targetCategory;
+    private final Category targetCategory;
 
-    public CategoryCommand(Index targetIndex, String targetCategory) {
+    public CategoryCommand(Index targetIndex, Category targetCategory) {
         this.targetIndex = targetIndex;
         this.targetCategory = targetCategory;
     }
@@ -45,9 +49,14 @@ public class CategoryCommand extends Command{
         Person personToCategorize = lastShownList.get(targetIndex.getZeroBased());
 
         //Assigning the category to a person
+        Person editedPerson = new Person(
+                personToCategorize.getName(), personToCategorize.getPhone(), personToCategorize.getEmail(),
+                personToCategorize.getAddress(), personToCategorize.getTags(), personToCategorize.getRemark(), targetCategory);
 
+        model.setPerson(personToCategorize, editedPerson);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(personToCategorize)));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
     }
 
 }
