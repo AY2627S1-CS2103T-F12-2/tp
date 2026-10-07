@@ -305,8 +305,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Use cases
 (For all use cases below, the **System** is `ContactFind` and the **Actor** is the `user`, unless specified otherwise)
 
-(For all use cases below, the **System** is the `ContactFind` and the **Actor** is the `user`, unless specified otherwise)
-
 **Use case: Add a person**
 
 **Guarantees**: The new contact and their details are saved in the contact list.
@@ -464,8 +462,6 @@ Extensions
     * 3b1. ContactFind starts with an empty contact list.
 
       Use case ends.
-
-*{More to be added}*
 
 **Use case: Edit a contact**
 
