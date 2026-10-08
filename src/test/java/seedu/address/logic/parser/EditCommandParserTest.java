@@ -23,8 +23,11 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOSS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -56,22 +59,22 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_missingParts_failure() {
-        // no index specified
+        // no value specified
         assertParseFailure(parser, VALID_NAME_AMY, MESSAGE_INVALID_FORMAT);
 
         // no field specified
         assertParseFailure(parser, "1", EditCommand.MESSAGE_NOT_EDITED);
 
-        // no index and no field specified
+        // no value and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
     }
 
     @Test
     public void parse_invalidPreamble_failure() {
-        // negative index
+        // negative value
         assertParseFailure(parser, "-5" + NAME_DESC_AMY, MESSAGE_INVALID_FORMAT);
 
-        // zero index
+        // zero value
         assertParseFailure(parser, "0" + NAME_DESC_AMY, MESSAGE_INVALID_FORMAT);
 
         // invalid arguments being parsed as preamble
@@ -153,6 +156,24 @@ public class EditCommandParserTest {
         // address
         userInput = targetIndex.getOneBased() + ADDRESS_DESC_AMY;
         descriptor = new EditPersonDescriptorBuilder().withAddress(VALID_ADDRESS_AMY).build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        // role
+        userInput = targetIndex.getOneBased() + " " + PREFIX_ROLE + "Software Engineer";
+        descriptor = new EditPersonDescriptorBuilder().withRole("Software Engineer").build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        // company
+        userInput = targetIndex.getOneBased() + " " + PREFIX_COMPANY + "Google";
+        descriptor = new EditPersonDescriptorBuilder().withCompany("Google").build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        // boss
+        userInput = targetIndex.getOneBased() + " " + PREFIX_BOSS + "Alice Tan";
+        descriptor = new EditPersonDescriptorBuilder().withBoss("Alice Tan").build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
