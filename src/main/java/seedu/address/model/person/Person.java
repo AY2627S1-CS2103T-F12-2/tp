@@ -21,6 +21,8 @@ public class Person {
     private final Phone phone;
     private final Email email;
     private final Remark remark;
+    private final Role role;
+    private final Company company;
 
     // Data fields
     private final Address address;
@@ -29,13 +31,15 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Remark remark) {
-        requireAllNonNull(name, phone, email, address, tags, remark);
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Remark remark, Role role, Company company) {
+        requireAllNonNull(name, phone, email, address, tags, remark, role, company);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.remark = remark;
+        this.role = role;
+        this.company = company;
         this.tags.addAll(tags);
     }
 
@@ -57,6 +61,14 @@ public class Person {
 
     public Remark getRemark() {
         return remark;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public Company getCompany() {
+        return company;
     }
 
     /**
