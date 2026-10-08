@@ -21,7 +21,13 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.*;
+import seedu.address.model.person.Address;
+import seedu.address.model.person.Category;
+import seedu.address.model.person.Email;
+import seedu.address.model.person.Name;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.Phone;
+import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -100,8 +106,10 @@ public class EditCommand extends Command {
         Role updatedRole = editPersonDescriptor.getRole().orElse(personToEdit.getRole());
         Company updatedCompany = editPersonDescriptor.getCompany().orElse(personToEdit.getCompany());
         Boss updatedBoss = editPersonDescriptor.getBoss().orElse(personToEdit.getBoss());
+        Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedRemark);
+        return new Person(updatedName, updatedPhone, updatedEmail,
+                updatedAddress, updatedTags, updatedRemark, updatedCategory);
     }
 
     @Override
@@ -141,6 +149,7 @@ public class EditCommand extends Command {
         private Role role;
         private Company company;
         private Boss boss;
+        private Category category;
 
         public EditPersonDescriptor() {}
 
@@ -158,6 +167,7 @@ public class EditCommand extends Command {
             setRole(toCopy.role);
             setCompany(toCopy.company);
             setBoss(toCopy.boss);
+            setCategory(toCopy.category);
         }
 
         /**
@@ -230,6 +240,14 @@ public class EditCommand extends Command {
         public Optional<Boss> getBoss() {
             return Optional.ofNullable(boss);
         }
+        public void setCategory(Category category) {
+            this.category = category;
+        }
+
+        public Optional<Category> getCategory() {
+            return Optional.ofNullable(category);
+        }
+
 
         /**
          * Sets {@code tags} to this object's {@code tags}.

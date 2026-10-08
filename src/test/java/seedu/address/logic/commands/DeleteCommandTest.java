@@ -80,9 +80,35 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_validRoleUnfilteredList_success() {
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String targetRole = personToDelete.getRole().value;
+        DeleteCommand deleteCommand = new DeleteCommand(targetRole);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_invalidRoleUnfilteredList_throwsCommandException() {
+        String missingRole = "Non Existent Role";
+        DeleteCommand deleteCommand = new DeleteCommand(missingRole);
+
+        assertCommandFailure(deleteCommand, model,
+                String.format(DeleteCommand.MESSAGE_ROLE_NOT_FOUND, missingRole));
+    }
+
+    @Test
     public void equals() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND_PERSON);
+        DeleteCommand deleteByRoleFirst = new DeleteCommand("Software Engineer");
+        DeleteCommand deleteByRoleSecond = new DeleteCommand("Product Manager");
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
@@ -90,6 +116,10 @@ public class DeleteCommandTest {
         // same values -> returns true
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
+
+        // same role value -> returns true
+        DeleteCommand deleteByRoleFirstCopy = new DeleteCommand("Software Engineer");
+        assertTrue(deleteByRoleFirst.equals(deleteByRoleFirstCopy));
 
         // different types -> returns false
         assertFalse(deleteFirstCommand.equals(1));
@@ -99,6 +129,9 @@ public class DeleteCommandTest {
 
         // different person -> returns false
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
+
+        // different role -> returns false
+        assertFalse(deleteByRoleFirst.equals(deleteByRoleSecond));
     }
 
     @Test

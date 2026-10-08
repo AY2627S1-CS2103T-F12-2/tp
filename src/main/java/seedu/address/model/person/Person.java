@@ -28,12 +28,13 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
-
+    private final Category category;
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Remark remark) {
-        requireAllNonNull(name, phone, email, address, tags, remark);
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Set<Tag> tags, Remark remark, Category category) {
+        requireAllNonNull(name, phone, email, address, tags, remark, category);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -44,6 +45,7 @@ public class Person {
         this.company = new Company("TEST COMPANY");
         this.boss= new Boss("TEST BOSS");
         this.tags.addAll(tags);
+        this.category = category;
     }
 
     public Name getName() {
@@ -86,6 +88,12 @@ public class Person {
         return Collections.unmodifiableSet(tags);
     }
 
+
+
+    public Category getCategory() {
+        return this.category;
+    }
+
     /**
      * Returns true if both persons have the same name.
      * This defines a weaker notion of equality between two persons.
@@ -119,13 +127,14 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
-                && remark.equals(otherPerson.remark);
+                && remark.equals(otherPerson.remark)
+                && category.equals(otherPerson.category);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, remark);
+        return Objects.hash(name, phone, email, address, tags, remark, category);
     }
 
     @Override
@@ -136,6 +145,7 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("category", category)
                 .toString();
     }
 
