@@ -10,13 +10,13 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphanumeric characters and spaces, and should not be blank";
+            "Names should only contain alphabetical characters and spaces, should not be blank "
+                    + "and must contain first and last name";
 
     /*
-     * The first character of the name must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * A valid name consists of at least a first name and last name, separated by spaces.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX = "[A-Za-z]+( +[A-Za-z]+)+";
 
     public final String fullName;
 
@@ -26,8 +26,19 @@ public class Name {
      * @param name A valid name.
      */
     public Name(String name) {
+        this(name, MESSAGE_CONSTRAINTS);
+    }
+
+    /**
+     * Constructs a {@code Name} with a custom validation message.
+     *
+     * @param name A valid name.
+     * @param messageConstraints The message displayed when validation fails.
+     */
+    protected Name(String name, String messageConstraints) {
+        name = name.trim();
         requireNonNull(name);
-        checkArgument(isValidName(name), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidName(name), messageConstraints);
         fullName = name;
     }
 
@@ -35,7 +46,7 @@ public class Name {
      * Returns true if a given string is a valid name.
      */
     public static boolean isValidName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test.trim().matches(VALIDATION_REGEX);
     }
 
 

@@ -45,10 +45,10 @@ public class PersonTest {
         Person editedBob = new PersonBuilder(BOB).withName(VALID_NAME_BOB.toLowerCase()).build();
         assertFalse(BOB.isSamePerson(editedBob));
 
-        // name has trailing spaces, all other attributes same -> returns false
+        // name has trailing spaces that are trimmed, all other attributes same -> returns true
         String nameWithTrailingSpaces = VALID_NAME_BOB + " ";
         editedBob = new PersonBuilder(BOB).withName(nameWithTrailingSpaces).build();
-        assertFalse(BOB.isSamePerson(editedBob));
+        assertTrue(BOB.isSamePerson(editedBob));
     }
 
     @Test
@@ -99,6 +99,8 @@ public class PersonTest {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags()
                 + ", category=" + ALICE.getCategory() + "}";
+                + ", email=" + ALICE.getEmail() + ", address="
+                + ALICE.getAddress() + ", tags=" + ALICE.getTags() + ", category=" + ALICE.getCategory() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }
