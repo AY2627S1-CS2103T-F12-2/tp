@@ -23,7 +23,7 @@ public class CategoryCommand extends Command{
     public static final String MESSAGE_SUCCESS = "Person has been added to new category: %1$s";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Places the person identified by the value number used in the displayed person list into a category\n"
+            + ": Places the person identified by the index number used in the displayed person list into a category\n"
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_CATEGORY + "CATEGORY\n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CATEGORY + "ROLE";
