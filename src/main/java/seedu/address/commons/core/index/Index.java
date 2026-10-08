@@ -3,12 +3,12 @@ package seedu.address.commons.core.index;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Represents a zero-based or one-based index.
+ * Represents a zero-based or one-based value.
  *
  * {@code Index} should be used right from the start (when parsing in a new user input), so that if the current
  * component wants to communicate with another component, it can send an {@code Index} to avoid having to know what
- * base the other component is using for its index. However, after receiving the {@code Index}, that component can
- * convert it back to an int if the index will not be passed to a different component again.
+ * base the other component is using for its value. However, after receiving the {@code Index}, that component can
+ * convert it back to an int if the value will not be passed to a different component again.
  */
 public class Index {
     private int zeroBasedIndex;
@@ -34,14 +34,14 @@ public class Index {
     }
 
     /**
-     * Creates a new {@code Index} using a zero-based index.
+     * Creates a new {@code Index} using a zero-based value.
      */
     public static Index fromZeroBased(int zeroBasedIndex) {
         return new Index(zeroBasedIndex);
     }
 
     /**
-     * Creates a new {@code Index} using a one-based index.
+     * Creates a new {@code Index} using a one-based value.
      */
     public static Index fromOneBased(int oneBasedIndex) {
         return new Index(oneBasedIndex - 1);

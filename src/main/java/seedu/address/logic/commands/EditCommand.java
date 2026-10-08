@@ -22,6 +22,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Category;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -102,8 +103,13 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         Remark updatedRemark = editPersonDescriptor.getRemark().orElse(personToEdit.getRemark());
+        Role updatedRole = editPersonDescriptor.getRole().orElse(personToEdit.getRole());
+        Company updatedCompany = editPersonDescriptor.getCompany().orElse(personToEdit.getCompany());
+        Boss updatedBoss = editPersonDescriptor.getBoss().orElse(personToEdit.getBoss());
+        Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedRemark);
+        return new Person(updatedName, updatedPhone, updatedEmail,
+                updatedAddress, updatedTags, updatedRemark, updatedCategory);
     }
 
     @Override
@@ -140,6 +146,10 @@ public class EditCommand extends Command {
         private Address address;
         private Set<Tag> tags;
         private Remark remark;
+        private Role role;
+        private Company company;
+        private Boss boss;
+        private Category category;
 
         public EditPersonDescriptor() {}
 
@@ -154,6 +164,10 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setTags(toCopy.tags);
             setRemark(toCopy.remark);
+            setRole(toCopy.role);
+            setCompany(toCopy.company);
+            setBoss(toCopy.boss);
+            setCategory(toCopy.category);
         }
 
         /**
@@ -203,6 +217,38 @@ public class EditCommand extends Command {
             return Optional.ofNullable(remark);
         }
 
+        public void setRole(Role role) {
+            this.role = role;
+        }
+
+        public Optional<Role> getRole() {
+            return Optional.ofNullable(role);
+        }
+
+        public void setCompany(Company company) {
+            this.company = company;
+        }
+
+        public Optional<Company> getCompany() {
+            return Optional.ofNullable(company);
+        }
+
+        public void setBoss(Boss boss) {
+            this.boss = boss;
+        }
+
+        public Optional<Boss> getBoss() {
+            return Optional.ofNullable(boss);
+        }
+        public void setCategory(Category category) {
+            this.category = category;
+        }
+
+        public Optional<Category> getCategory() {
+            return Optional.ofNullable(category);
+        }
+
+
         /**
          * Sets {@code tags} to this object's {@code tags}.
          * A defensive copy of {@code tags} is used internally.
@@ -236,7 +282,10 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags)
-                    && Objects.equals(remark, otherEditPersonDescriptor.remark);
+                    && Objects.equals(remark, otherEditPersonDescriptor.remark)
+                    && Objects.equals(role, otherEditPersonDescriptor.role)
+                    && Objects.equals(company, otherEditPersonDescriptor.company)
+                    && Objects.equals(boss, otherEditPersonDescriptor.boss);
         }
 
         @Override
@@ -248,6 +297,9 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("tags", tags)
                     .add("remark", remark)
+                    .add("role", role)
+                    .add("company", company)
+                    .add("boss", boss)
                     .toString();
         }
     }
