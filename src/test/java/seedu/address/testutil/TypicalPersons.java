@@ -40,7 +40,7 @@ public class TypicalPersons {
             .withEmail("werner@example.com").withAddress("michegan ave").build();
     public static final Person FIONA = new PersonBuilder().withName("Fiona Kunz").withPhone("94824270")
             .withEmail("lydia@example.com").withAddress("little tokyo").build();
-    public static final Person GEORGE = new PersonBuilder().withName("George Best").withPhone("9482442")
+    public static final Person GEORGE = new PersonBuilder().withName("George Best").withPhone("94824420")
             .withEmail("anna@example.com").withAddress("4th street").withCategory(Category.UNCATEGORIZED).build();
 
     // Manually added
