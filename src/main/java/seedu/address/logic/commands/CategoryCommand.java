@@ -59,4 +59,29 @@ public class CategoryCommand extends Command{
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
     }
 
+
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof CategoryCommand otherCategoryCommand)) {
+            return false;
+        }
+
+        return targetIndex.equals(otherCategoryCommand.targetIndex)
+                && targetCategory.equals(otherCategoryCommand.targetCategory);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("targetIndex", targetIndex)
+                .add("targetCategory", targetCategory)
+                .toString();
+    }
+
 }
