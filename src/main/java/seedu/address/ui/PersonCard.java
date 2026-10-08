@@ -42,6 +42,8 @@ public class PersonCard extends UiPart<Region> {
     private Label remark;
     @FXML
     private FlowPane tags;
+    @FXML
+    private Label category;
 
     /**
      * Creates a {@code PersonCard} with the given {@code Person} and value to display.
@@ -58,5 +60,6 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         remark.setText(person.getRemark().value);
+        category.setText(person.getCategory().name());
     }
 }
