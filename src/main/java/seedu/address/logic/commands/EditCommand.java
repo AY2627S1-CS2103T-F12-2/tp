@@ -22,12 +22,15 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
+import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -174,7 +177,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, remark);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, remark, role, company, boss, category);
         }
 
         public void setName(Name name) {
@@ -285,7 +288,8 @@ public class EditCommand extends Command {
                     && Objects.equals(remark, otherEditPersonDescriptor.remark)
                     && Objects.equals(role, otherEditPersonDescriptor.role)
                     && Objects.equals(company, otherEditPersonDescriptor.company)
-                    && Objects.equals(boss, otherEditPersonDescriptor.boss);
+                    && Objects.equals(boss, otherEditPersonDescriptor.boss)
+                    && Objects.equals(category, otherEditPersonDescriptor.category);
         }
 
         @Override

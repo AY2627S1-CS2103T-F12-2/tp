@@ -40,10 +40,10 @@ public class Person {
         this.email = email;
         this.address = address;
         this.remark = remark;
-//        TODO: [FOR WK 9] REMOVE TEST OBJECTS; INITIALISE FIELDS THROUGH CONSTRUCTOR ARGUMENTS
+        // TODO: [FOR WK 9] REMOVE TEST OBJECTS; INITIALISE FIELDS THROUGH CONSTRUCTOR ARGUMENTS
         this.role = new Role("TEST ROLE");
         this.company = new Company("TEST COMPANY");
-        this.boss= new Boss("TEST BOSS");
+        this.boss = new Boss("TEST BOSS");
         this.tags.addAll(tags);
         this.category = category;
     }
