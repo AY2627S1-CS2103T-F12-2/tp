@@ -94,7 +94,7 @@ public class PersonTest {
         assertFalse(ALICE.equals(editedAlice));
 
         // different role -> returns false
-        editedAlice = new PersonBuilder(ALICE).withRole("Software Engineer").build();
+        editedAlice = new PersonBuilder(ALICE).withRole("Product Manager").build();
         assertFalse(ALICE.equals(editedAlice));
 
         // different company -> returns false
