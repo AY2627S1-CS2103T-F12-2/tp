@@ -4,12 +4,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
+import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -23,6 +26,9 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_REMARK = "";
+    public static final String DEFAULT_ROLE = "TEST ROLE";
+    public static final String DEFAULT_COMPANY = "TEST COMPANY";
+    public static final String DEFAULT_BOSS = "TEST BOSS";
 
     private Name name;
     private Phone phone;
@@ -31,6 +37,9 @@ public class PersonBuilder {
     private Remark remark;
     private Set<Tag> tags;
     private Category category;
+    private Role role;
+    private Company company;
+    private Boss boss;
     /**
      * Creates a {@code PersonBuilder} with the default details.
      */
@@ -42,6 +51,9 @@ public class PersonBuilder {
         remark = new Remark(DEFAULT_REMARK);
         tags = new HashSet<>();
         category = Category.UNCATEGORIZED;
+        role = new Role(DEFAULT_ROLE);
+        company = new Company(DEFAULT_COMPANY);
+        boss = new Boss(DEFAULT_BOSS);
     }
 
     /**
@@ -55,6 +67,9 @@ public class PersonBuilder {
         remark = personToCopy.getRemark();
         tags = new HashSet<>(personToCopy.getTags());
         category = personToCopy.getCategory();
+        role = personToCopy.getRole();
+        company = personToCopy.getCompany();
+        boss = personToCopy.getBoss();
     }
 
     /**
@@ -113,8 +128,32 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Role} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withRole(String role) {
+        this.role = new Role(role);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Company} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withCompany(String company) {
+        this.company = new Company(company);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Boss} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withBoss(String boss) {
+        this.boss = new Boss(boss);
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, phone, email, address, tags, remark, category);
+        return new Person(name, phone, email, address, tags, remark, role, company, boss, category);
     }
 
 }

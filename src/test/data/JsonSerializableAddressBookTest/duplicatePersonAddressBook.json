@@ -6,6 +6,9 @@
     "address": "123, Jurong West Ave 6, #08-111",
     "remark" : "",
     "tags": [ "friends" ],
+    "role" : "TEST ROLE",
+    "boss" : "TEST BOSS",
+    "company" : "TEST COMPANY",
     "category": "UNCATEGORIZED"
   }, {
     "name": "Alice Pauline",
@@ -13,6 +16,9 @@
     "email": "pauline@example.com",
     "address": "4th street",
     "remark" : "",
+    "role" : "TEST ROLE",
+    "boss" : "TEST BOSS",
+    "company" : "TEST COMPANY",
     "category": "UNCATEGORIZED"
   } ]
 }

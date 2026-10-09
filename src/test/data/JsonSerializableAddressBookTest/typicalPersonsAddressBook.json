@@ -7,6 +7,9 @@
     "address" : "123, Jurong West Ave 6, #08-111",
     "remark" : "She likes aardvarks.",
     "tags" : [ "friends" ],
+    "role" : "Software Engineer",
+    "boss" : "Jane Smith",
+    "company" : "Jane Street",
     "category" : "UNCATEGORIZED"
   }, {
     "name" : "Benson Meier",
@@ -15,6 +18,9 @@
     "address" : "311, Clementi Ave 2, #02-25",
     "remark" : "He can't take beer!",
     "tags" : [ "owesMoney", "friends" ],
+    "role" : "Product Manager",
+    "boss" : "Martin Lee",
+    "company" : "Meridian Labs",
     "category" : "UNCATEGORIZED"
   }, {
     "name" : "Carl Kurz",
@@ -23,6 +29,9 @@
     "address" : "wall street",
     "remark" : "",
     "tags" : [ ],
+    "role" : "Data Analyst",
+    "boss" : "Sarah Chen",
+    "company" : "Harbor Analytics",
     "category" : "UNCATEGORIZED"
   }, {
     "name" : "Daniel Meier",
@@ -31,6 +40,9 @@
     "address" : "10th street",
     "remark" : "",
     "tags" : [ "friends" ],
+    "role" : "Financial Advisor",
+    "boss" : "Michael Tan",
+    "company" : "Summit Capital",
     "category" : "UNCATEGORIZED"
   }, {
     "name" : "Elle Meyer",
@@ -39,6 +51,9 @@
     "address" : "michegan ave",
     "remark" : "",
     "tags" : [ ],
+    "role" : "UX Designer",
+    "boss" : "Olivia Wong",
+    "company" : "Pixel Studio",
     "category" : "UNCATEGORIZED"
   }, {
     "name" : "Fiona Kunz",
@@ -47,6 +62,9 @@
     "address" : "little tokyo",
     "remark" : "",
     "tags" : [ ],
+    "role" : "Marketing Manager",
+    "boss" : "David Lim",
+    "company" : "Brightside Media",
     "category" : "UNCATEGORIZED"
   }, {
     "name" : "George Best",
@@ -55,6 +73,9 @@
     "address" : "4th street",
     "remark" : "",
     "tags" : [ ],
+    "role" : "Operations Manager",
+    "boss" : "Emily Clark",
+    "company" : "Northstar Group",
     "category" : "UNCATEGORIZED"
   } ]
 }

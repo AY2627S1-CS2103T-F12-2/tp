@@ -48,6 +48,9 @@ public class EditCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[rl/ROLE] "
+            + "[com/COMPANY] "
+            + "[b/BOSS] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -112,7 +115,8 @@ public class EditCommand extends Command {
         Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
         return new Person(updatedName, updatedPhone, updatedEmail,
-                updatedAddress, updatedTags, updatedRemark, updatedCategory);
+                updatedAddress, updatedTags, updatedRemark, updatedRole,
+                updatedCompany, updatedBoss, updatedCategory);
     }
 
     @Override
@@ -177,7 +181,8 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, remark, role, company, boss, category);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, remark,
+                    role, company, boss, category);
         }
 
         public void setName(Name name) {
@@ -243,6 +248,7 @@ public class EditCommand extends Command {
         public Optional<Boss> getBoss() {
             return Optional.ofNullable(boss);
         }
+
         public void setCategory(Category category) {
             this.category = category;
         }
@@ -250,7 +256,6 @@ public class EditCommand extends Command {
         public Optional<Category> getCategory() {
             return Optional.ofNullable(category);
         }
-
 
         /**
          * Sets {@code tags} to this object's {@code tags}.

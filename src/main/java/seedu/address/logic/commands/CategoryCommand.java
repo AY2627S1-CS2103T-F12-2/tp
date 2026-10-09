@@ -60,6 +60,9 @@ public class CategoryCommand extends Command {
                 personToCategorize.getAddress(),
                 personToCategorize.getTags(),
                 personToCategorize.getRemark(),
+                personToCategorize.getRole(),
+                personToCategorize.getCompany(),
+                personToCategorize.getBoss(),
                 targetCategory);
 
         model.setPerson(personToCategorize, editedPerson);

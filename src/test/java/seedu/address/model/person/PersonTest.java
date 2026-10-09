@@ -92,6 +92,18 @@ public class PersonTest {
         // different remark -> returns false
         editedAlice = new PersonBuilder(ALICE).withRemark("Likes cycling.").build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different role -> returns false
+        editedAlice = new PersonBuilder(ALICE).withRole("Product Manager").build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different company -> returns false
+        editedAlice = new PersonBuilder(ALICE).withCompany("Google").build();
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different boss -> returns false
+        editedAlice = new PersonBuilder(ALICE).withBoss("Alice Tan").build();
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
