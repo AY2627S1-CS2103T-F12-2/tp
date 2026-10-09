@@ -11,15 +11,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
+import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
-import seedu.address.model.person.Boss;
 import seedu.address.model.person.Role;
-import seedu.address.model.person.Company;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -28,6 +28,9 @@ import seedu.address.model.tag.Tag;
 class JsonAdaptedPerson {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Person's %s field is missing!";
+    private static final String DEFAULT_ROLE = "TEST ROLE";
+    private static final String DEFAULT_BOSS = "TEST BOSS";
+    private static final String DEFAULT_COMPANY = "TEST COMPANY";
 
     private final String name;
     private final String phone;
@@ -46,22 +49,29 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-                             @JsonProperty("remark") String remark, @JsonProperty("tags") List<JsonAdaptedTag> tags,
-                             @JsonProperty("role") String role, @JsonProperty("boss") String boss,
-                             @JsonProperty("company") String company,
-                                        @JsonProperty("category") String category) {
+            @JsonProperty("remark") String remark, @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("role") String role, @JsonProperty("boss") String boss,
+            @JsonProperty("company") String company, @JsonProperty("category") String category) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.remark = remark;
-        this.boss = boss;
-        this.company = company;
-        this.role = role;
+        this.boss = boss == null ? DEFAULT_BOSS : boss;
+        this.company = company == null ? DEFAULT_COMPANY : company;
+        this.role = role == null ? DEFAULT_ROLE : role;
         this.category = category;
         if (tags != null) {
             this.tags.addAll(tags);
         }
+    }
+
+    /**
+     * Constructs a {@code JsonAdaptedPerson} without the optional employment details.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
+                             List<JsonAdaptedTag> tags, String category) {
+        this(name, phone, email, address, remark, tags, DEFAULT_ROLE, DEFAULT_BOSS, DEFAULT_COMPANY, category);
     }
 
     /**
@@ -133,7 +143,7 @@ class JsonAdaptedPerson {
         if (boss == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Boss.class.getSimpleName()));
         }
-        final Boss modelBoss= new Boss(boss);
+        final Boss modelBoss = new Boss(boss);
 
         if (role == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Role.class.getSimpleName()));

@@ -42,6 +42,17 @@ public class Company {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Company otherCompany)) {
+            return false;
+        }
+        return value.equals(otherCompany.value);
+    }
+
+    @Override
     public int hashCode() {
         return value.hashCode();
     }
