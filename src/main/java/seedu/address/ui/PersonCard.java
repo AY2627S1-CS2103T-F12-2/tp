@@ -43,6 +43,12 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane tags;
     @FXML
+    private Label boss;
+    @FXML
+    private Label company;
+    @FXML
+    private Label role;
+    @FXML
     private Label category;
 
     /**
@@ -60,6 +66,9 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         remark.setText(person.getRemark().value);
+        boss.setText(person.getBoss().fullName);
+        role.setText(person.getRole().value);
+        company.setText(person.getCompany().value);
         category.setText(person.getCategory().name());
     }
 }

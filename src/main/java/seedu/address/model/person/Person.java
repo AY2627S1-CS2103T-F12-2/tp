@@ -33,14 +33,13 @@ public class Person {
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address,
-                  Set<Tag> tags, Remark remark, Category category) {
+                  Set<Tag> tags, Remark remark, Role role, Company company, Boss boss, Category category) {
         requireAllNonNull(name, phone, email, address, tags, remark, category);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.remark = remark;
-        // TODO: [FOR WK 9] REMOVE TEST OBJECTS; INITIALISE FIELDS THROUGH CONSTRUCTOR ARGUMENTS
         this.role = new Role("TEST ROLE");
         this.company = new Company("TEST COMPANY");
         this.boss = new Boss("TEST BOSS");

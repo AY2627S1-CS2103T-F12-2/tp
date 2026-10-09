@@ -112,7 +112,8 @@ public class EditCommand extends Command {
         Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
         return new Person(updatedName, updatedPhone, updatedEmail,
-                updatedAddress, updatedTags, updatedRemark, updatedCategory);
+                updatedAddress, updatedTags, updatedRemark, updatedRole,
+                updatedCompany, updatedBoss, updatedCategory);
     }
 
     @Override
