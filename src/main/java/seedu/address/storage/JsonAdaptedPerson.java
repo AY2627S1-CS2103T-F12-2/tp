@@ -28,9 +28,6 @@ import seedu.address.model.tag.Tag;
 class JsonAdaptedPerson {
 
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Person's %s field is missing!";
-    private static final String DEFAULT_ROLE = "TEST ROLE";
-    private static final String DEFAULT_BOSS = "TEST BOSS";
-    private static final String DEFAULT_COMPANY = "TEST COMPANY";
 
     private final String name;
     private final String phone;
@@ -57,9 +54,9 @@ class JsonAdaptedPerson {
         this.email = email;
         this.address = address;
         this.remark = remark;
-        this.boss = boss == null ? DEFAULT_BOSS : boss;
-        this.company = company == null ? DEFAULT_COMPANY : company;
-        this.role = role == null ? DEFAULT_ROLE : role;
+        this.boss = boss;
+        this.company = company;
+        this.role = role;
         this.category = category;
         if (tags != null) {
             this.tags.addAll(tags);
@@ -67,11 +64,12 @@ class JsonAdaptedPerson {
     }
 
     /**
-     * Constructs a {@code JsonAdaptedPerson} without the optional employment details.
+     * Constructs a {@code JsonAdaptedPerson} without employment details.
+     * Conversion to a model person will report the missing required fields.
      */
     public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
-                             List<JsonAdaptedTag> tags, String category) {
-        this(name, phone, email, address, remark, tags, DEFAULT_ROLE, DEFAULT_BOSS, DEFAULT_COMPANY, category);
+            List<JsonAdaptedTag> tags, String category) {
+        this(name, phone, email, address, remark, tags, null, null, null, category);
     }
 
     /**
@@ -140,6 +138,17 @@ class JsonAdaptedPerson {
         }
         final Remark modelRemark = new Remark(remark);
 
+        if (category == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    Category.class.getSimpleName()));
+        }
+
+        if (!Category.isValidCategory(category)) {
+            throw new IllegalValueException(Category.MESSAGE_CONSTRAINTS);
+        }
+
+        final Category modelCategory = Category.valueOf(category.toUpperCase());
+
         if (boss == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Boss.class.getSimpleName()));
         }
@@ -154,17 +163,6 @@ class JsonAdaptedPerson {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Company.class.getSimpleName()));
         }
         final Company modelCompany = new Company(company);
-
-        if (category == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
-                    Category.class.getSimpleName()));
-        }
-
-        if (!Category.isValidCategory(category)) {
-            throw new IllegalValueException(Category.MESSAGE_CONSTRAINTS);
-        }
-
-        final Category modelCategory = Category.valueOf(category.toUpperCase());
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark,
