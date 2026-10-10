@@ -34,16 +34,24 @@ public class Person {
      */
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category) {
-        requireAllNonNull(name, phone, email, address, tags, remark, category);
+        this(name, phone, email, address, tags, remark, category, new Role("TEST ROLE"),
+                new Company("TEST COMPANY"), new Boss("TEST BOSS"));
+    }
+
+    /**
+     * Creates a person with all contact and employment details.
+     */
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss) {
+        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.remark = remark;
-        // TODO: [FOR WK 9] REMOVE TEST OBJECTS; INITIALISE FIELDS THROUGH CONSTRUCTOR ARGUMENTS
-        this.role = new Role("TEST ROLE");
-        this.company = new Company("TEST COMPANY");
-        this.boss = new Boss("TEST BOSS");
+        this.role = role;
+        this.company = company;
+        this.boss = boss;
         this.tags.addAll(tags);
         this.category = category;
     }
