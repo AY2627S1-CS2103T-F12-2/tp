@@ -136,13 +136,16 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
                 && remark.equals(otherPerson.remark)
+                && role.equals(otherPerson.role)
+                && company.equals(otherPerson.company)
+                && boss.equals(otherPerson.boss)
                 && category.equals(otherPerson.category);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, remark, category);
+        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, category);
     }
 
     @Override
@@ -153,6 +156,9 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("role", role)
+                .add("company", company)
+                .add("boss", boss)
                 .add("category", category)
                 .toString();
     }
