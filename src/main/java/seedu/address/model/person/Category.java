@@ -5,13 +5,15 @@ package seedu.address.model.person;
  */
 public enum Category {
     UNCATEGORIZED,
-    ENTITY,
-    ROLE,
-    TIER,
-    SECTOR;
+    CLIENT,
+    INVESTOR,
+    LAWYER,
+    ACCOUNTANT,
+    CONSULTANT,
+    OTHER;
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Category should be one of: UNCATEGORIZED, ENTITY, ROLE, TIER, SECTOR";
+            "Category should be one of: UNCATEGORIZED, CLIENT, INVESTOR, LAWYER, ACCOUNTANT";
 
     /**
      * Returns true if the given string matches a valid category.
@@ -23,6 +25,11 @@ public enum Category {
         } catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return name();
     }
 
 }
