@@ -1,16 +1,17 @@
 package seedu.address.logic.commands;
 
-import javafx.collections.ObservableList;
-import seedu.address.model.Model;
-import seedu.address.model.person.Category;
-import seedu.address.model.person.Person;
+import static java.util.Objects.requireNonNull;
 
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.Objects.requireNonNull;
+import javafx.collections.ObservableList;
+import seedu.address.model.Model;
+import seedu.address.model.person.Category;
+import seedu.address.model.person.Person;
+
 
 /**
  * Lists all categories and the number of contacts assigned to each category.
