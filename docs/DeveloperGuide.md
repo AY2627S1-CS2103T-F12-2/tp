@@ -376,34 +376,29 @@ Use case ends.
 
       Use case resumes at step 2.
 
-**Use case: Assign tags to a contact**
+**Use case: Assign a contact to a category**
 
 MSS
 
-1. User requests to list contacts.
-2. ContactFind shows a list of contacts.
-3. User requests to assign one or more tags (e.g. priority, or specialization) to a specific contact in the list.
-4. ContactFind updates the contact with the specified tag(s).
+1. ContactFind shows a list of contacts.
+2. User requests to assign a contact to a category.
+3. ContactFind updates the contact with the specified category.
 
    Use case ends.
 
-Extensions
+**Extensions**
 
-* 2a. The contacts list is empty.
+* 2a. The given index is invalid.
+
+   * 2a1. ContactFind shows an error message.
+
+      Use case resumes at step 1.
+
+* 2b. The specified category command format or syntax is invalid.
+
+   * 2b1. ContactFind shows an error message.
    
-   Use case ends.
-
-* 3a. The given index is invalid.
-
-   * 3a1. ContactFind shows an error message.
-
-      Use case resumes at step 2.
-
-* 3b. The specified tag format or syntax is invalid.
-
-   * 3b1. ContactFind shows an error message.
-   
-      Use case resumes at step 2.
+      Use case resumes at step 1.
 
 **Use case: View usage instructions**
 
@@ -508,6 +503,8 @@ Extensions
 13. The application should have zero external dependencies, and should not require any installation of additional software or libraries.
 
 *{More to be added}*
+
+### Glossary
 
 * **API (Application Programming Interface)**: A set of specifications, rules, and methods that components use to communicate and interact with each other without exposing internal implementation details.
 * **Architecture**: The high-level structure of the application, defining its major components (`UI`, `Logic`, `Model`, `Storage`) and the rules governing interactions between them.
