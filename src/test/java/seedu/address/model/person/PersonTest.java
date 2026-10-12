@@ -108,7 +108,7 @@ public class PersonTest {
         // different boss -> returns false
         editedAlice = new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
                 ALICE.getTags(), ALICE.getRemark(), ALICE.getCategory(), ALICE.getRole(), ALICE.getCompany(),
-                new Boss("Jane Smith"));
+                new Boss("Alex Tan"));
         assertFalse(ALICE.equals(editedAlice));
     }
 
