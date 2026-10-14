@@ -95,10 +95,9 @@ public class DeleteCommand extends Command {
 
     @Override
     public String toString() {
-        ToStringBuilder builder = new ToStringBuilder(this);
-        if (targetRole == null) {
-            return builder.add("targetIndex", targetIndex).toString();
-        }
-        return builder.add("targetRole", targetRole).toString();
+        return new ToStringBuilder(this)
+                .add("targetIndex", targetIndex)
+                .add("targetRole", targetRole)
+                .toString();
     }
 }
