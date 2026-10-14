@@ -29,6 +29,7 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final Category category;
+
     /**
      * Every field must be present and not null.
      */
