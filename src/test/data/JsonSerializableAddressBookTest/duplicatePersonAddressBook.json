@@ -6,13 +6,19 @@
     "address": "123, Jurong West Ave 6, #08-111",
     "remark" : "",
     "tags": [ "friends" ],
-    "category": "UNCATEGORIZED"
+    "category": "UNCATEGORIZED",
+    "boss": "John Smith",
+    "company": "ABC Company",
+    "role": "Manager"
   }, {
     "name": "Alice Pauline",
     "phone": "94351253",
     "email": "pauline@example.com",
     "address": "4th street",
     "remark" : "",
-    "category": "UNCATEGORIZED"
+    "category": "UNCATEGORIZED",
+    "boss": "John Smith",
+    "company": "ABC Company",
+    "role": "Manager"
   } ]
 }

@@ -36,9 +36,16 @@ public class Name {
      * @param messageConstraints The message displayed when validation fails.
      */
     protected Name(String name, String messageConstraints) {
+        this(name, messageConstraints, false);
+    }
+
+    /**
+     * Constructs a {@code Name} with a custom validation message and optional empty value.
+     */
+    protected Name(String name, String messageConstraints, boolean allowsEmpty) {
         name = name.trim();
         requireNonNull(name);
-        checkArgument(isValidName(name), messageConstraints);
+        checkArgument(allowsEmpty && name.isEmpty() || isValidName(name), messageConstraints);
         fullName = name;
     }
 
