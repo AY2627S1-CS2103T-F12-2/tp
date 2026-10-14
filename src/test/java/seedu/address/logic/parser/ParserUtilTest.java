@@ -13,9 +13,12 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Boss;
+import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
@@ -101,6 +104,14 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseEditPhone_validAndInvalidValues() throws Exception {
+        assertEquals(new Phone(VALID_PHONE), ParserUtil.parseEditPhone(VALID_PHONE));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditPhone("1234 5678"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditPhone("1234abcd"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditPhone("1234567"));
+    }
+
+    @Test
     public void parseAddress_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseAddress((String) null));
     }
@@ -144,6 +155,41 @@ public class ParserUtilTest {
         String emailWithWhitespace = WHITESPACE + VALID_EMAIL + WHITESPACE;
         Email expectedEmail = new Email(VALID_EMAIL);
         assertEquals(expectedEmail, ParserUtil.parseEmail(emailWithWhitespace));
+    }
+
+    @Test
+    public void parseEditEmail_validAndInvalidValues() throws Exception {
+        assertEquals(new Email(VALID_EMAIL), ParserUtil.parseEditEmail(VALID_EMAIL));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel walker@example.com"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel@example.org"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel@@example.com"));
+    }
+
+    @Test
+    public void parseEditName_validAndInvalidValues() throws Exception {
+        assertEquals(new Name(VALID_NAME), ParserUtil.parseEditName("  Rachel   Walker  "));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditName("Rachel"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditName("R@chel Walker"));
+    }
+
+    @Test
+    public void parseEditRole_validAndInvalidValues() throws Exception {
+        assertEquals(new Role("Software Engineer"), ParserUtil.parseEditRole(" Software   Engineer "));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditRole("Software&Engineer"));
+    }
+
+    @Test
+    public void parseEditCompany_validAndInvalidValues() throws Exception {
+        assertEquals(new Company("Example Company"), ParserUtil.parseEditCompany(" Example   Company "));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditCompany("Ex&Company"));
+    }
+
+    @Test
+    public void parseEditBoss_validEmptyAndInvalidValues() throws Exception {
+        assertEquals(new Boss("Jane Smith"), ParserUtil.parseEditBoss(" Jane   Smith "));
+        assertEquals(new Boss(""), ParserUtil.parseEditBoss("   "));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditBoss("Jane"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditBoss("Jane1 Smith"));
     }
 
     @Test
