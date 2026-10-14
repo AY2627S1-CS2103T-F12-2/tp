@@ -1,9 +1,7 @@
 package seedu.address.model.person;
 
-import java.util.List;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 
@@ -11,16 +9,15 @@ import seedu.address.commons.util.ToStringBuilder;
  * Tests that a {@code Person}'s {@code Category} matches the given category.
  */
 public class PersonInCategory implements Predicate<Person> {
-    private final List<String> category;
+    private final Category category;
 
-    public PersonInCategory(List<String> category) {
+    public PersonInCategory(Category category) {
         this.category = category;
     }
 
     @Override
     public boolean test(Person person) {
-        return category.stream()
-                .anyMatch(category -> StringUtil.containsWordIgnoreCase(person.getCategory().name(), category));
+        return person.getCategory().equals(category);
     }
 
     @Override
@@ -39,6 +36,6 @@ public class PersonInCategory implements Predicate<Person> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keywords", category).toString();
+        return new ToStringBuilder(this).add("category", category).toString();
     }
 }
