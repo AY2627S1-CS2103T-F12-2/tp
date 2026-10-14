@@ -98,7 +98,6 @@ public class Person {
     }
 
 
-
     public Category getCategory() {
         return this.category;
     }
@@ -113,7 +112,7 @@ public class Person {
         }
 
         return otherPerson != null
-                && otherPerson.getName().equals(getName());
+                && otherPerson.getName().fullName.equals(getName().fullName);
     }
 
     /**

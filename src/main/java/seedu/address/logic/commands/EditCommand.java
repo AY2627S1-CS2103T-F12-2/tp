@@ -1,11 +1,12 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOSS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Collections;
@@ -47,15 +48,21 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_ROLE + "ROLE] "
+            + "[" + PREFIX_COMPANY + "COMPANY] "
+            + "[" + PREFIX_BOSS + "BOSS_NAME]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited person: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Contact: %1$s";
+    public static final String MESSAGE_NOT_EDITED =
+            "At least one field to edit must be provided (e.g., p/, e/, rl/, com/, b/).";
+    public static final String MESSAGE_DUPLICATE_PERSON =
+            "Error: An existing contact already uses this phone number or email address. "
+                    + "Duplicate entries are not allowed.";
+    public static final String MESSAGE_BOSS_CYCLE =
+            "Error: A contact cannot be their own boss or form a cyclical management chain.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -88,9 +95,14 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
+        if (createsBossCycle(model.getAddressBook().getPersonList(), personToEdit, editedPerson)) {
+            throw new CommandException(MESSAGE_BOSS_CYCLE);
+        }
+
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
+        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.formatEditedPerson(editedPerson)));
     }
 
     /**
@@ -112,7 +124,41 @@ public class EditCommand extends Command {
         Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
         return new Person(updatedName, updatedPhone, updatedEmail,
-                updatedAddress, updatedTags, updatedRemark, updatedCategory);
+                updatedAddress, updatedTags, updatedRemark, updatedCategory,
+                updatedRole, updatedCompany, updatedBoss);
+    }
+
+    /**
+     * Checks whether the edited person's boss chain contains a cycle.
+     *
+     * @param people all people in the address book
+     * @param original person being edited, which should be excluded when finding bosses
+     * @param edited updated person whose boss chain is checked
+     * @return true if the updated boss chain contains a cycle
+     */
+    private static boolean createsBossCycle(List<Person> people, Person original, Person edited) {
+        String editedName = edited.getName().fullName;
+        String bossName = edited.getBoss().fullName;
+        Set<String> visited = new HashSet<>();
+        visited.add(editedName.toLowerCase(java.util.Locale.ROOT));
+
+        while (!bossName.isEmpty()) {
+            String normalizedBossName = bossName.toLowerCase(java.util.Locale.ROOT);
+            if (!visited.add(normalizedBossName)) {
+                return true;
+            }
+            String bossToFind = bossName;
+            Person boss = people.stream()
+                    .filter(person -> person != original)
+                    .filter(person -> person.getName().fullName.equalsIgnoreCase(bossToFind))
+                    .findFirst()
+                    .orElse(null);
+            if (boss == null) {
+                return false;
+            }
+            bossName = boss.getBoss().fullName;
+        }
+        return false;
     }
 
     @Override

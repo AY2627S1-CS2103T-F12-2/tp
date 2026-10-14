@@ -47,4 +47,14 @@ public class CompanyTest {
 
         assertTrue(companyName.value.equals("Apple Inc"));
     }
+
+    @Test
+    public void hashCode_sameValueDifferentCase_returnsSameHashCode() {
+        assertTrue(new Company("Apple Inc").hashCode() == new Company("apple inc").hashCode());
+    }
+
+    @Test
+    public void equals_differentType_returnsFalse() {
+        assertFalse(new Company("Apple Inc").equals(5));
+    }
 }

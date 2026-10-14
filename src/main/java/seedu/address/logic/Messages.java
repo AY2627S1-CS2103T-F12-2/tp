@@ -45,9 +45,25 @@ public class Messages {
                 .append(person.getAddress())
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
-        builder.append("; Category: ")
+        builder.append("; Role: ")
+                .append(person.getRole())
+                .append("; Company: ")
+                .append(person.getCompany())
+                .append("; Boss: ")
+                .append(person.getBoss())
+                .append("; Category: ")
                 .append(person.getCategory());
         return builder.toString();
+    }
+
+    /** Formats the fields shown in the edit command's success message. */
+    public static String formatEditedPerson(Person person) {
+        return person.getName()
+                + "; Phone: " + person.getPhone()
+                + "; Email: " + person.getEmail()
+                + "; Role: " + person.getRole()
+                + "; Company: " + person.getCompany()
+                + "; Boss: " + person.getBoss();
     }
 
 }
