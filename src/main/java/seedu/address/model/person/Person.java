@@ -33,8 +33,17 @@ public class Person {
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address,
+                  Set<Tag> tags, Remark remark, Category category) {
+        this(name, phone, email, address, tags, remark, new Role("TEST ROLE"),
+                new Company("TEST COMPANY"), new Boss("TEST BOSS"), category);
+    }
+
+    /**
+     * Creates a person with all contact and employment details.
+     */
+    public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Role role, Company company, Boss boss, Category category) {
-        requireAllNonNull(name, phone, email, address, tags, remark, role, company, boss, category);
+        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -147,6 +156,9 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("role", role)
+                .add("company", company)
+                .add("boss", boss)
                 .add("category", category)
                 .toString();
     }

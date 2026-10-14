@@ -39,15 +39,15 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
-    private Label remark;
-    @FXML
-    private FlowPane tags;
-    @FXML
-    private Label boss;
+    private Label role;
     @FXML
     private Label company;
     @FXML
-    private Label role;
+    private Label boss;
+    @FXML
+    private Label remark;
+    @FXML
+    private FlowPane tags;
     @FXML
     private Label category;
 
@@ -59,16 +59,16 @@ public class PersonCard extends UiPart<Region> {
         this.person = person;
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
-        phone.setText(person.getPhone().value);
-        address.setText(person.getAddress().value);
+        phone.setText("Phone: " + person.getPhone().value);
+        address.setText("Address: " + person.getAddress().value);
         email.setText(person.getEmail().value);
+        role.setText("Role: " + person.getRole().value);
+        company.setText("Company: " + person.getCompany().value);
+        boss.setText("Boss: " + person.getBoss().fullName);
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
-        remark.setText(person.getRemark().value);
-        boss.setText(person.getBoss().fullName);
-        role.setText(person.getRole().value);
-        company.setText(person.getCompany().value);
+        remark.setText("Remark: " + person.getRemark().value);
         category.setText(person.getCategory().name());
     }
 }

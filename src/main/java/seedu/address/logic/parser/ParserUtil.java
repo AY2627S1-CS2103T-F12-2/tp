@@ -100,6 +100,7 @@ public class ParserUtil {
 
     /**
      * Parses a {@code String role} into a {@code Role}.
+     * Leading and trailing whitespaces will be trimmed.
      *
      * @throws ParseException if the given role is invalid.
      */
@@ -114,6 +115,7 @@ public class ParserUtil {
 
     /**
      * Parses a {@code String company} into a {@code Company}.
+     * Leading and trailing whitespaces will be trimmed.
      *
      * @throws ParseException if the given company is invalid.
      */
@@ -128,13 +130,14 @@ public class ParserUtil {
 
     /**
      * Parses a {@code String boss} into a {@code Boss}.
+     * Leading and trailing whitespaces will be trimmed.
      *
      * @throws ParseException if the given boss is invalid.
      */
     public static Boss parseBoss(String boss) throws ParseException {
         requireNonNull(boss);
         String trimmedBoss = boss.trim();
-        if (!Name.isValidName(trimmedBoss)) {
+        if (!Boss.isValidBoss(trimmedBoss)) {
             throw new ParseException(Boss.MESSAGE_CONSTRAINTS);
         }
         return new Boss(trimmedBoss);

@@ -26,9 +26,9 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_REMARK = "";
-    public static final String DEFAULT_ROLE = "TEST ROLE";
-    public static final String DEFAULT_COMPANY = "TEST COMPANY";
-    public static final String DEFAULT_BOSS = "TEST BOSS";
+    public static final String DEFAULT_ROLE = "Software Engineer";
+    public static final String DEFAULT_COMPANY = "Acme Corporation";
+    public static final String DEFAULT_BOSS = "Jane Smith";
 
     private Name name;
     private Phone phone;
@@ -113,22 +113,6 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code Remark} of the {@code Person} that we are building.
-     */
-    public PersonBuilder withRemark(String remark) {
-        this.remark = new Remark(remark);
-        return this;
-    }
-
-    /**
-     * Sets the {@code Category} of the {@code Person} that we are building.
-     */
-    public PersonBuilder withCategory(Category category) {
-        this.category = category;
-        return this;
-    }
-
-    /**
      * Sets the {@code Role} of the {@code Person} that we are building.
      */
     public PersonBuilder withRole(String role) {
@@ -149,6 +133,22 @@ public class PersonBuilder {
      */
     public PersonBuilder withBoss(String boss) {
         this.boss = new Boss(boss);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Remark} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withRemark(String remark) {
+        this.remark = new Remark(remark);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Category} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withCategory(Category category) {
+        this.category = category;
         return this;
     }
 

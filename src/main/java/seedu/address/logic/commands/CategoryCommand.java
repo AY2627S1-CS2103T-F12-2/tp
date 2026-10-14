@@ -26,7 +26,7 @@ public class CategoryCommand extends Command {
             + ": Places the person identified by the index number used in the displayed person list into a category\n"
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_CATEGORY + "CATEGORY\n"
-            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CATEGORY + "ROLE";
+            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CATEGORY + "INVESTOR";
 
     private final Index targetIndex;
 

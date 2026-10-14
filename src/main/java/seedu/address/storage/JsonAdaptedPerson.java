@@ -34,10 +34,10 @@ class JsonAdaptedPerson {
     private final String email;
     private final String address;
     private final String remark;
-    private final String category;
-    private final String boss;
     private final String role;
     private final String company;
+    private final String boss;
+    private final String category;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
@@ -46,17 +46,17 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("remark") String remark, @JsonProperty("tags") List<JsonAdaptedTag> tags,
-            @JsonProperty("role") String role, @JsonProperty("boss") String boss,
-            @JsonProperty("company") String company, @JsonProperty("category") String category) {
+            @JsonProperty("remark") String remark, @JsonProperty("role") String role,
+            @JsonProperty("company") String company, @JsonProperty("boss") String boss,
+            @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("category") String category) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.remark = remark;
-        this.boss = boss;
-        this.company = company;
         this.role = role;
+        this.company = company;
+        this.boss = boss;
         this.category = category;
         if (tags != null) {
             this.tags.addAll(tags);
@@ -69,7 +69,7 @@ class JsonAdaptedPerson {
      */
     public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
             List<JsonAdaptedTag> tags, String category) {
-        this(name, phone, email, address, remark, tags, null, null, null, category);
+        this(name, phone, email, address, remark, null, null, null, tags, category);
     }
 
     /**
@@ -81,9 +81,9 @@ class JsonAdaptedPerson {
         email = source.getEmail().value;
         address = source.getAddress().value;
         remark = source.getRemark().value;
-        boss = source.getBoss().fullName;
         role = source.getRole().value;
         company = source.getCompany().value;
+        boss = source.getBoss().fullName;
         category = source.getCategory().name();
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -138,6 +138,31 @@ class JsonAdaptedPerson {
         }
         final Remark modelRemark = new Remark(remark);
 
+        if (role == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Role.class.getSimpleName()));
+        }
+        if (!Role.isValidRole(role)) {
+            throw new IllegalValueException(Role.MESSAGE_CONSTRAINTS);
+        }
+        final Role modelRole = new Role(role);
+
+        if (company == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    Company.class.getSimpleName()));
+        }
+        if (!Company.isValidCompanyName(company)) {
+            throw new IllegalValueException(Company.MESSAGE_CONSTRAINTS);
+        }
+        final Company modelCompany = new Company(company);
+
+        if (boss == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Boss.class.getSimpleName()));
+        }
+        if (!Boss.isValidBoss(boss.trim())) {
+            throw new IllegalValueException(Boss.MESSAGE_CONSTRAINTS);
+        }
+        final Boss modelBoss = new Boss(boss);
+
         if (category == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     Category.class.getSimpleName()));
@@ -148,21 +173,6 @@ class JsonAdaptedPerson {
         }
 
         final Category modelCategory = Category.valueOf(category.toUpperCase());
-
-        if (boss == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Boss.class.getSimpleName()));
-        }
-        final Boss modelBoss = new Boss(boss);
-
-        if (role == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Role.class.getSimpleName()));
-        }
-        final Role modelRole = new Role(role);
-
-        if (company == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Company.class.getSimpleName()));
-        }
-        final Company modelCompany = new Company(company);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark,
