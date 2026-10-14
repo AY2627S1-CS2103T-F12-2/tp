@@ -92,12 +92,31 @@ public class PersonTest {
         // different remark -> returns false
         editedAlice = new PersonBuilder(ALICE).withRemark("Likes cycling.").build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different role -> returns false
+        editedAlice = new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                ALICE.getTags(), ALICE.getRemark(), ALICE.getCategory(), new Role("Manager"),
+                ALICE.getCompany(), ALICE.getBoss());
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different company -> returns false
+        editedAlice = new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                ALICE.getTags(), ALICE.getRemark(), ALICE.getCategory(), ALICE.getRole(), new Company("Google"),
+                ALICE.getBoss());
+        assertFalse(ALICE.equals(editedAlice));
+
+        // different boss -> returns false
+        editedAlice = new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                ALICE.getTags(), ALICE.getRemark(), ALICE.getCategory(), ALICE.getRole(), ALICE.getCompany(),
+                new Boss("Alex Tan"));
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags()
+                + ", role=" + ALICE.getRole() + ", company=" + ALICE.getCompany() + ", boss=" + ALICE.getBoss()
                 + ", category=" + ALICE.getCategory() + "}";
         assertEquals(expected, ALICE.toString());
     }

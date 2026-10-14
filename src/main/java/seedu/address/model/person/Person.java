@@ -34,16 +34,24 @@ public class Person {
      */
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category) {
-        requireAllNonNull(name, phone, email, address, tags, remark, category);
+        this(name, phone, email, address, tags, remark, category, new Role("TEST ROLE"),
+                new Company("TEST COMPANY"), new Boss("TEST BOSS"));
+    }
+
+    /**
+     * Creates a person with all contact and employment details.
+     */
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss) {
+        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.remark = remark;
-        // TODO: [FOR WK 9] REMOVE TEST OBJECTS; INITIALISE FIELDS THROUGH CONSTRUCTOR ARGUMENTS
-        this.role = new Role("TEST ROLE");
-        this.company = new Company("TEST COMPANY");
-        this.boss = new Boss("TEST BOSS");
+        this.role = role;
+        this.company = company;
+        this.boss = boss;
         this.tags.addAll(tags);
         this.category = category;
     }
@@ -128,13 +136,16 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
                 && remark.equals(otherPerson.remark)
+                && role.equals(otherPerson.role)
+                && company.equals(otherPerson.company)
+                && boss.equals(otherPerson.boss)
                 && category.equals(otherPerson.category);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, remark, category);
+        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, category);
     }
 
     @Override
@@ -145,6 +156,9 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("role", role)
+                .add("company", company)
+                .add("boss", boss)
                 .add("category", category)
                 .toString();
     }
