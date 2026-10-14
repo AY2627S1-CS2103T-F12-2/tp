@@ -97,7 +97,6 @@ public class Person {
     }
 
 
-
     public Category getCategory() {
         return this.category;
     }
