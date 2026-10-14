@@ -1,15 +1,16 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import seedu.address.logic.commands.FindCommand;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import seedu.address.model.person.CompanyContainsKeywordsPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.RoleContainsKeywordsPredicate;
 
 public class FindCommandParserTest {
 
@@ -29,6 +30,18 @@ public class FindCommandParserTest {
 
         // multiple whitespaces between keywords
         assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+
+        FindCommand expectedRoleFindCommand =
+                new FindCommand(new RoleContainsKeywordsPredicate(List.of("Engineer")));
+        assertParseSuccess(parser, "rl/Engineer", expectedRoleFindCommand);
+
+        FindCommand expectedCompanyFindCommand =
+                new FindCommand(new CompanyContainsKeywordsPredicate(List.of("Google")));
+        assertParseSuccess(parser, "com/Google", expectedCompanyFindCommand);
+
+        FindCommand expectedNameFindCommand =
+                new FindCommand(new NameContainsKeywordsPredicate(List.of("Alice")));
+        assertParseSuccess(parser, "n/Alice", expectedNameFindCommand);
     }
 
 }
