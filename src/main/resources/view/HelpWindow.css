@@ -1,5 +1,9 @@
-#copyButton, #helpMessage {
+#copyButton, #helpMessage, #commandListTitle {
     -fx-text-fill: white;
+}
+
+#commandListTitle {
+    -fx-font-weight: bold;
 }
 
 #copyButton {
@@ -14,6 +18,19 @@
     -fx-background-color: darkgray;
 }
 
-#helpMessageContainer {
+#helpWindowContainer {
     -fx-background-color: derive(#1d1d1d, 20%);
+}
+
+#commandList {
+    -fx-text-fill: white;
+    -fx-font-family: "Monospaced";
+    -fx-font-size: 12px;
+    -fx-background-color: derive(#1d1d1d, 10%);
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+#commandList .content {
+    -fx-background-color: derive(#1d1d1d, 10%);
 }
