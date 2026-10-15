@@ -33,8 +33,6 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
    * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 rl/Analyst com/Example Bank` : Adds a contact named `John Doe`.
 
-   * `tag 1 t/client` : Adds the tag `client` to the 1st contact shown in the current list.
-
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
    * `clear` : Deletes all contacts.
@@ -84,7 +82,7 @@ Prefix | Field | Used by
 `rl/` | Role | `add`, `edit`, `find`
 `com/` | Company | `add`, `edit`, `find`
 `b/` | Boss | `add`, `edit`
-`t/` | Tag | `add`, `edit`, `tag`
+`t/` | Tag | `add`, `edit`
 `r/` | Remark | `remark`
 `c/` | Category | `category`
 
@@ -158,30 +156,10 @@ Format: `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [c
 * When editing tags, all of the contact's existing tags are removed and replaced with the tags you enter; adding tags this way is not cumulative.
 * To remove all of a contact's tags, enter `t/` without a tag after it.
 
-<box type="tip" seamless>
-
-**Tip:** To add tags without removing the existing ones, use [`tag`](#adding-tags-to-a-contact-tag) instead.
-</box>
-
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 rl/Managing Director com/Example Bank b/` Updates the role and company of the 3rd contact and removes their boss.
-
-### Adding tags to a contact: `tag`
-
-Adds one or more tags to an existing contact, keeping the tags they already have.
-
-Format: `tag INDEX t/TAG [t/TAG]...`
-
-* Adds the given tags to the contact at the specified `INDEX`.
-* At least one tag must be provided.
-* The contact's existing tags are kept. If the contact already has a tag you enter, it is not added a second time.
-* After the command runs, the full contact list is shown.
-
-Examples:
-* `tag 1 t/client` adds the tag `client` to the 1st contact.
-* `tag 2 t/priority t/followup` adds the tags `priority` and `followup` to the 2nd contact.
 
 ### Adding a remark to a contact: `remark`
 
@@ -285,7 +263,7 @@ Furthermore, certain edits can cause ContactFind to behave in unexpected ways (e
 **A**: Install the app on the other computer and overwrite the data file it creates with the data file from your previous ContactFind home folder.
 
 **Q**: How do I add a tag without losing a contact's existing tags?<br>
-**A**: Use `tag INDEX t/TAG`. The `edit` command replaces all existing tags, while `tag` adds to them.
+**A**: The `edit` command replaces all of a contact's existing tags, so include every tag you want to keep. For example, if a contact is tagged `client`, use `edit INDEX t/client t/priority` to add `priority`.
 
 **Q**: Why was my phone number rejected?<br>
 **A**: Phone numbers must contain digits only and be at least 8 digits long. Remove spaces, dashes, and the `+` country code prefix. See [Field constraints](#field-constraints).
@@ -314,4 +292,3 @@ Action     | Format, Examples
 **Help**   | `help`
 **List**   | `list`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
-**Tag**    | `tag INDEX t/TAG [t/TAG]...`<br> e.g., `tag 1 t/client t/priority`
