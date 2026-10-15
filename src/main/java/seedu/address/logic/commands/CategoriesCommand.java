@@ -19,6 +19,10 @@ import seedu.address.model.person.Person;
 public class CategoriesCommand extends Command {
     public static final String COMMAND_WORD = "categories";
 
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Lists all categories and the number of persons in each category.\n"
+            + "Example: " + COMMAND_WORD;
+
     public static final String MESSAGE_SUCCESS = "Listed all categories:\n%1$s";
 
     @Override
