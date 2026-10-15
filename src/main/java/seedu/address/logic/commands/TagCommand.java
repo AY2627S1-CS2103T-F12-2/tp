@@ -10,14 +10,12 @@ import java.util.HashSet;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.parser.ParserUtil;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
- * Changes the remark of an existing person in the address book.
+ * Adds a tag to an existing person in the address book.
  */
 public class TagCommand extends Command {
 
@@ -34,6 +32,8 @@ public class TagCommand extends Command {
 
 
     public static final String MESSAGE_ADD_TAG_SUCCESS = "Added tag(s) to Person: %1$s";
+
+    //unused, to be used when delete tag function is added
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Removed tag(s) from Person: %1$s";
 
     private final Index index;
@@ -68,7 +68,8 @@ public class TagCommand extends Command {
         Person editedPerson = new Person(
                 personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(),
                 personToEdit.getAddress(), updatedTags, personToEdit.getRemark(),
-                personToEdit.getCategory());
+                personToEdit.getCategory(), personToEdit.getRole(), personToEdit.getCompany(),
+                personToEdit.getBoss());
 
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
@@ -82,7 +83,13 @@ public class TagCommand extends Command {
      * {@code personToEdit}.
      */
     private String generateSuccessMessage(Person personToEdit) {
-        String message = !tagsToAdd.isEmpty() ? MESSAGE_ADD_TAG_SUCCESS : MESSAGE_DELETE_TAG_SUCCESS;
+
+        // MESSAGE_DELETE_TAG_SUCCESS unused,
+        // to be used when delete tag function is added
+        //String message = !tagsToAdd.isEmpty() ? MESSAGE_ADD_TAG_SUCCESS : MESSAGE_DELETE_TAG_SUCCESS;
+
+        String message = MESSAGE_ADD_TAG_SUCCESS;
+
         return String.format(message, Messages.format(personToEdit));
     }
 

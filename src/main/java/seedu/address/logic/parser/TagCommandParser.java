@@ -2,14 +2,11 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.TagCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 import java.util.Set;
@@ -17,7 +14,7 @@ import java.util.Set;
 /**
  * Parses input arguments and creates a {@code TagCommand}.
  */
-public class TagCommandParser implements Parser {
+public class TagCommandParser implements Parser<TagCommand> {
     /**
      * Parses the given arguments and returns a {@code TagCommand}.
      *
@@ -28,7 +25,7 @@ public class TagCommandParser implements Parser {
     public TagCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
-                PREFIX_REMARK);
+                PREFIX_TAG);
 
         Index index;
         try {
@@ -36,6 +33,12 @@ public class TagCommandParser implements Parser {
         } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     TagCommand.MESSAGE_USAGE), pe);
+        }
+
+        // Check for empty tag parameters (i.e. "tag 1")
+        if (argMultimap.getAllValues(PREFIX_TAG).isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    TagCommand.MESSAGE_USAGE));
         }
 
         Set<Tag> tagsToAdd = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
