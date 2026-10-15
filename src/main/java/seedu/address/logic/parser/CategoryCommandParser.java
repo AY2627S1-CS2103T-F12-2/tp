@@ -49,7 +49,7 @@ public class CategoryCommandParser implements Parser<CategoryCommand> {
             Category category = Category.valueOf(categoryFieldInput.toUpperCase());
             return new CategoryCommand(index, category);
         } catch (IllegalArgumentException e) {
-            throw new ParseException("Invalid Category");
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CategoryCommand.MESSAGE_USAGE), e);
         }
 
     }

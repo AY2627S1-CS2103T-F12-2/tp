@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Locale;
 /**
  * Represents a Person's name in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidName(String)}
@@ -10,8 +11,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphabetical characters and spaces, should not be blank "
-                    + "and must contain first and last name";
+            "Invalid name! Names may contain alphabetic characters only.";
 
     /*
      * A valid name consists of at least a first name and last name, separated by spaces.
@@ -36,9 +36,16 @@ public class Name {
      * @param messageConstraints The message displayed when validation fails.
      */
     protected Name(String name, String messageConstraints) {
+        this(name, messageConstraints, false);
+    }
+
+    /**
+     * Constructs a {@code Name} with a custom validation message and optional empty value.
+     */
+    protected Name(String name, String messageConstraints, boolean allowsEmpty) {
         name = name.trim();
         requireNonNull(name);
-        checkArgument(isValidName(name), messageConstraints);
+        checkArgument(allowsEmpty && name.isEmpty() || isValidName(name), messageConstraints);
         fullName = name;
     }
 
@@ -66,12 +73,12 @@ public class Name {
             return false;
         }
 
-        return fullName.equals(otherName.fullName);
+        return fullName.equalsIgnoreCase(otherName.fullName);
     }
 
     @Override
     public int hashCode() {
-        return fullName.hashCode();
+        return fullName.toLowerCase(Locale.ROOT).hashCode();
     }
 
 }

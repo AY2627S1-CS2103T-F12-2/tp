@@ -3,6 +3,8 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Locale;
+
 /**
  * Represents a Person's company name in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidCompanyName(String)}
@@ -42,7 +44,20 @@ public class Company {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof Company otherCompany)) {
+            return false;
+        }
+
+        return value.equalsIgnoreCase(otherCompany.value);
+    }
+
+    @Override
     public int hashCode() {
-        return value.hashCode();
+        return value.toLowerCase(Locale.ROOT).hashCode();
     }
 }

@@ -31,7 +31,7 @@ AddressBook Level 3 (AB3) is a **desktop application for managing contacts, opti
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 rl/Analyst com/Example Bank` : Adds a contact named `John Doe`.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -67,6 +67,23 @@ AddressBook Level 3 (AB3) is a **desktop application for managing contacts, opti
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
+### Prefix reference
+
+Use a prefix immediately before its value. Not every prefix is accepted by every command; refer to each command's format.
+
+Prefix | Field | Used by
+-------|-------|--------
+`n/` | Name | `add`, `edit`
+`p/` | Phone number | `add`, `edit`
+`e/` | Email address | `add`, `edit`
+`a/` | Address | `add`, `edit`
+`rl/` | Role | `add`
+`com/` | Company | `add`
+`b/` | Boss | `add`
+`t/` | Tag | `add`, `edit`
+`r/` | Remark | `remark`
+`c/` | Category | `category`
+
 ### Viewing help: `help`
 
 Shows a message explaining how to access the help page.
@@ -78,18 +95,21 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book.
+Adds a person to ContactFind.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]... `
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS rl/ROLE com/COMPANY [b/BOSS] [t/TAG]...`
 
+* Name, phone number, email address, address, role, and company are required.
+* Boss and tags are optional.
 <box type="tip" seamless>
 
-**Tip:** A person can have any number of tags, including zero.
+**Tip:** * You can provide any number of tags.
+To assign multiple tags, repeat the `t/` prefix.
 </box>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 rl/CEO com/ABC Bank`
+* `add n/Mary Smith p/1234567 e/betsycrowe@example.com a/ABC Street rl/CFO com/Hello Company b/Alex Smith t/client t/priority`
 
 ### Listing all persons: `list`
 
@@ -97,13 +117,38 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
+### Categorizing a person: `category`
+
+Places an existing person into a category.
+
+Format: `category INDEX c/CATEGORY`
+
+* Categorizes the person at the specified `INDEX`. 
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, ...
+* `CATEGORY` must be one of: `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, `OTHER`.
+* Category names are case-insensitive.
+* Each person can have only one category. Categorizing a person replaces that person's current category.
+
+Examples:
+* `category 1 c/INVESTOR` categorizes the 1st person in the displayed list as an investor.
+* `category 2 c/UNCATEGORIZED` removes the 2nd person's specific category.
+
+### Listing all categories: `categories`
+
+Shows all available categories and the number of persons assigned to each category.
+
+Format: `categories`
+
 ### Editing a person: `edit`
 
 Edits an existing person in the address book.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... `
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, ...
+* Edits the person at the specified `INDEX`. 
+* The index refers to the index number shown in the displayed person list. 
+* The index **must be a positive integer** 1, 2, 3, ...
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing tags, all of the person's existing tags are removed; adding tags is not cumulative.
@@ -196,6 +241,8 @@ _Details coming soon ..._
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]... ` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
+**Categories** | `categories`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]... `<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`

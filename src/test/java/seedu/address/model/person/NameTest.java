@@ -61,4 +61,9 @@ public class NameTest {
         // different values -> returns false
         assertFalse(name.equals(new Name("Other Person")));
     }
+
+    @Test
+    public void hashCode_sameValueDifferentCase_returnsSameHashCode() {
+        assertTrue(new Name("Valid Name").hashCode() == new Name("valid name").hashCode());
+    }
 }
