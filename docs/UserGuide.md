@@ -205,14 +205,14 @@ Format: `categories`
 
 Finds contacts whose name, role, or company contains any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]...` or `find n/KEYWORD [MORE_KEYWORDS]...` or `find rl/KEYWORD [MORE_KEYWORDS]...` or `find com/KEYWORD [MORE_KEYWORDS]...`
+Format: `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD [MORE_KEYWORDS]...`, `find rl/KEYWORD [MORE_KEYWORDS]...`, `find com/KEYWORD [MORE_KEYWORDS]...`, or `find fd/YYYY-MM-DD`
 
-* Without a prefix, or with `n/`, the search looks at names. With `rl/`, it looks at roles. With `com/`, it looks at companies.
+* Without a prefix, or with `n/`, the search looks at names. With `rl/`, it looks at roles. With `com/`, it looks at companies. With `fd/`, it looks for an exact follow-up date.
 * The search is case-insensitive; for example, `hans` matches `Hans`.
 * Partial words match; for example, `Han` matches `Hans`.
 * Keyword order does not matter.
 * Contacts matching at least one keyword are returned (an `OR` search); for example, `find Hans Bo` returns `Hans Gruber` and `Bo Yang`.
-* Only one field can be searched at a time. If you enter more than one prefix, only the first of `n/`, `rl/`, `com/` (in that order) is used.
+* Only one field can be searched at a time. If you enter more than one prefix, only the first recognized field is used.
 
 Examples:
 * `find John` returns `John Doe` and `Johnny Tan`.
@@ -220,18 +220,34 @@ Examples:
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 * `find rl/analyst` returns every contact whose role contains `analyst`.
 * `find com/example` returns every contact whose company contains `example`.
+* `find fd/2026-10-20` returns every contact with a follow-up date of `2026-10-20`.
 
 ### Deleting a contact: `delete`
 
 Deletes the specified contact from ContactFind.
 
-Format: `delete INDEX`
+Format: `delete INDEX` or `delete fd/YYYY-MM-DD`
 
 * Deletes the contact at the specified `INDEX`.
+* `delete fd/YYYY-MM-DD` deletes all displayed contacts with the specified follow-up date.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd contact in ContactFind.
 * `find Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
+* `delete fd/2026-10-20` deletes every displayed contact with that follow-up date.
+
+### Sorting contacts: `sort`
+
+Sorts contacts by follow-up date. Contacts without a follow-up date are placed at the end.
+
+Format: `sort fd/[asc|desc]`
+
+* `sort fd/` and `sort fd/asc` sort by follow-up date from earliest to latest.
+* `sort fd/desc` sorts by follow-up date from latest to earliest.
+
+Examples:
+* `sort fd/` sorts all contacts by their next follow-up date.
+* `sort fd/desc` sorts all contacts in reverse date order.
 
 ### Clearing all entries: `clear`
 
@@ -290,10 +306,11 @@ Action     | Format, Examples
 **Categories** | `categories`
 **Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
 **Clear**  | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete INDEX` or `delete fd/YYYY-MM-DD`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`<br> e.g., `find James Jake`, `find com/example`
+**Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`
 **Help**   | `help`
 **List**   | `list`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
+**Sort**   | `sort fd/[asc\|desc]`<br> e.g., `sort fd/`
