@@ -45,6 +45,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label boss;
     @FXML
+    private Label followUpDate;
+    @FXML
     private Label remark;
     @FXML
     private FlowPane tags;
@@ -65,6 +67,8 @@ public class PersonCard extends UiPart<Region> {
         role.setText("Role: " + person.getRole().value);
         company.setText("Company: " + person.getCompany().value);
         boss.setText("Boss: " + person.getBoss().fullName);
+        followUpDate.setText(person.getFollowUpDate() == null
+                ? "Follow-up date: not set" : "Follow-up date: " + person.getFollowUpDate());
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));

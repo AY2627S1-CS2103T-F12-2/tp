@@ -82,6 +82,7 @@ Prefix | Field | Used by
 `rl/` | Role | `add`, `edit`, `find`
 `com/` | Company | `add`, `edit`, `find`
 `b/` | Boss | `add`, `edit`
+`fd/` | Follow-up date | `add`, `edit`
 `t/` | Tag | `add`, `edit`
 `r/` | Remark | `remark`
 `c/` | Category | `category`
@@ -99,6 +100,7 @@ Address | Any value, but must not be blank. | `John street, block 123, #01-01`
 Role | Letters and digits, with words separated by single spaces. | `Vice President`
 Company | Letters and digits, with words separated by single spaces, and at least 3 characters long. | `Example Bank`
 Boss | Same as Name, or empty. | `Alex Smith`
+Follow-up date | A valid calendar date in `yyyy-MM-dd` format. | `2026-10-20`
 Tag | Letters and digits only, with no spaces. | `priority`
 Remark | Any value. | `Prefers email over calls`
 Category | One of `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, `OTHER` (case-insensitive). | `INVESTOR`
@@ -121,10 +123,10 @@ Format: `help`
 
 Adds a contact to ContactFind.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS rl/ROLE com/COMPANY [b/BOSS] [t/TAG]...`
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS rl/ROLE com/COMPANY [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`
 
 * Name, phone number, email address, address, role, and company are required.
-* Boss and tags are optional.
+* Boss, follow-up date, and tags are optional.
 * New contacts start in the `UNCATEGORIZED` category. Use [`category`](#categorizing-a-contact-category) to change it.
 
 <box type="tip" seamless>
@@ -136,6 +138,7 @@ To assign multiple tags, repeat the `t/` prefix.
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 rl/CEO com/ABC Bank`
 * `add n/Mary Smith p/12345678 e/betsycrowe@example.com a/ABC Street rl/CFO com/Hello Company b/Alex Smith t/client t/priority`
+* `add n/Chris Tan p/81234567 e/chris@example.com a/Orchard Road rl/Analyst com/ABC Bank fd/2026-10-20`
 
 ### Listing all contacts: `list`
 
@@ -147,12 +150,13 @@ Format: `list`
 
 Edits an existing contact in ContactFind.
 
-Format: `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [t/TAG]...`
+Format: `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`
 
 * Edits the contact at the specified `INDEX`.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * To remove a contact's boss, enter `b/` without a name after it.
+* To set a contact's follow-up date, enter `fd/YYYY-MM-DD`.
 * When editing tags, all of the contact's existing tags are removed and replaced with the tags you enter; adding tags this way is not cumulative.
 * To remove all of a contact's tags, enter `t/` without a tag after it.
 
@@ -160,6 +164,7 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 rl/Managing Director com/Example Bank b/` Updates the role and company of the 3rd contact and removes their boss.
+* `edit 1 fd/2026-10-20` sets the follow-up date of the 1st contact.
 
 ### Adding a remark to a contact: `remark`
 
@@ -281,12 +286,12 @@ Furthermore, certain edits can cause ContactFind to behave in unexpected ways (e
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS rl/ROLE com/COMPANY [b/BOSS] [t/TAG]...` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 rl/Analyst com/Example Bank t/client`
+**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS rl/ROLE com/COMPANY [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 rl/Analyst com/Example Bank fd/2026-10-20 t/client`
 **Categories** | `categories`
 **Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
+**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`<br> e.g., `find James Jake`, `find com/example`
 **Help**   | `help`

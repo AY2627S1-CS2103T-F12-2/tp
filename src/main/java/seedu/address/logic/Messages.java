@@ -50,20 +50,28 @@ public class Messages {
                 .append("; Company: ")
                 .append(person.getCompany())
                 .append("; Boss: ")
-                .append(person.getBoss())
-                .append("; Category: ")
+                .append(person.getBoss());
+        if (person.getFollowUpDate() != null) {
+            builder.append("; Follow-up date: ")
+                    .append(person.getFollowUpDate());
+        }
+        builder.append("; Category: ")
                 .append(person.getCategory());
         return builder.toString();
     }
 
     /** Formats the fields shown in the edit command's success message. */
     public static String formatEditedPerson(Person person) {
-        return person.getName()
+        String result = person.getName()
                 + "; Phone: " + person.getPhone()
                 + "; Email: " + person.getEmail()
                 + "; Role: " + person.getRole()
                 + "; Company: " + person.getCompany()
                 + "; Boss: " + person.getBoss();
+        if (person.getFollowUpDate() != null) {
+            result += "; Follow-up date: " + person.getFollowUpDate();
+        }
+        return result;
     }
 
 }

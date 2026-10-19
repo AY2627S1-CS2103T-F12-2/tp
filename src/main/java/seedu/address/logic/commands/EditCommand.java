@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_BOSS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_FOLLOW_UP_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
@@ -29,6 +30,7 @@ import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -54,6 +56,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_ROLE + "ROLE] "
             + "[" + PREFIX_COMPANY + "COMPANY] "
             + "[" + PREFIX_BOSS + "BOSS_NAME] "
+            + "[" + PREFIX_FOLLOW_UP_DATE + "DATE] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -125,11 +128,13 @@ public class EditCommand extends Command {
         Role updatedRole = editPersonDescriptor.getRole().orElse(personToEdit.getRole());
         Company updatedCompany = editPersonDescriptor.getCompany().orElse(personToEdit.getCompany());
         Boss updatedBoss = editPersonDescriptor.getBoss().orElse(personToEdit.getBoss());
+        FollowUpDate updatedFollowUpDate = editPersonDescriptor.getFollowUpDate()
+                .orElse(personToEdit.getFollowUpDate());
         Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
         return new Person(updatedName, updatedPhone, updatedEmail,
                 updatedAddress, updatedTags, updatedRemark, updatedCategory,
-                updatedRole, updatedCompany, updatedBoss);
+                updatedRole, updatedCompany, updatedBoss, updatedFollowUpDate);
     }
 
     /**
@@ -202,6 +207,7 @@ public class EditCommand extends Command {
         private Role role;
         private Company company;
         private Boss boss;
+        private FollowUpDate followUpDate;
         private Category category;
 
         public EditPersonDescriptor() {}
@@ -220,6 +226,7 @@ public class EditCommand extends Command {
             setRole(toCopy.role);
             setCompany(toCopy.company);
             setBoss(toCopy.boss);
+            setFollowUpDate(toCopy.followUpDate);
             setCategory(toCopy.category);
         }
 
@@ -228,7 +235,7 @@ public class EditCommand extends Command {
          */
         public boolean isAnyFieldEdited() {
             return CollectionUtil.isAnyNonNull(name, phone, email, address, tags,
-                    remark, role, company, boss, category);
+                    remark, role, company, boss, followUpDate, category);
         }
 
         public void setName(Name name) {
@@ -294,6 +301,15 @@ public class EditCommand extends Command {
         public Optional<Boss> getBoss() {
             return Optional.ofNullable(boss);
         }
+
+        public void setFollowUpDate(FollowUpDate followUpDate) {
+            this.followUpDate = followUpDate;
+        }
+
+        public Optional<FollowUpDate> getFollowUpDate() {
+            return Optional.ofNullable(followUpDate);
+        }
+
         public void setCategory(Category category) {
             this.category = category;
         }
@@ -340,12 +356,13 @@ public class EditCommand extends Command {
                     && Objects.equals(role, otherEditPersonDescriptor.role)
                     && Objects.equals(company, otherEditPersonDescriptor.company)
                     && Objects.equals(boss, otherEditPersonDescriptor.boss)
+                    && Objects.equals(followUpDate, otherEditPersonDescriptor.followUpDate)
                     && Objects.equals(category, otherEditPersonDescriptor.category);
         }
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this)
+            ToStringBuilder builder = new ToStringBuilder(this)
                     .add("name", name)
                     .add("phone", phone)
                     .add("email", email)
@@ -355,8 +372,11 @@ public class EditCommand extends Command {
                     .add("category", category)
                     .add("role", role)
                     .add("company", company)
-                    .add("boss", boss)
-                    .toString();
+                    .add("boss", boss);
+            if (followUpDate != null) {
+                builder.add("followUpDate", followUpDate);
+            }
+            return builder.toString();
         }
     }
 }
