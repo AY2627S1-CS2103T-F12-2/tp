@@ -66,6 +66,7 @@ public class CategoryCommand extends Command {
                 personToCategorize.getBoss());
 
         model.setPerson(personToCategorize, editedPerson);
+        model.commitAddressBook();
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
