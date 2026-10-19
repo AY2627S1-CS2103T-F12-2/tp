@@ -27,6 +27,7 @@ checkstyle {
 test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
+    enableAssertions = true
 }
 
 task coverage(type: JacocoReport) {
