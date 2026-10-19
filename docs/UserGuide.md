@@ -234,6 +234,26 @@ Clears all contacts from ContactFind.
 
 Format: `clear`
 
+### Saving an undo checkpoint: `commit`
+
+Saves the current contact list as a manual checkpoint for a future undo operation.
+
+Format: `commit`
+
+### Undoing a change: `undo`
+
+Restores the contact-list state before the most recent saved change. Each successful contact-changing command
+automatically saves a state.
+
+Format: `undo`
+
+### Redoing a change: `redo`
+
+Reapplies the contact-list state most recently undone. Redo is unavailable after a new contact-changing command is
+run.
+
+Format: `redo`
+
 ### Exiting the program: `exit`
 
 Exits the program.
@@ -285,6 +305,7 @@ Action     | Format, Examples
 **Categories** | `categories`
 **Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
 **Clear**  | `clear`
+**Commit** | `commit`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
@@ -292,3 +313,5 @@ Action     | Format, Examples
 **Help**   | `help`
 **List**   | `list`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
+**Redo** | `redo`
+**Undo** | `undo`
