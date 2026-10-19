@@ -80,5 +80,11 @@ public class HistoryCommitCommandTest {
             super.commitAddressBook();
             commitCount++;
         }
+
+        @Override
+        public void commitAddressBook(String actionName) {
+            super.commitAddressBook(actionName);
+            commitCount++;
+        }
     }
 }

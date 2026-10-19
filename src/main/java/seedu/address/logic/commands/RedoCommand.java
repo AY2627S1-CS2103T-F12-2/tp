@@ -2,6 +2,9 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 
@@ -11,6 +14,7 @@ import seedu.address.model.Model;
 public class RedoCommand extends Command {
 
     public static final String COMMAND_WORD = "redo";
+    private static final Logger logger = LogsCenter.getLogger(RedoCommand.class);
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Reapplies the contact-list change most recently undone.\n"
             + "Example: " + COMMAND_WORD;
     public static final String MESSAGE_SUCCESS = "Redid previously undone action. Contact-list state restored.";
@@ -20,6 +24,7 @@ public class RedoCommand extends Command {
         requireNonNull(model);
 
         if (!model.canRedoAddressBook()) {
+            logger.warning("Redo unavailable: no later history state exists.");
             throw new CommandException(MESSAGE_NO_REDOABLE_ACTIONS);
         }
 

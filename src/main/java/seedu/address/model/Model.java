@@ -42,6 +42,15 @@ public interface Model {
     void commitAddressBook();
 
     /**
+     * Saves the current address book state with a safe name for the action that created it.
+     *
+     * @param actionName non-sensitive action name for history logging
+     */
+    default void commitAddressBook(String actionName) {
+        commitAddressBook();
+    }
+
+    /**
      * Restores the previous address book state.
      */
     void undoAddressBook();

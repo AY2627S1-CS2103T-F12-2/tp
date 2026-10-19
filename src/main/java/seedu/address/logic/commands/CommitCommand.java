@@ -17,7 +17,7 @@ public class CommitCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        model.commitAddressBook();
+        model.commitAddressBook(COMMAND_WORD);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

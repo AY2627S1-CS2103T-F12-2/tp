@@ -75,6 +75,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void commitAddressBook(String actionName) {
+        addressBook.commit(actionName);
+    }
+
+    @Override
     public void undoAddressBook() {
         addressBook.undo();
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
