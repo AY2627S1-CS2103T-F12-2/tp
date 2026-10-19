@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.CompanyContainsKeywordsPredicate;
+import seedu.address.model.person.FollowUpDate;
+import seedu.address.model.person.FollowUpDatePredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.RoleContainsKeywordsPredicate;
 
@@ -43,6 +45,15 @@ public class FindCommandParserTest {
         FindCommand expectedNameFindCommand =
                 new FindCommand(new NameContainsKeywordsPredicate(List.of("Alice")));
         assertParseSuccess(parser, "n/Alice", expectedNameFindCommand);
+
+        FindCommand expectedFollowUpDateFindCommand =
+                new FindCommand(new FollowUpDatePredicate(new FollowUpDate("2026-10-20")));
+        assertParseSuccess(parser, "fd/2026-10-20", expectedFollowUpDateFindCommand);
+    }
+
+    @Test
+    public void parse_invalidFollowUpDate_throwsParseException() {
+        assertParseFailure(parser, "fd/2026-02-30", FollowUpDate.MESSAGE_CONSTRAINTS);
     }
 
 }
