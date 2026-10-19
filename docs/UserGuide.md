@@ -236,7 +236,7 @@ Format: `clear`
 
 ### Saving an undo checkpoint: `commit`
 
-Saves the current contact list as a manual checkpoint for a future undo operation.
+Manually saves the current contact list as a manual checkpoint for a future undo operation.
 
 Format: `commit`
 
@@ -313,3 +313,6 @@ Action     | Format, Examples
 **Help**   | `help`
 **List**   | `list`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
+**Redo**   | `redo`
+**Undo**   | `undo`
+**Commit** | `commit`
