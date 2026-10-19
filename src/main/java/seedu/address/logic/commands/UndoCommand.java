@@ -14,11 +14,12 @@ import seedu.address.model.Model;
 public class UndoCommand extends Command {
 
     public static final String COMMAND_WORD = "undo";
-    private static final Logger logger = LogsCenter.getLogger(UndoCommand.class);
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Reverts the most recent saved contact-list change.\n"
             + "Example: " + COMMAND_WORD;
     public static final String MESSAGE_SUCCESS = "Undid previous action. Previous contact-list state restored.";
     public static final String MESSAGE_NO_UNDOABLE_ACTIONS = "There are no earlier changes to undo.";
+    private static final Logger logger = LogsCenter.getLogger(UndoCommand.class);
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);

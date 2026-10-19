@@ -11,16 +11,16 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CategoriesCommand;
 import seedu.address.logic.commands.CategoryCommand;
 import seedu.address.logic.commands.ClearCommand;
-import seedu.address.logic.commands.CommitCommand;
 import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.CommitCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
-import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.RedoCommand;
+import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 

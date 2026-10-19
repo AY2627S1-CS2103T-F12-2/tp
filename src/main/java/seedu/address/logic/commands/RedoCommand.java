@@ -14,11 +14,13 @@ import seedu.address.model.Model;
 public class RedoCommand extends Command {
 
     public static final String COMMAND_WORD = "redo";
-    private static final Logger logger = LogsCenter.getLogger(RedoCommand.class);
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Reapplies the contact-list change most recently undone.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Reapplies the contact-list change most recently undone.\n"
             + "Example: " + COMMAND_WORD;
     public static final String MESSAGE_SUCCESS = "Redid previously undone action. Contact-list state restored.";
     public static final String MESSAGE_NO_REDOABLE_ACTIONS = "There are no later changes to redo.";
+    private static final Logger logger = LogsCenter.getLogger(RedoCommand.class);
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);

@@ -41,7 +41,7 @@ public class AddCommandTest {
         assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
                 commandResult.getFeedbackToUser());
         assertEquals(List.of(validPerson), modelStub.personsAdded);
-        assertEquals(1, modelStub.commitCount);
+        assertEquals(1, modelStub.getCommitCount());
     }
 
     @Test
@@ -192,7 +192,7 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
-        int commitCount;
+        private int commitCount;
 
         @Override
         public boolean hasPerson(Person person) {
@@ -209,6 +209,10 @@ public class AddCommandTest {
         @Override
         public void commitAddressBook() {
             commitCount++;
+        }
+
+        int getCommitCount() {
+            return commitCount;
         }
 
         @Override
