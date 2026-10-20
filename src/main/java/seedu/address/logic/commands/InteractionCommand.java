@@ -50,7 +50,7 @@ public class InteractionCommand extends Command {
         }
 
         Person original = shownPersons.get(index.getZeroBased());
-        if (!Interaction.isValidInteraction(original.getName().fullName, date)) {
+        if (!Interaction.isValidDate(date)) {
             throw new CommandException(Interaction.MESSAGE_CONSTRAINTS);
         }
         Interaction interaction = new Interaction(original.getName().fullName, date, type, note);

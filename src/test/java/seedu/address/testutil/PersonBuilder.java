@@ -10,6 +10,7 @@ import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Interaction;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;

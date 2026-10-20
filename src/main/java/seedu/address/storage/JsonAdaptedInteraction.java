@@ -1,11 +1,14 @@
 package seedu.address.storage;
 
+import java.util.Locale;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
+import seedu.address.model.person.Name;
 
 /** Jackson-friendly form of an interaction. */
 class JsonAdaptedInteraction {
@@ -30,11 +33,25 @@ class JsonAdaptedInteraction {
     }
 
     public Interaction toModelType() throws IllegalValueException {
-        if (name == null || date == null || type == null || note == null
-                || !Interaction.isValidInteraction(name, date)
-                || !InteractionType.isValidInteractionType(type)) {
+        if (name == null || date == null || type == null || note == null) {
             throw new IllegalValueException(Interaction.MESSAGE_CONSTRAINTS);
         }
-        return new Interaction(name, date, InteractionType.valueOf(type.toUpperCase(java.util.Locale.ROOT)), note);
+
+        if (!Name.isValidName(name)) {
+            throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+        }
+
+        if (!Interaction.isValidDate(date)) {
+            throw new IllegalValueException(Interaction.MESSAGE_CONSTRAINTS);
+        }
+
+        if (!InteractionType.isValidInteractionType(type)) {
+            throw new IllegalValueException(InteractionType.MESSAGE_CONSTRAINTS);
+        }
+
+        InteractionType interactionType =
+                InteractionType.valueOf(type.toUpperCase(Locale.ROOT));
+
+        return new Interaction(name, date, interactionType, note);
     }
 }

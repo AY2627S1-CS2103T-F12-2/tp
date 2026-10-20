@@ -1,11 +1,14 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -27,4 +30,50 @@ public class InteractionCommandTest {
         assertEquals(original.getInteractions().size() + 1, updated.getInteractions().size());
         assertEquals("Discussed proposal", updated.getInteractions().getLast().getNote());
     }
+
+
+    @Test
+    public void execute_invalidDate_throwsIllegalArgumentException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        assertThrows(IllegalArgumentException.class, () -> new InteractionCommand(INDEX_FIRST_PERSON,
+                "invalid-date", InteractionType.MEETING, "Discussed proposal"));
+    }
+
+    @Test
+    public void execute_invalidIndex_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-20", InteractionType.MEETING, "Discussed proposal");
+        model.deletePerson(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()));
+        assertThrows(CommandException.class, () -> command.execute(model));
+    }
+
+    @Test
+    public void toStringMethod() {
+        InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-20", InteractionType.MEETING, "Discussed proposal");
+        String expectedString = "interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal";
+        assertEquals(expectedString, command.toString());
+    }
+
+
+    @Test
+    public void equals() {
+        InteractionCommand command1 = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-20", InteractionType.MEETING, "Discussed proposal");
+        InteractionCommand command2 = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-20", InteractionType.MEETING, "Discussed proposal");
+        InteractionCommand command3 = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-21", InteractionType.MEETING, "Discussed proposal");
+
+        // same object -> returns true
+        assertEquals(command1, command1);
+
+        // same values -> returns true
+        assertEquals(command1, command2);
+
+        // different values -> returns false
+        assertNotEquals(command1, command3);
+    }
+
 }
