@@ -52,6 +52,23 @@ public class RemarkCommandTest {
     }
 
     @Test
+    public void execute_remarkWithFollowUpDate_preservesFollowUpDate() {
+        Person originalPerson = new PersonBuilder().withName("Follow Up Contact")
+                .withFollowUpDate("2026-10-20").build();
+        AddressBook addressBook = new AddressBook();
+        addressBook.addPerson(originalPerson);
+        Model model = new ModelManager(addressBook, new UserPrefs());
+        Person editedPerson = new PersonBuilder(originalPerson).withRemark("Call next week.").build();
+        Model expectedModel = new ModelManager(new AddressBook(addressBook), new UserPrefs());
+        expectedModel.setPerson(originalPerson, editedPerson);
+        String expectedMessage = String.format(RemarkCommand.MESSAGE_ADD_REMARK_SUCCESS,
+                Messages.format(editedPerson));
+
+        assertCommandSuccess(new RemarkCommand(INDEX_FIRST_PERSON, new Remark("Call next week.")), model,
+                expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_invalidIndex_failure() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);

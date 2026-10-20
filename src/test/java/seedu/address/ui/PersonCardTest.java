@@ -24,7 +24,8 @@ public class PersonCardTest {
 
     @Test
     public void constructor_withoutFollowUpDate_loadsPersonCard() {
-        Person person = new PersonBuilder().withName("Alice Tan").build();
+        Person person = new PersonBuilder().withName("Alice Tan")
+                .withTags("zulu", "alpha").build();
         PersonCard personCard = new PersonCard(person, 1);
 
         assertEquals(person, personCard.person);
@@ -34,7 +35,7 @@ public class PersonCardTest {
     @Test
     public void constructor_withFollowUpDate_loadsPersonCard() {
         Person person = new PersonBuilder().withName("Bob Tan")
-                .withFollowUpDate("2026-10-20").build();
+                .withTags("beta", "alpha").withFollowUpDate("2026-10-20").build();
         PersonCard personCard = new PersonCard(person, 2);
 
         assertEquals(person, personCard.person);
