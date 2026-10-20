@@ -63,7 +63,8 @@ public class CategoryCommand extends Command {
                 targetCategory,
                 personToCategorize.getRole(),
                 personToCategorize.getCompany(),
-                personToCategorize.getBoss());
+                personToCategorize.getBoss(),
+                personToCategorize.getInteractions());
 
         model.setPerson(personToCategorize, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);

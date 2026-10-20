@@ -15,6 +15,7 @@ import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Interaction;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -39,6 +40,7 @@ class JsonAdaptedPerson {
     private final String boss;
     private final String category;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
+    private final List<JsonAdaptedInteraction> interactions = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -48,7 +50,8 @@ class JsonAdaptedPerson {
             @JsonProperty("email") String email, @JsonProperty("address") String address,
             @JsonProperty("remark") String remark, @JsonProperty("role") String role,
             @JsonProperty("company") String company, @JsonProperty("boss") String boss,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("category") String category) {
+            @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("category") String category,
+            @JsonProperty("interactions") List<JsonAdaptedInteraction> interactions) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -60,6 +63,9 @@ class JsonAdaptedPerson {
         this.category = category;
         if (tags != null) {
             this.tags.addAll(tags);
+        }
+        if (interactions != null) {
+            this.interactions.addAll(interactions);
         }
     }
 
@@ -78,6 +84,9 @@ class JsonAdaptedPerson {
         category = source.getCategory().name();
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
+                .collect(Collectors.toList()));
+        interactions.addAll(source.getInteractions().stream()
+                .map(JsonAdaptedInteraction::new)
                 .collect(Collectors.toList()));
     }
 
@@ -166,8 +175,15 @@ class JsonAdaptedPerson {
         final Category modelCategory = Category.valueOf(category.toUpperCase());
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
+        final List<Interaction> modelInteractions = new ArrayList<>();
+        for (JsonAdaptedInteraction interaction : interactions) {
+            if (interaction == null) {
+                throw new IllegalValueException(Interaction.MESSAGE_CONSTRAINTS);
+            }
+            modelInteractions.add(interaction.toModelType());
+        }
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark,
-                modelCategory, modelRole, modelCompany, modelBoss);
+                modelCategory, modelRole, modelCompany, modelBoss, modelInteractions);
     }
 
 }

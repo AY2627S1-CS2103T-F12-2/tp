@@ -129,7 +129,7 @@ public class EditCommand extends Command {
 
         return new Person(updatedName, updatedPhone, updatedEmail,
                 updatedAddress, updatedTags, updatedRemark, updatedCategory,
-                updatedRole, updatedCompany, updatedBoss);
+                updatedRole, updatedCompany, updatedBoss, personToEdit.getInteractions());
     }
 
     /**
