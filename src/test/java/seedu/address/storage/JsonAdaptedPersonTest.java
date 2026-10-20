@@ -18,6 +18,7 @@ import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Interaction;
+import seedu.address.model.person.InteractionType;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Role;
@@ -226,7 +227,7 @@ public class JsonAdaptedPersonTest {
                 VALID_REMARK, VALID_ROLE, VALID_COMPANY, VALID_BOSS, VALID_TAGS, VALID_CATEGORY,
                 List.of(invalidInteraction));
 
-        assertThrows(IllegalValueException.class, Interaction.MESSAGE_CONSTRAINTS, person::toModelType);
+        assertThrows(IllegalValueException.class, InteractionType.MESSAGE_CONSTRAINTS, person::toModelType);
     }
 
 

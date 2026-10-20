@@ -8,6 +8,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
@@ -33,18 +34,21 @@ public class InteractionCommandTest {
 
 
     @Test
-    public void execute_invalidDate_throwsIllegalArgumentException() {
+    public void execute_invalidDate_throwsCommandException() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        assertThrows(IllegalArgumentException.class, () -> new InteractionCommand(INDEX_FIRST_PERSON,
-                "invalid-date", InteractionType.MEETING, "Discussed proposal"));
+        InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
+                "invalid-date", InteractionType.MEETING, "Discussed proposal");
+
+        assertThrows(CommandException.class, () -> command.execute(model));
     }
 
     @Test
     public void execute_invalidIndex_throwsCommandException() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
+        Index invalidIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+        InteractionCommand command = new InteractionCommand(invalidIndex,
                 "2026-10-20", InteractionType.MEETING, "Discussed proposal");
-        model.deletePerson(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()));
+
         assertThrows(CommandException.class, () -> command.execute(model));
     }
 
@@ -52,7 +56,9 @@ public class InteractionCommandTest {
     public void toStringMethod() {
         InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
                 "2026-10-20", InteractionType.MEETING, "Discussed proposal");
-        String expectedString = "interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal";
+        String expectedString = InteractionCommand.class.getCanonicalName()
+                + "{index=" + INDEX_FIRST_PERSON + ", date=2026-10-20, "
+                + "type=MEETING, note=Discussed proposal}";
         assertEquals(expectedString, command.toString());
     }
 

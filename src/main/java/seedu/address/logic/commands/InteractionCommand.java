@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
@@ -78,5 +79,15 @@ public class InteractionCommand extends Command {
     @Override
     public int hashCode() {
         return Objects.hash(index, date, type, note);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("index", index)
+                .add("date", date)
+                .add("type", type)
+                .add("note", note)
+                .toString();
     }
 }
