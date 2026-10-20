@@ -1,10 +1,11 @@
 package seedu.address.ui;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.time.LocalDate;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 
 import javafx.application.Platform;
@@ -27,7 +28,11 @@ public class ContactDashboardPanelTest {
 
     @Test
     public void refresh_filtersContactsDueWithinOneWeek() {
-        Platform.startup(() -> { });
+        try {
+            Platform.startup(() -> { });
+        } catch (IllegalStateException e) {
+            // JavaFX toolkit already initialized.
+        }
 
         ObservableList<Person> people = FXCollections.observableArrayList();
 
@@ -44,7 +49,7 @@ public class ContactDashboardPanelTest {
         assertEquals(3, panel.getDueSoonPeople().size());
         assertEquals(3, panel.getDueSoonPeople().stream()
                 .filter(person -> person.getFollowUpDate() != null
-                        && !person.getFollowUpDate().value.isBefore(LocalDate.now())
+                        && !person.getFollowUpDate().value.isBefore(LocalDate.now().minusDays(7))
                         && !person.getFollowUpDate().value.isAfter(LocalDate.now().plusDays(7)))
                 .count());
     }

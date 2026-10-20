@@ -31,6 +31,12 @@ public class ContactDashboardPanel extends UiPart<Region> {
 
     private final ObservableList<Person> dueSoonPeople;
 
+    /**
+     * Creates a dashboard panel for the due-soon contacts.
+     *
+     * @param personList the full list of people to filter.
+     * @param backAction action to run when returning to the main CLI view.
+     */
     public ContactDashboardPanel(ObservableList<Person> personList, Runnable backAction) {
         super(FXML);
         dueSoonPeople = FXCollections.observableArrayList();
@@ -43,6 +49,11 @@ public class ContactDashboardPanel extends UiPart<Region> {
         }
     }
 
+    /**
+     * Refreshes the dashboard with contacts whose follow-up dates are within the past or next seven days.
+     *
+     * @param personList the current list of people to filter.
+     */
     public void refresh(ObservableList<Person> personList) {
         LocalDate today = LocalDate.now();
         LocalDate oneWeekAgo = today.minusDays(7);
@@ -61,6 +72,11 @@ public class ContactDashboardPanel extends UiPart<Region> {
         totalContactsLabel.setText("Total contacts: " + dueSoonPeople.size());
     }
 
+    /**
+     * Returns the filtered list of due-soon contacts.
+     *
+     * @return the filtered list of due-soon contacts.
+     */
     public ObservableList<Person> getDueSoonPeople() {
         return dueSoonPeople;
     }
