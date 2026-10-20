@@ -50,25 +50,37 @@ public class ContactDashboardPanel extends UiPart<Region> {
     }
 
     /**
-     * Refreshes the dashboard with contacts whose follow-up dates are within the past or next seven days.
+     * Filters people whose follow-up date is within the last seven days or the next seven days.
      *
-     * @param personList the current list of people to filter.
+     * @param personList the current list of people.
+     * @return a filtered observable list containing only relevant contacts.
      */
-    public void refresh(ObservableList<Person> personList) {
+    public static ObservableList<Person> filterDueSoonPeople(ObservableList<Person> personList) {
+        ObservableList<Person> filtered = FXCollections.observableArrayList();
         LocalDate today = LocalDate.now();
         LocalDate oneWeekAgo = today.minusDays(7);
         LocalDate oneWeekLater = today.plusDays(7);
 
-        dueSoonPeople.clear();
         for (Person person : personList) {
             if (person.getFollowUpDate() == null) {
                 continue;
             }
             LocalDate dueDate = person.getFollowUpDate().value;
             if (!dueDate.isBefore(oneWeekAgo) && !dueDate.isAfter(oneWeekLater)) {
-                dueSoonPeople.add(person);
+                filtered.add(person);
             }
         }
+        return filtered;
+    }
+
+    /**
+     * Refreshes the dashboard with contacts whose follow-up dates are within the past or next seven days.
+     *
+     * @param personList the current list of people to filter.
+     */
+    public void refresh(ObservableList<Person> personList) {
+        dueSoonPeople.clear();
+        dueSoonPeople.addAll(filterDueSoonPeople(personList));
         totalContactsLabel.setText("Total contacts: " + dueSoonPeople.size());
     }
 

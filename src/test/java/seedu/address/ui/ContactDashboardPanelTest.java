@@ -1,14 +1,11 @@
 package seedu.address.ui;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.time.LocalDate;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Address;
@@ -28,12 +25,6 @@ public class ContactDashboardPanelTest {
 
     @Test
     public void refresh_filtersContactsDueWithinOneWeek() {
-        try {
-            Platform.startup(() -> { });
-        } catch (IllegalStateException e) {
-            // JavaFX toolkit already initialized.
-        }
-
         ObservableList<Person> people = FXCollections.observableArrayList();
 
         people.add(createPerson("Alice Tan", LocalDate.now().plusDays(2)));
@@ -42,12 +33,10 @@ public class ContactDashboardPanelTest {
         people.add(createPerson("Diana Ong", LocalDate.now().plusDays(7)));
         people.add(createPerson("Eve Wong", null));
 
-        ContactDashboardPanel panel = new ContactDashboardPanel(people, () -> { });
-        panel.refresh(people);
+        ObservableList<Person> filtered = ContactDashboardPanel.filterDueSoonPeople(people);
 
-        assertNotNull(panel);
-        assertEquals(3, panel.getDueSoonPeople().size());
-        assertEquals(3, panel.getDueSoonPeople().stream()
+        assertEquals(3, filtered.size());
+        assertEquals(3, filtered.stream()
                 .filter(person -> person.getFollowUpDate() != null
                         && !person.getFollowUpDate().value.isBefore(LocalDate.now().minusDays(7))
                         && !person.getFollowUpDate().value.isAfter(LocalDate.now().plusDays(7)))
