@@ -32,11 +32,13 @@ public class Interaction {
     public Interaction(String name, String date, InteractionType type, String note) {
         requireAllNonNull(name, date, type, note);
 
-        date = date.trim();
-        checkArgument(isValidInteraction(name, date), MESSAGE_CONSTRAINTS);
+        String trimmedDate = date.trim();
+
+        checkArgument(Name.isValidName(name), Name.MESSAGE_CONSTRAINTS);
+        checkArgument(isValidDate(trimmedDate), MESSAGE_CONSTRAINTS);
 
         this.name = new Name(name);
-        this.date = LocalDate.parse(date, FORMATTER);
+        this.date = LocalDate.parse(trimmedDate, FORMATTER);
         this.type = type;
         this.note = note;
     }
@@ -61,13 +63,12 @@ public class Interaction {
     /**
      * Returns true if a given string is a valid interaction date.
      */
-    public static boolean isValidInteraction(String testName, String testDate) {
-        requireNonNull(testName);
-        requireNonNull(testDate);
+    public static boolean isValidDate(String date) {
+        requireNonNull(date);
 
         try {
-            LocalDate.parse(testDate, FORMATTER);
-            return Name.isValidName(testName);
+            LocalDate.parse(date, FORMATTER);
+            return true;
         } catch (DateTimeParseException e) {
             return false;
         }

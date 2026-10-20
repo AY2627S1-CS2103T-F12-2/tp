@@ -1,6 +1,8 @@
 package seedu.address.testutil;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
@@ -40,6 +42,7 @@ public class PersonBuilder {
     private Role role;
     private Company company;
     private Boss boss;
+    private List<Interaction> interactions = new ArrayList<>();
     /**
      * Creates a {@code PersonBuilder} with the default details.
      */
@@ -149,6 +152,14 @@ public class PersonBuilder {
      */
     public PersonBuilder withCategory(Category category) {
         this.category = category;
+        return this;
+    }
+
+    /**
+     * Sets the interactions of the {@code Person} that we are building.
+     */
+    public PersonBuilder withInteractions(List<Interaction> interactions) {
+        this.interactions = new ArrayList<>(interactions);
         return this;
     }
 

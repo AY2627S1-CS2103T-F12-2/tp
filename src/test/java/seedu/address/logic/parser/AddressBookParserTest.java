@@ -21,6 +21,7 @@ import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.InteractionCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -95,6 +96,22 @@ public class AddressBookParserTest {
         RemarkCommand command = (RemarkCommand) parser.parseCommand(RemarkCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_REMARK + remark);
         assertEquals(new RemarkCommand(INDEX_FIRST_PERSON, new seedu.address.model.person.Remark(remark)), command);
+    }
+
+    @Test
+    public void parseCommand_interaction() throws Exception {
+        String date = "2026-10-20";
+        InteractionType type = InteractionType.MEETING;
+        String note = "Discussed proposal";
+
+        InteractionCommand command = (InteractionCommand) parser.parseCommand(
+                InteractionCommand.COMMAND_WORD
+                        + " " + INDEX_FIRST_PERSON.getOneBased()
+                        + " d/" + date
+                        + " ty/" + type
+                        + " nt/" + note);
+
+        assertEquals(new InteractionCommand(INDEX_FIRST_PERSON, date, type, note), command);
     }
 
     @Test
