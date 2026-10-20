@@ -1,5 +1,7 @@
 package seedu.address.model;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -14,6 +16,12 @@ public class VersionedAddressBook extends AddressBook {
     private static final String INITIAL_ACTION_NAME = "initial state";
     private static final String UNSPECIFIED_ACTION_NAME = "unspecified action";
     private static final Logger logger = LogsCenter.getLogger(VersionedAddressBook.class);
+
+    static {
+        if (MAX_HISTORY_SIZE <= 0) {
+            throw new IllegalStateException("History size limit must be positive.");
+        }
+    }
 
     private final List<HistoryEntry> addressBookStateList = new ArrayList<>();
     private int currentStatePointer;
@@ -30,9 +38,10 @@ public class VersionedAddressBook extends AddressBook {
      * Creates a versioned address book initialized with a copy of {@code initialState}.
      */
     public VersionedAddressBook(ReadOnlyAddressBook initialState) {
-        super(initialState);
+        super(requireNonNull(initialState));
         addressBookStateList.add(new HistoryEntry(new AddressBook(initialState), INITIAL_ACTION_NAME, 0));
         currentStatePointer = 0;
+        assert isHistoryStateValid();
     }
 
     /**
@@ -50,6 +59,7 @@ public class VersionedAddressBook extends AddressBook {
      * @param actionName safe, non-sensitive name of the action that changed the address book
      */
     public void commit(String actionName) {
+        requireNonNull(actionName);
         int discardedRedoStates = removeStatesAfterCurrentPointer();
         if (discardedRedoStates > 0) {
             logger.info("History branch discarded: action=" + actionName
@@ -68,32 +78,45 @@ public class VersionedAddressBook extends AddressBook {
 
         logger.info("History commit: action=" + actionName + ", version=" + newEntry.versionNumber
                 + ", retainedStates=" + addressBookStateList.size() + ", maxStates=" + MAX_HISTORY_SIZE);
+        assert isHistoryStateValid();
     }
 
     /**
      * Restores the previous saved address book state.
-     * Callers must check {@link #canUndo()} before invoking this method.
+     *
+     * @throws IllegalStateException if there is no previous saved state
      */
     public void undo() {
+        if (!canUndo()) {
+            throw new IllegalStateException("No earlier address book state to undo to.");
+        }
+        assert canUndo();
         HistoryEntry currentEntry = addressBookStateList.get(currentStatePointer);
         currentStatePointer--;
         HistoryEntry restoredEntry = addressBookStateList.get(currentStatePointer);
         resetData(restoredEntry.state);
         logger.info("History undo: undoneAction=" + currentEntry.actionName + ", fromVersion="
                 + currentEntry.versionNumber + ", toVersion=" + restoredEntry.versionNumber);
+        assert isHistoryStateValid();
     }
 
     /**
      * Restores the next saved address book state.
-     * Callers must check {@link #canRedo()} before invoking this method.
+     *
+     * @throws IllegalStateException if there is no later saved state
      */
     public void redo() {
+        if (!canRedo()) {
+            throw new IllegalStateException("No later address book state to redo to.");
+        }
+        assert canRedo();
         HistoryEntry previousEntry = addressBookStateList.get(currentStatePointer);
         currentStatePointer++;
         HistoryEntry restoredEntry = addressBookStateList.get(currentStatePointer);
         resetData(restoredEntry.state);
         logger.info("History redo: redoneAction=" + restoredEntry.actionName + ", fromVersion="
                 + previousEntry.versionNumber + ", toVersion=" + restoredEntry.versionNumber);
+        assert isHistoryStateValid();
     }
 
     /**
@@ -114,6 +137,15 @@ public class VersionedAddressBook extends AddressBook {
         int numberOfStatesToRemove = addressBookStateList.size() - currentStatePointer - 1;
         addressBookStateList.subList(currentStatePointer + 1, addressBookStateList.size()).clear();
         return numberOfStatesToRemove;
+    }
+
+    /**
+     * Returns whether the history always has a valid current state.
+     */
+    private boolean isHistoryStateValid() {
+        return !addressBookStateList.isEmpty()
+                && currentStatePointer >= 0
+                && currentStatePointer < addressBookStateList.size();
     }
 
     /**
