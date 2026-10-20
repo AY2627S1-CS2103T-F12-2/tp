@@ -24,6 +24,7 @@ public class Person {
     private final Role role;
     private final Company company;
     private final Boss boss;
+    private final FollowUpDate followUpDate;
 
     // Data fields
     private final Address address;
@@ -31,7 +32,7 @@ public class Person {
     private final Category category;
 
     /**
-     * Every field must be present and not null.
+     * Creates a person with the required contact details and default employment details.
      */
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category) {
@@ -44,6 +45,15 @@ public class Person {
      */
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss) {
+        this(name, phone, email, address, tags, remark, category, role, company, boss, null);
+    }
+
+    /**
+     * Creates a person with all contact and employment details, including an optional follow-up date.
+     */
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss,
+                  FollowUpDate followUpDate) {
         requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss);
         this.name = name;
         this.phone = phone;
@@ -53,6 +63,7 @@ public class Person {
         this.role = role;
         this.company = company;
         this.boss = boss;
+        this.followUpDate = followUpDate;
         this.tags.addAll(tags);
         this.category = category;
     }
@@ -87,6 +98,10 @@ public class Person {
 
     public Boss getBoss() {
         return boss;
+    }
+
+    public FollowUpDate getFollowUpDate() {
+        return followUpDate;
     }
 
     /**
@@ -139,18 +154,19 @@ public class Person {
                 && role.equals(otherPerson.role)
                 && company.equals(otherPerson.company)
                 && boss.equals(otherPerson.boss)
+                && Objects.equals(followUpDate, otherPerson.followUpDate)
                 && category.equals(otherPerson.category);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, category);
+        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, followUpDate, category);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        ToStringBuilder builder = new ToStringBuilder(this)
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
@@ -158,9 +174,11 @@ public class Person {
                 .add("tags", tags)
                 .add("role", role)
                 .add("company", company)
-                .add("boss", boss)
-                .add("category", category)
-                .toString();
+                .add("boss", boss);
+        if (followUpDate != null) {
+            builder.add("followUpDate", followUpDate);
+        }
+        return builder.add("category", category).toString();
     }
 
 }

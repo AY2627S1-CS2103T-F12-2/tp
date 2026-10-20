@@ -9,6 +9,7 @@ import static seedu.address.logic.commands.CommandTestUtil.COMPANY_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.COMPANY_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.FOLLOW_UP_DATE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_BOSS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_COMPANY_DESC;
@@ -193,6 +194,12 @@ public class AddCommandParserTest {
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
                         + ROLE_DESC_AMY + COMPANY_DESC_AMY,
                 new AddCommand(expectedPerson));
+
+        Person expectedPersonWithFollowUpDate = new PersonBuilder(AMY).withTags().withBoss("")
+                .withFollowUpDate("2026-10-20").build();
+        assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
+                        + ROLE_DESC_AMY + COMPANY_DESC_AMY + FOLLOW_UP_DATE_DESC_AMY,
+                new AddCommand(expectedPersonWithFollowUpDate));
     }
 
     @Test

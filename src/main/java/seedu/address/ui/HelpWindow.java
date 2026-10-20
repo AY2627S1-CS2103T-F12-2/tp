@@ -21,6 +21,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RemarkCommand;
+import seedu.address.logic.commands.SortCommand;
 
 /**
  * Controller for a help page
@@ -40,7 +41,8 @@ public class HelpWindow extends UiPart<Stage> {
             FindCommand.MESSAGE_USAGE,
             HelpCommand.MESSAGE_USAGE,
             ListCommand.MESSAGE_USAGE,
-            RemarkCommand.MESSAGE_USAGE);
+            RemarkCommand.MESSAGE_USAGE,
+            SortCommand.MESSAGE_USAGE);
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";

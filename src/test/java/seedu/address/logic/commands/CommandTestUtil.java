@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_BOSS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_FOLLOW_UP_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
@@ -42,6 +43,8 @@ public class CommandTestUtil {
     public static final String VALID_COMPANY_BOB = "ABC Corporation";
     public static final String VALID_BOSS_AMY = "Alice Smith";
     public static final String VALID_BOSS_BOB = "Jane Smith";
+    public static final String VALID_FOLLOW_UP_DATE_AMY = "2026-10-20";
+    public static final String VALID_FOLLOW_UP_DATE_BOB = "2026-11-20";
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
 
@@ -59,6 +62,8 @@ public class CommandTestUtil {
     public static final String COMPANY_DESC_BOB = " " + PREFIX_COMPANY + VALID_COMPANY_BOB;
     public static final String BOSS_DESC_AMY = " " + PREFIX_BOSS + VALID_BOSS_AMY;
     public static final String BOSS_DESC_BOB = " " + PREFIX_BOSS + VALID_BOSS_BOB;
+    public static final String FOLLOW_UP_DATE_DESC_AMY = " " + PREFIX_FOLLOW_UP_DATE + VALID_FOLLOW_UP_DATE_AMY;
+    public static final String FOLLOW_UP_DATE_DESC_BOB = " " + PREFIX_FOLLOW_UP_DATE + VALID_FOLLOW_UP_DATE_BOB;
     public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
 

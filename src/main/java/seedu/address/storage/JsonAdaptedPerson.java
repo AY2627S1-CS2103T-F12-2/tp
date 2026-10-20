@@ -15,6 +15,7 @@ import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -37,6 +38,7 @@ class JsonAdaptedPerson {
     private final String role;
     private final String company;
     private final String boss;
+    private final String followUpDate;
     private final String category;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
@@ -48,7 +50,8 @@ class JsonAdaptedPerson {
             @JsonProperty("email") String email, @JsonProperty("address") String address,
             @JsonProperty("remark") String remark, @JsonProperty("role") String role,
             @JsonProperty("company") String company, @JsonProperty("boss") String boss,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("category") String category) {
+            @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("category") String category,
+            @JsonProperty("followUpDate") String followUpDate) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -57,10 +60,19 @@ class JsonAdaptedPerson {
         this.role = role;
         this.company = company;
         this.boss = boss;
+        this.followUpDate = followUpDate;
         this.category = category;
         if (tags != null) {
             this.tags.addAll(tags);
         }
+    }
+
+    /**
+     * Constructs an adapted person without a follow-up date for backwards compatibility with existing callers.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
+            String role, String company, String boss, List<JsonAdaptedTag> tags, String category) {
+        this(name, phone, email, address, remark, role, company, boss, tags, category, null);
     }
 
     /**
@@ -75,6 +87,7 @@ class JsonAdaptedPerson {
         role = source.getRole().value;
         company = source.getCompany().value;
         boss = source.getBoss().fullName;
+        followUpDate = source.getFollowUpDate() == null ? null : source.getFollowUpDate().toString();
         category = source.getCategory().name();
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -154,6 +167,12 @@ class JsonAdaptedPerson {
         }
         final Boss modelBoss = new Boss(boss);
 
+        if (followUpDate != null && !FollowUpDate.isValidFollowUpDate(followUpDate.trim())) {
+            throw new IllegalValueException(FollowUpDate.MESSAGE_CONSTRAINTS);
+        }
+        final FollowUpDate modelFollowUpDate = followUpDate == null
+                ? null : new FollowUpDate(followUpDate);
+
         if (category == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     Category.class.getSimpleName()));
@@ -167,7 +186,7 @@ class JsonAdaptedPerson {
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark,
-                modelCategory, modelRole, modelCompany, modelBoss);
+                modelCategory, modelRole, modelCompany, modelBoss, modelFollowUpDate);
     }
 
 }
