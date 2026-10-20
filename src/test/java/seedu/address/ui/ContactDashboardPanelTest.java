@@ -1,14 +1,17 @@
 package seedu.address.ui;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
@@ -23,6 +26,11 @@ import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 
 public class ContactDashboardPanelTest {
+
+    @BeforeAll
+    public static void initJavaFx() {
+        Platform.startup(() -> {});
+    }
 
     @Test
     public void refresh_filtersContactsDueWithinOneWeek() {
@@ -44,6 +52,22 @@ public class ContactDashboardPanelTest {
                 .count());
     }
 
+    @Test
+    public void refresh_updatesTotalContactsLabel() throws Exception {
+        ObservableList<Person> people = FXCollections.observableArrayList();
+        people.add(createPerson("Alice Tan", LocalDate.now().plusDays(2)));
+        people.add(createPerson("Bob Lee", LocalDate.now().plusDays(10)));
+        people.add(createPerson("Charlie Lim", LocalDate.now().minusDays(1)));
+        people.add(createPerson("Diana Ong", LocalDate.now().plusDays(7)));
+        people.add(createPerson("Eve Wong", null));
+
+        ContactDashboardPanel panel = new ContactDashboardPanel(people, () -> {});
+        Label totalContactsLabel = getField(panel, "totalContactsLabel", Label.class);
+
+        assertEquals("Total contacts: 3", totalContactsLabel.getText());
+        assertEquals(3, panel.getDueSoonPeople().size());
+    }
+
     private Person createPerson(String name, LocalDate followUpDate) {
         return new Person(
                 new Name(name),
@@ -58,5 +82,12 @@ public class ContactDashboardPanelTest {
                 new Boss("Boss Tan"),
                 followUpDate == null ? null : new FollowUpDate(followUpDate.toString())
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T getField(Object target, String fieldName, Class<T> type) throws Exception {
+        Field field = target.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return (T) field.get(target);
     }
 }
