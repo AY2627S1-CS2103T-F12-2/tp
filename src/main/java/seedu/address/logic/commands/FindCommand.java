@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -18,7 +19,7 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose details match the specified "
             + "keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: [n/NAME] [rl/ROLE] [com/COMPANY] or KEYWORD [MORE_KEYWORDS]...\n"
+            + "Parameters: [n/NAME] [rl/ROLE] [com/COMPANY] [fd/FOLLOW_UP_DATE] or KEYWORD [MORE_KEYWORDS]...\n"
             + "Examples: " + COMMAND_WORD + " n/alice\n"
             + "         " + COMMAND_WORD + " rl/engineer\n"
             + "         " + COMMAND_WORD + " com/google";

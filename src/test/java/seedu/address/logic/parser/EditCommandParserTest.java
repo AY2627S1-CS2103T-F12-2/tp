@@ -7,6 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.BOSS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.COMPANY_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.FOLLOW_UP_DATE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
@@ -179,6 +180,11 @@ public class EditCommandParserTest {
         // tags
         userInput = targetIndex.getOneBased() + TAG_DESC_FRIEND;
         descriptor = new EditPersonDescriptorBuilder().withTags(VALID_TAG_FRIEND).build();
+        expectedCommand = new EditCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+
+        userInput = targetIndex.getOneBased() + FOLLOW_UP_DATE_DESC_AMY;
+        descriptor = new EditPersonDescriptorBuilder().withFollowUpDate("2026-10-20").build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
     }

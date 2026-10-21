@@ -1,17 +1,19 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.model.person.CompanyContainsKeywordsPredicate;
+import seedu.address.model.person.FollowUpDate;
+import seedu.address.model.person.FollowUpDatePredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.RoleContainsKeywordsPredicate;
-
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 public class FindCommandParserTest {
 
@@ -43,6 +45,15 @@ public class FindCommandParserTest {
         FindCommand expectedNameFindCommand =
                 new FindCommand(new NameContainsKeywordsPredicate(List.of("Alice")));
         assertParseSuccess(parser, "n/Alice", expectedNameFindCommand);
+
+        FindCommand expectedFollowUpDateFindCommand =
+                new FindCommand(new FollowUpDatePredicate(new FollowUpDate("2026-10-20")));
+        assertParseSuccess(parser, "fd/2026-10-20", expectedFollowUpDateFindCommand);
+    }
+
+    @Test
+    public void parse_invalidFollowUpDate_throwsParseException() {
+        assertParseFailure(parser, "fd/2026-02-30", FollowUpDate.MESSAGE_CONSTRAINTS);
     }
 
 }
