@@ -246,7 +246,20 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command is correct.
 
-_{more aspects and alternatives to be added}_
+
+### Category/Categories feature
+
+#### Implementation
+
+`category INDEX c/CATEGORY` is parsed by `CategoryCommandParser`. `CategoryCommand` selects the person at the displayed index, creates a copy with the new category, and replaces the original through `Model#setPerson`. Other person details are preserved.
+
+![Category command through Logic](images/CategorySequenceDiagram-Logic.png)
+![Category update through Model](images/CategorySequenceDiagram-Model.png)
+
+`categories` creates a `CategoriesCommand` directly. It reads the unfiltered person list, counts contacts in every `Category` (including those with zero contacts), and returns the formatted counts without changing the model.
+
+![Categories command through Logic](images/CategoriesSequenceDiagram-Logic.png)
+![Categories list through Model](images/CategoriesSequenceDiagram-Model.png)
 
 ### \[Proposed\] Data archiving
 

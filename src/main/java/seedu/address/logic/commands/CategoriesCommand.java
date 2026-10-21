@@ -28,7 +28,7 @@ public class CategoriesCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        Map<Category, Integer> categoryPersonCountMap = countPersonsPerCategory(model.getAddressBook().getPersonList());
+        Map<Category, Integer> categoryPersonCountMap = countPersonsPerCategory(model.getUnfilteredPersonList());
         String formattedMessage = getFormattedMessage(categoryPersonCountMap);
         return new CommandResult(String.format(MESSAGE_SUCCESS, formattedMessage));
     }
