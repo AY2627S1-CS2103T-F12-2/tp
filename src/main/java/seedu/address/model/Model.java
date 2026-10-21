@@ -69,5 +69,8 @@ public interface Model {
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
 
+    /**
+     * Returns an unmodifiable view of the unfiltered person list.
+     */
     ObservableList<Person> getUnfilteredPersonList();
 }
