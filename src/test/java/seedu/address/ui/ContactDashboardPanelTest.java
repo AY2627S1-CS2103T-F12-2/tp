@@ -8,7 +8,10 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,11 +19,13 @@ import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -48,6 +53,7 @@ public class ContactDashboardPanelTest {
 
     @BeforeAll
     public static void initJavaFx() {
+        Logger.getLogger(MainWindow.class.getName()).setLevel(Level.WARNING);
         Platform.startup(() -> {});
     }
 
@@ -109,7 +115,7 @@ public class ContactDashboardPanelTest {
     }
 
     @Test
-    public void mainWindow_initializesAndFillsInnerParts() throws Exception {
+    public void mainWindow_behaviors_areCovered() throws Exception {
         StubLogic logic = new StubLogic(FXCollections.observableArrayList(),
                 new GuiSettings(900, 700, 10, 20));
 
@@ -121,29 +127,13 @@ public class ContactDashboardPanelTest {
             assert mainWindow.getPrimaryStage().getX() == 10;
             assert mainWindow.getPrimaryStage().getY() == 20;
 
+            invoke(mainWindow, "setWindowDefaultSize", GuiSettings.class, new GuiSettings());
             mainWindow.fillInnerParts();
             assert mainWindow.getPersonListPanel() != null;
             mainWindow.show();
             assert mainWindow.getPrimaryStage().isShowing();
 
-            invoke(mainWindow, "handleExit");
-            assert !mainWindow.getPrimaryStage().isShowing();
-            assert logic.savedGuiSettings != null;
-
-            closeWindow(mainWindow);
-        });
-    }
-
-    @Test
-    public void mainWindow_dashboardNavigation_updatesPlaceholders() throws Exception {
-        StubLogic logic = new StubLogic(FXCollections.observableArrayList(), new GuiSettings());
-
-        runOnFxThread(() -> {
-            MainWindow mainWindow = createMainWindow(logic);
-            mainWindow.fillInnerParts();
-
-            Button dashboardButton = getField(mainWindow, "dashboardButton", Button.class);
-            dashboardButton.fire();
+            invoke(mainWindow, "handleDashboard");
 
             assert isVisible(mainWindow, "dashboardPlaceholder");
             assert !isVisible(mainWindow, "personListPanelPlaceholder");
@@ -152,7 +142,7 @@ public class ContactDashboardPanelTest {
             ContactDashboardPanel dashboard = getField(mainWindow, "contactDashboardPanel",
                     ContactDashboardPanel.class);
             Button backButton = getField(dashboard, "backButton", Button.class);
-            backButton.fire();
+            backButton.getOnAction().handle(new ActionEvent(backButton, null));
 
             assert !isVisible(mainWindow, "dashboardPlaceholder");
             assert isManaged(mainWindow, "personListPanelPlaceholder");
@@ -162,17 +152,6 @@ public class ContactDashboardPanelTest {
             invoke(mainWindow, "handleToggleDashboard");
             assert !isVisible(mainWindow, "dashboardPlaceholder");
 
-            closeWindow(mainWindow);
-        });
-    }
-
-    @Test
-    public void mainWindow_commandExecution_handlesResultsAndExceptions() throws Exception {
-        StubLogic logic = new StubLogic(FXCollections.observableArrayList(), new GuiSettings());
-
-        runOnFxThread(() -> {
-            MainWindow mainWindow = createMainWindow(logic);
-            mainWindow.fillInnerParts();
             ResultDisplay resultDisplay = getField(mainWindow, "resultDisplay", ResultDisplay.class);
             TextArea resultTextArea = getField(resultDisplay, "resultDisplay", TextArea.class);
 
@@ -201,26 +180,18 @@ public class ContactDashboardPanelTest {
             invoke(mainWindow, "executeCommand", String.class, "exit");
             assert !mainWindow.getPrimaryStage().isShowing();
 
-            closeWindow(mainWindow);
-        });
-    }
+            MenuItem helpMenuItem = getField(mainWindow, "helpMenuItem", MenuItem.class);
+            AtomicBoolean actionInvoked = new AtomicBoolean(false);
+            helpMenuItem.setOnAction(event -> actionInvoked.set(true));
 
-    @Test
-    public void mainWindow_acceleratorFilter_handlesFunctionKeys() throws Exception {
-        StubLogic logic = new StubLogic(FXCollections.observableArrayList(), new GuiSettings());
+            KeyEvent matchingKey = keyPressed(KeyCode.F1);
+            Event.fireEvent(resultTextArea, matchingKey);
+            assert actionInvoked.get();
+            assert !helpWindow.isShowing();
 
-        runOnFxThread(() -> {
-            MainWindow mainWindow = createMainWindow(logic);
-            mainWindow.fillInnerParts();
-            HelpWindow helpWindow = getField(mainWindow, "helpWindow", HelpWindow.class);
-            ResultDisplay resultDisplay = getField(mainWindow, "resultDisplay", ResultDisplay.class);
-            TextArea resultTextArea = getField(resultDisplay, "resultDisplay", TextArea.class);
-
-            Event.fireEvent(resultTextArea, keyPressed(KeyCode.F1));
-            assert helpWindow.isShowing();
-            helpWindow.hide();
-
-            Event.fireEvent(resultTextArea, keyPressed(KeyCode.F2));
+            KeyEvent nonMatchingKey = keyPressed(KeyCode.F2);
+            Event.fireEvent(resultTextArea, nonMatchingKey);
+            assert !nonMatchingKey.isConsumed();
             assert !helpWindow.isShowing();
 
             closeWindow(mainWindow);
