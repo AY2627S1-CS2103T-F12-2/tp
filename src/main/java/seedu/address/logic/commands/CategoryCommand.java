@@ -63,7 +63,8 @@ public class CategoryCommand extends Command {
                 targetCategory,
                 personToCategorize.getRole(),
                 personToCategorize.getCompany(),
-                personToCategorize.getBoss());
+                personToCategorize.getBoss(),
+                personToCategorize.getFollowUpDate());
 
         model.setPerson(personToCategorize, editedPerson);
         model.commitAddressBook(COMMAND_WORD);

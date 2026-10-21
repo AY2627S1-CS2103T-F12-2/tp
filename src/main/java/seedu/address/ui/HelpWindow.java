@@ -23,6 +23,7 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemarkCommand;
+import seedu.address.logic.commands.SortCommand;
 import seedu.address.logic.commands.UndoCommand;
 
 /**
@@ -46,7 +47,8 @@ public class HelpWindow extends UiPart<Stage> {
             ListCommand.MESSAGE_USAGE,
             RemarkCommand.MESSAGE_USAGE,
             RedoCommand.MESSAGE_USAGE,
-            UndoCommand.MESSAGE_USAGE);
+            UndoCommand.MESSAGE_USAGE,
+            SortCommand.MESSAGE_USAGE);
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";

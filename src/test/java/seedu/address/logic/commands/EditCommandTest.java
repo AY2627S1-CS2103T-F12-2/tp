@@ -159,6 +159,22 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_followUpDate_success() {
+        Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person editedPerson = new PersonBuilder(originalPerson).withFollowUpDate("2026-10-20").build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withFollowUpDate("2026-10-20").build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(originalPerson, editedPerson);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.formatEditedPerson(editedPerson));
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
@@ -207,6 +223,15 @@ public class EditCommandTest {
 
         // different descriptor -> returns false
         assertFalse(standardCommand.equals(new EditCommand(INDEX_FIRST_PERSON, DESC_BOB)));
+
+        EditPersonDescriptor datedDescriptor = new EditPersonDescriptorBuilder()
+                .withFollowUpDate("2026-10-20").build();
+        assertTrue(new EditCommand(INDEX_FIRST_PERSON, datedDescriptor)
+                .equals(new EditCommand(INDEX_FIRST_PERSON,
+                        new EditPersonDescriptorBuilder().withFollowUpDate("2026-10-20").build())));
+        assertFalse(new EditCommand(INDEX_FIRST_PERSON, datedDescriptor)
+                .equals(new EditCommand(INDEX_FIRST_PERSON,
+                        new EditPersonDescriptorBuilder().withFollowUpDate("2026-10-21").build())));
     }
 
     @Test
@@ -217,6 +242,13 @@ public class EditCommandTest {
         String expected = EditCommand.class.getCanonicalName() + "{index=" + index + ", editPersonDescriptor="
                 + editPersonDescriptor + "}";
         assertEquals(expected, editCommand.toString());
+
+        EditPersonDescriptor datedDescriptor = new EditPersonDescriptorBuilder()
+                .withFollowUpDate("2026-10-20").build();
+        EditCommand datedCommand = new EditCommand(index, datedDescriptor);
+        String expectedDated = EditCommand.class.getCanonicalName() + "{index=" + index
+                + ", editPersonDescriptor=" + datedDescriptor + "}";
+        assertEquals(expectedDated, datedCommand.toString());
     }
 
 }

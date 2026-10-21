@@ -1,14 +1,18 @@
 package seedu.address.logic.parser;
 
-import java.util.List;
-
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import seedu.address.logic.commands.FindCommand;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_FOLLOW_UP_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
+
+import java.util.List;
+
+import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.CompanyContainsKeywordsPredicate;
+import seedu.address.model.person.FollowUpDate;
+import seedu.address.model.person.FollowUpDatePredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.RoleContainsKeywordsPredicate;
 
@@ -31,7 +35,13 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs,
-                PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY);
+                PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY, PREFIX_FOLLOW_UP_DATE);
+
+        if (argMultimap.getValue(PREFIX_FOLLOW_UP_DATE).isPresent()) {
+            FollowUpDate followUpDate = ParserUtil.parseFollowUpDate(
+                    argMultimap.getValue(PREFIX_FOLLOW_UP_DATE).get());
+            return new FindCommand(new FollowUpDatePredicate(followUpDate));
+        }
 
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
             String[] nameKeywords = argMultimap.getValue(PREFIX_NAME).get().split("\\s+");

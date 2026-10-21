@@ -13,6 +13,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Boss;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Role;
@@ -246,6 +247,16 @@ public class ParserUtil {
             throw new ParseException(MESSAGE_EDIT_BOSS);
         }
         return new Boss(normalizedBoss);
+    }
+
+    /** Parses a follow-up date in the format {@code yyyy-MM-dd}. */
+    public static FollowUpDate parseFollowUpDate(String followUpDate) throws ParseException {
+        requireNonNull(followUpDate);
+        String trimmedFollowUpDate = followUpDate.trim();
+        if (!FollowUpDate.isValidFollowUpDate(trimmedFollowUpDate)) {
+            throw new ParseException(FollowUpDate.MESSAGE_CONSTRAINTS);
+        }
+        return new FollowUpDate(trimmedFollowUpDate);
     }
 
     /**
