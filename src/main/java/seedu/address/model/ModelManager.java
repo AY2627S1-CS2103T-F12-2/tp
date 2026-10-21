@@ -126,4 +126,11 @@ public class ModelManager implements Model {
                 && filteredPersons.equals(otherModelManager.filteredPersons);
     }
 
+
+    @Override
+    public ObservableList<Person> getUnfilteredPersonList() {
+        return addressBook.getPersonList();
+    }
+
+
 }
