@@ -135,7 +135,7 @@ public class EditCommand extends Command {
 
         return new Person(updatedName, updatedPhone, updatedEmail,
                 updatedAddress, updatedTags, updatedRemark, updatedCategory,
-                updatedRole, updatedCompany, updatedBoss, personToEdit.getInteractions(), updatedFollowUpDate);
+                updatedRole, updatedCompany, updatedBoss, updatedFollowUpDate, personToEdit.getInteractions());
     }
 
     /**

@@ -128,7 +128,7 @@ public class PersonTest {
                 + ", address=" + datedAlice.getAddress() + ", tags=" + datedAlice.getTags()
                 + ", role=" + datedAlice.getRole() + ", company=" + datedAlice.getCompany()
                 + ", boss=" + datedAlice.getBoss() + ", followUpDate=" + datedAlice.getFollowUpDate()
-                + ", category=" + datedAlice.getCategory() + "}";
+                + ", category=" + datedAlice.getCategory() + ", interactions=" + datedAlice.getInteractions() + "}";
         assertEquals(expectedDated, datedAlice.toString());
 
         assertTrue(datedAlice.equals(new PersonBuilder(datedAlice).build()));

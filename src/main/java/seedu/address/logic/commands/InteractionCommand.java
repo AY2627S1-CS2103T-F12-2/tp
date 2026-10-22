@@ -59,7 +59,7 @@ public class InteractionCommand extends Command {
         history.add(interaction);
         Person updated = new Person(original.getName(), original.getPhone(), original.getEmail(),
                 original.getAddress(), original.getTags(), original.getRemark(), original.getCategory(),
-                original.getRole(), original.getCompany(), original.getBoss(), history);
+                original.getRole(), original.getCompany(), original.getBoss(), original.getFollowUpDate(), history);
         model.setPerson(original, updated);
         return new CommandResult(String.format(MESSAGE_SUCCESS, original.getName()));
     }

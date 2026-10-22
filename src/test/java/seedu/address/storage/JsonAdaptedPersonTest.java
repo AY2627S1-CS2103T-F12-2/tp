@@ -17,9 +17,9 @@ import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
-import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -268,5 +268,16 @@ public class JsonAdaptedPersonTest {
         assertThrows(IllegalValueException.class, InteractionType.MESSAGE_CONSTRAINTS, person::toModelType);
     }
 
+    @Test
+    public void toModelType_followUpDateAndInteractions_returnsPersonWithBoth() throws Exception {
+        JsonAdaptedInteraction interaction =
+                new JsonAdaptedInteraction(VALID_NAME, "2026-10-20", "MEETING", "Discussed proposal");
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                VALID_REMARK, VALID_ROLE, VALID_COMPANY, VALID_BOSS, VALID_TAGS, VALID_CATEGORY,
+                VALID_FOLLOW_UP_DATE, List.of(interaction));
 
+        Person modelPerson = person.toModelType();
+        assertEquals(new FollowUpDate(VALID_FOLLOW_UP_DATE), modelPerson.getFollowUpDate());
+        assertEquals(List.of(interaction.toModelType()), modelPerson.getInteractions());
+    }
 }

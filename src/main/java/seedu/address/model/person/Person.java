@@ -39,7 +39,7 @@ public class Person {
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category) {
         this(name, phone, email, address, tags, remark, category, new Role("TEST ROLE"),
-                new Company("TEST COMPANY"), new Boss("TEST BOSS"));
+                new Company("TEST COMPANY"), new Boss("TEST BOSS"), null, List.of());
     }
 
     /**
@@ -47,15 +47,7 @@ public class Person {
      */
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss) {
-        this(name, phone, email, address, tags, remark, category, role, company, boss, List.of());
-    }
-
-    /** Creates a person with their interaction history. */
-    public Person(Name name, Phone phone, Email email, Address address,
-                  Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss,
-                  List<Interaction> interactions) {
-        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss, interactions);
-        this(name, phone, email, address, tags, remark, category, role, company, boss, null);
+        this(name, phone, email, address, tags, remark, category, role, company, boss, null, List.of());
     }
 
     /**
@@ -64,7 +56,16 @@ public class Person {
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss,
                   FollowUpDate followUpDate) {
-        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss);
+        this(name, phone, email, address, tags, remark, category, role, company, boss, followUpDate, List.of());
+    }
+
+    /**
+     * Creates a person with EVERY FIELD. {@code followUpDate} may be null. {@code interactions} may be List.of().
+     */
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss,
+                  FollowUpDate followUpDate, List<Interaction> interactions) {
+        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss, interactions);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -170,15 +171,15 @@ public class Person {
                 && company.equals(otherPerson.company)
                 && boss.equals(otherPerson.boss)
                 && category.equals(otherPerson.category)
-                && interactions.equals(otherPerson.interactions);
                 && Objects.equals(followUpDate, otherPerson.followUpDate)
-                && category.equals(otherPerson.category);
+                && interactions.equals(otherPerson.interactions);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, followUpDate, category, interactions);
+        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, followUpDate,
+                category, interactions);
     }
 
     @Override
@@ -191,15 +192,13 @@ public class Person {
                 .add("tags", tags)
                 .add("role", role)
                 .add("company", company)
-                .add("boss", boss)
-                .add("category", category)
-                .add("interactions", interactions)
-                .toString();
                 .add("boss", boss);
         if (followUpDate != null) {
             builder.add("followUpDate", followUpDate);
         }
-        return builder.add("category", category).toString();
+        return builder.add("category", category)
+                .add("interactions", interactions)
+                .toString();
     }
 
 }

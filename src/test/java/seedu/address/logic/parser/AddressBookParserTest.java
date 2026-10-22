@@ -128,6 +128,8 @@ public class AddressBookParserTest {
                         + " nt/" + note);
 
         assertEquals(new InteractionCommand(INDEX_FIRST_PERSON, date, type, note), command);
+    }
+
     public void parseCommand_undo() throws Exception {
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD) instanceof UndoCommand);
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD + " now") instanceof UndoCommand);

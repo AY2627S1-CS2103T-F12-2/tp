@@ -60,7 +60,7 @@ public class RemarkCommand extends Command {
                 personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(),
                 personToEdit.getAddress(), personToEdit.getTags(), remark, personToEdit.getCategory(),
                 personToEdit.getRole(), personToEdit.getCompany(), personToEdit.getBoss(),
-                personToEdit.getInteractions(), personToEdit.getFollowUpDate());
+                personToEdit.getFollowUpDate(), personToEdit.getInteractions());
 
         model.setPerson(personToEdit, editedPerson);
         model.commitAddressBook(COMMAND_WORD);

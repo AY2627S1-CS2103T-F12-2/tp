@@ -15,8 +15,8 @@ import seedu.address.model.person.Boss;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
-import seedu.address.model.person.Interaction;
 import seedu.address.model.person.FollowUpDate;
+import seedu.address.model.person.Interaction;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -53,8 +53,9 @@ class JsonAdaptedPerson {
             @JsonProperty("remark") String remark, @JsonProperty("role") String role,
             @JsonProperty("company") String company, @JsonProperty("boss") String boss,
             @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("category") String category,
+            @JsonProperty("followUpDate") String followUpDate,
             @JsonProperty("interactions") List<JsonAdaptedInteraction> interactions) {
-            @JsonProperty("followUpDate") String followUpDate) {
+
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -74,11 +75,29 @@ class JsonAdaptedPerson {
     }
 
     /**
-     * Constructs an adapted person without a follow-up date for backwards compatibility with existing callers.
+     * Constructs an adapted person without a follow-up date or interactions.
      */
     public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
             String role, String company, String boss, List<JsonAdaptedTag> tags, String category) {
-        this(name, phone, email, address, remark, role, company, boss, tags, category, null);
+        this(name, phone, email, address, remark, role, company, boss, tags, category, null, List.of());
+    }
+
+    /**
+     * Constructs an adapted person with a follow-up date but no interactions.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
+            String role, String company, String boss, List<JsonAdaptedTag> tags, String category,
+            String followUpDate) {
+        this(name, phone, email, address, remark, role, company, boss, tags, category, followUpDate, List.of());
+    }
+
+    /**
+     * Constructs an adapted person with interactions but no follow-up date.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
+            String role, String company, String boss, List<JsonAdaptedTag> tags, String category,
+            List<JsonAdaptedInteraction> interactions) {
+        this(name, phone, email, address, remark, role, company, boss, tags, category, null, interactions);
     }
 
     /**
