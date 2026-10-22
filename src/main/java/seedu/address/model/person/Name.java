@@ -15,6 +15,7 @@ public class Name {
 
     /*
      * A valid name consists of at least a first name and last name, separated by spaces.
+     * Single source of truth for both Add and Edit.
      */
     public static final String VALIDATION_REGEX = "[A-Za-z]+( +[A-Za-z]+)+";
 
@@ -43,7 +44,7 @@ public class Name {
      * Constructs a {@code Name} with a custom validation message and optional empty value.
      */
     protected Name(String name, String messageConstraints, boolean allowsEmpty) {
-        name = name.trim();
+        name = parseSpaces(name);
         requireNonNull(name);
         checkArgument(allowsEmpty && name.isEmpty() || isValidName(name), messageConstraints);
         fullName = name;
@@ -53,9 +54,16 @@ public class Name {
      * Returns true if a given string is a valid name.
      */
     public static boolean isValidName(String test) {
-        return test.trim().matches(VALIDATION_REGEX);
+        return parseSpaces(test.trim()).matches(VALIDATION_REGEX);
     }
 
+    /**
+     * Trims {@code name} by removing spaces from front and back
+     * and collapsing repeated spaces into one.
+     */
+    public static String parseSpaces(String name) {
+        return name.trim().replaceAll(" +", " ");
+    }
 
     @Override
     public String toString() {

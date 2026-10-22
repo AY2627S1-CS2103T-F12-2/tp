@@ -34,7 +34,7 @@ public class PhoneTest {
 
         // valid phone numbers
         assertTrue(Phone.isValidPhone("12345678")); // exactly 8 numbers
-        assertTrue(Phone.isValidPhone("124293842033123")); // long phone number
+        assertFalse(Phone.isValidPhone("124293842033123")); // phone number too long
     }
 
     @Test
