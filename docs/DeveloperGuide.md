@@ -258,13 +258,15 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 `category INDEX c/CATEGORY` is parsed by `CategoryCommandParser`. `CategoryCommand` selects the person at the displayed index, creates a copy with the new category, and replaces the original through `Model#setPerson`. Other person details are preserved.
 
-![Category command through Logic](images/CategorySequenceDiagram-Logic.png)
-![Category update through Model](images/CategorySequenceDiagram-Model.png)
+<puml src="diagrams/CategorySequenceDiagram-Logic.puml" width="500" />
+
+<puml src="diagrams/CategorySequenceDiagram-Model.puml" width="250" />
 
 `categories` creates a `CategoriesCommand` directly. It reads the unfiltered person list, counts contacts in every `Category` (including those with zero contacts), and returns the formatted counts without changing the model.
 
-![Categories command through Logic](images/CategoriesSequenceDiagram-Logic.png)
-![Categories list through Model](images/CategoriesSequenceDiagram-Model.png)
+<puml src="diagrams/CategoriesSequenceDiagram-Logic.puml" width="500" />
+
+<puml src="diagrams/CategoriesSequenceDiagram-Model.puml" width="250" />
 
 ### \[Proposed\] Data archiving
 

@@ -1,0 +1,22 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+participant ":AddressBook" as AddressBook MODEL_COLOR
+end box
+
+[-> Model : setPerson(index,\neditedPerson)
+activate Model
+
+Model -> AddressBook : setPerson(target,\neditedPerson)
+activate AddressBook
+
+AddressBook --> Model
+deactivate AddressBook
+
+[<-- Model
+deactivate Model
+
+@enduml
