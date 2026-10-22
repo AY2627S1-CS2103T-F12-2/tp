@@ -119,7 +119,7 @@ public class PersonTest {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags()
                 + ", role=" + ALICE.getRole() + ", company=" + ALICE.getCompany() + ", boss=" + ALICE.getBoss()
-                + ", category=" + ALICE.getCategory() + "}";
+                + ", category=" + ALICE.getCategory() + ", interactions=" + ALICE.getInteractions() + "}";
         assertEquals(expected, ALICE.toString());
 
         Person datedAlice = new PersonBuilder(ALICE).withFollowUpDate("2026-10-20").build();
@@ -128,7 +128,7 @@ public class PersonTest {
                 + ", address=" + datedAlice.getAddress() + ", tags=" + datedAlice.getTags()
                 + ", role=" + datedAlice.getRole() + ", company=" + datedAlice.getCompany()
                 + ", boss=" + datedAlice.getBoss() + ", followUpDate=" + datedAlice.getFollowUpDate()
-                + ", category=" + datedAlice.getCategory() + "}";
+                + ", category=" + datedAlice.getCategory() + ", interactions=" + datedAlice.getInteractions() + "}";
         assertEquals(expectedDated, datedAlice.toString());
 
         assertTrue(datedAlice.equals(new PersonBuilder(datedAlice).build()));

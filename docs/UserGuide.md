@@ -22,7 +22,7 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
 1. Copy the file to the folder you want to use as the _home folder_ for ContactFind.
 
-1. Open a terminal, `cd` to the folder containing the JAR file, and run `java -jar addressbook.jar`.<br>
+1. Open a terminal, `cd` to the folder containing the JAR file, and run `java -jar contactfind.jar`.<br>
    A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -82,7 +82,7 @@ Prefix | Field | Used by
 `rl/` | Role | `add`, `edit`, `find`
 `com/` | Company | `add`, `edit`, `find`
 `b/` | Boss | `add`, `edit`
-`fd/` | Follow-up date | `add`, `edit`
+`fd/` | Follow-up date | `add`, `edit`, `find`, `delete`, `sort`
 `t/` | Tag | `add`, `edit`
 `r/` | Remark | `remark`
 `c/` | Category | `category`
@@ -94,8 +94,8 @@ ContactFind checks every value you enter. If a value does not meet its constrain
 Field | Constraint                                                                                                                     | Valid example
 ------|--------------------------------------------------------------------------------------------------------------------------------|--------------
 Name | Letters only, with at least a first and last name separated by a space. When using `edit`, the name must be exactly two words. | `John Doe`
-Phone number | Digits only, at least 8 digits long.                                                                                           | `98765432`
-Email address | Must be in the form `name@domain`.                                                                                             | `johnd@example.com`
+Phone number | Digits only, exactly 8 digits long.                                                                                            | `98765432`
+Email address | Must be in the form `local-part@domain`.                                                                                       | `johnd@example.com`
 Address | Any value, but must not be blank.                                                                                              | `John street, block 123, #01-01`
 Role | Letters and digits, with words separated by single spaces.                                                                     | `Vice President`
 Company | Letters and digits, with words separated by single spaces, and at least 3 characters long.                                     | `Example Bank`
@@ -112,9 +112,10 @@ Category | One of `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`,
 
 ### Viewing help: `help`
 
-Shows a message explaining how to access the help page.
+Opens a Help window. <br>
+Help window lists every commands' usage text and contains a link to the User Guide.
 
-![help message](images/helpMessage.png)
+![help message](images/helpWindow.png)
 
 Format: `help`
 
@@ -203,7 +204,7 @@ Format: `categories`
 
 ### Finding contacts: `find`
 
-Finds contacts whose name, role, or company contains any of the given keywords.
+Finds contacts whose name, role, company or follow-up date contains any of the given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD [MORE_KEYWORDS]...`, `find rl/KEYWORD [MORE_KEYWORDS]...`, `find com/KEYWORD [MORE_KEYWORDS]...`, or `find fd/YYYY-MM-DD`
 
@@ -212,7 +213,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD [MORE_KEYWORDS]...`, 
 * Partial words match; for example, `Han` matches `Hans`.
 * Keyword order does not matter.
 * Contacts matching at least one keyword are returned (an `OR` search); for example, `find Hans Bo` returns `Hans Gruber` and `Bo Yang`.
-* Only one field can be searched at a time. If you enter more than one prefix, only the first recognized field is used.
+* Only one field can be searched at a time. If you enter more than one prefix, the field that takes effect is according to the priority `fd/`->`n/`->`rl/`->`com/`.
 
 Examples:
 * `find John` returns `John Doe` and `Johnny Tan`.
@@ -257,14 +258,14 @@ Format: `clear`
 
 ### Saving an undo checkpoint: `commit`
 
-Manually saves the current contact list as a manual checkpoint for a future undo operation.
+Saves the current contact list as a manual checkpoint for a future undo operation.
 
 Format: `commit`
 
 ### Undoing a change: `undo`
 
 Restores the contact-list state before the most recent saved change. Each successful contact-changing command
-automatically saves a state.
+automatically saves a state (except for delete fd/ and sort.)
 
 Format: `undo`
 
@@ -307,7 +308,7 @@ Furthermore, certain edits can cause ContactFind to behave in unexpected ways (e
 **A**: The `edit` command replaces all of a contact's existing tags, so include every tag you want to keep. For example, if a contact is tagged `client`, use `edit INDEX t/client t/priority` to add `priority`.
 
 **Q**: Why was my phone number rejected?<br>
-**A**: Phone numbers must contain digits only and be at least 8 digits long. Remove spaces, dashes, and the `+` country code prefix. See [Field constraints](#field-constraints).
+**A**: Phone numbers must contain digits only and be exactly 8 digits long. Remove spaces, dashes, and the `+` country code prefix. See [Field constraints](#field-constraints).
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -327,14 +328,13 @@ Action     | Format, Examples
 **Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
 **Clear**  | `clear`
 **Commit** | `commit`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
+**Delete** | `delete INDEX` e.g., `delete 3` (deletes based on index) OR <br> `delete fd/YYYY-MM-DD` e.g., `delete fd/1985-03-11` (deletes based on follow-up date)
+**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`
+**Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
 **Help**   | `help`
 **List**   | `list`
-**Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
 **Redo**   | `redo`
-**Undo**   | `undo`
-**Commit** | `commit`
+**Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
 **Sort**   | `sort fd/[asc\|desc]`<br> e.g., `sort fd/`
+**Undo**   | `undo`

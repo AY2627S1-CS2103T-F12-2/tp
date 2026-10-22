@@ -171,10 +171,10 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseEditName_validAndInvalidValues() throws Exception {
-        assertEquals(new Name(VALID_NAME), ParserUtil.parseEditName("  Rachel   Walker  "));
-        assertThrows(ParseException.class, () -> ParserUtil.parseEditName("Rachel"));
-        assertThrows(ParseException.class, () -> ParserUtil.parseEditName("R@chel Walker"));
+    public void parseName_validAndInvalidValues() throws Exception {
+        assertEquals(new Name(VALID_NAME), ParserUtil.parseName("  Rachel   Walker  "));
+        assertThrows(ParseException.class, () -> ParserUtil.parseName("Rachel"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseName("R@chel Walker"));
     }
 
     @Test
@@ -190,11 +190,11 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseEditBoss_validEmptyAndInvalidValues() throws Exception {
-        assertEquals(new Boss("Jane Smith"), ParserUtil.parseEditBoss(" Jane   Smith "));
-        assertEquals(new Boss(""), ParserUtil.parseEditBoss("   "));
-        assertThrows(ParseException.class, () -> ParserUtil.parseEditBoss("Jane"));
-        assertThrows(ParseException.class, () -> ParserUtil.parseEditBoss("Jane1 Smith"));
+    public void parseBoss_validEmptyAndInvalidValues() throws Exception {
+        assertEquals(new Boss("Jane Smith"), ParserUtil.parseBoss(" Jane   Smith "));
+        assertEquals(new Boss(""), ParserUtil.parseBoss("   "));
+        assertThrows(ParseException.class, () -> ParserUtil.parseBoss("Jane"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseBoss("Jane1 Smith"));
     }
 
     @Test

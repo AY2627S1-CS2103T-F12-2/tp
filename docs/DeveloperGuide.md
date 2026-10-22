@@ -71,7 +71,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
-The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
+The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, `ContactDashboardPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
 
 The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java).
 
@@ -258,13 +258,15 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 `category INDEX c/CATEGORY` is parsed by `CategoryCommandParser`. `CategoryCommand` selects the person at the displayed index, creates a copy with the new category, and replaces the original through `Model#setPerson`. Other person details are preserved.
 
-![Category command through Logic](images/CategorySequenceDiagram-Logic.png)
-![Category update through Model](images/CategorySequenceDiagram-Model.png)
+<puml src="diagrams/CategorySequenceDiagram-Logic.puml" width="500" />
+
+<puml src="diagrams/CategorySequenceDiagram-Model.puml" width="250" />
 
 `categories` creates a `CategoriesCommand` directly. It reads the unfiltered person list, counts contacts in every `Category` (including those with zero contacts), and returns the formatted counts without changing the model.
 
-![Categories command through Logic](images/CategoriesSequenceDiagram-Logic.png)
-![Categories list through Model](images/CategoriesSequenceDiagram-Model.png)
+<puml src="diagrams/CategoriesSequenceDiagram-Logic.puml" width="500" />
+
+<puml src="diagrams/CategoriesSequenceDiagram-Model.puml" width="250" />
 
 ### \[Proposed\] Data archiving
 

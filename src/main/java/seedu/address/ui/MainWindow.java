@@ -3,8 +3,10 @@ package seedu.address.ui;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -36,6 +38,11 @@ public class MainWindow extends UiPart<Stage> {
     private PersonListPanel personListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private ContactDashboardPanel contactDashboardPanel;
+    private boolean dashboardVisible;
+
+    @FXML
+    private Button dashboardButton;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -51,6 +58,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane statusbarPlaceholder;
+
+    @FXML
+    private StackPane dashboardPlaceholder;
 
     /**
      * Creates a {@code MainWindow} with the given {@code Stage}, {@code Logic},
@@ -70,6 +80,9 @@ public class MainWindow extends UiPart<Stage> {
         setAccelerators();
 
         helpWindow = new HelpWindow();
+        dashboardVisible = false;
+        contactDashboardPanel = new ContactDashboardPanel(FXCollections.observableArrayList(), this::showMainView);
+        contactDashboardPanel.refresh(logic.getFilteredPersonList());
     }
 
     public Stage getPrimaryStage() {
@@ -196,5 +209,53 @@ public class MainWindow extends UiPart<Stage> {
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
         }
+    }
+
+    /**
+     * Toggles the dashboard.
+     */
+    @FXML
+    private void handleToggleDashboard() {
+        dashboardVisible = !dashboardVisible;
+        dashboardPlaceholder.setVisible(dashboardVisible);
+        personListPanelPlaceholder.setVisible(!dashboardVisible);
+        commandBoxPlaceholder.setVisible(!dashboardVisible);
+        resultDisplayPlaceholder.setVisible(!dashboardVisible);
+        statusbarPlaceholder.setVisible(!dashboardVisible);
+    }
+
+    @FXML
+    private void handleDashboard() {
+        showDashboardView();
+    }
+
+    private void showDashboardView() {
+        dashboardVisible = true;
+        contactDashboardPanel.refresh(logic.getFilteredPersonList());
+        dashboardPlaceholder.getChildren().setAll(contactDashboardPanel.getRoot());
+        dashboardPlaceholder.setVisible(true);
+        dashboardPlaceholder.setManaged(true);
+        personListPanelPlaceholder.setVisible(false);
+        personListPanelPlaceholder.setManaged(false);
+        commandBoxPlaceholder.setVisible(false);
+        commandBoxPlaceholder.setManaged(false);
+        resultDisplayPlaceholder.setVisible(false);
+        resultDisplayPlaceholder.setManaged(false);
+        statusbarPlaceholder.setVisible(false);
+        statusbarPlaceholder.setManaged(false);
+    }
+
+    private void showMainView() {
+        dashboardVisible = false;
+        dashboardPlaceholder.setVisible(false);
+        dashboardPlaceholder.setManaged(false);
+        personListPanelPlaceholder.setVisible(true);
+        personListPanelPlaceholder.setManaged(true);
+        commandBoxPlaceholder.setVisible(true);
+        commandBoxPlaceholder.setManaged(true);
+        resultDisplayPlaceholder.setVisible(true);
+        resultDisplayPlaceholder.setManaged(true);
+        statusbarPlaceholder.setVisible(true);
+        statusbarPlaceholder.setManaged(true);
     }
 }
