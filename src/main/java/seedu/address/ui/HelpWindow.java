@@ -14,14 +14,17 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CategoriesCommand;
 import seedu.address.logic.commands.CategoryCommand;
 import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.CommitCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.SortCommand;
+import seedu.address.logic.commands.UndoCommand;
 
 /**
  * Controller for a help page
@@ -35,6 +38,7 @@ public class HelpWindow extends UiPart<Stage> {
             CategoriesCommand.MESSAGE_USAGE,
             CategoryCommand.MESSAGE_USAGE,
             ClearCommand.MESSAGE_USAGE,
+            CommitCommand.MESSAGE_USAGE,
             DeleteCommand.MESSAGE_USAGE,
             EditCommand.MESSAGE_USAGE,
             ExitCommand.MESSAGE_USAGE,
@@ -42,6 +46,8 @@ public class HelpWindow extends UiPart<Stage> {
             HelpCommand.MESSAGE_USAGE,
             ListCommand.MESSAGE_USAGE,
             RemarkCommand.MESSAGE_USAGE,
+            RedoCommand.MESSAGE_USAGE,
+            UndoCommand.MESSAGE_USAGE,
             SortCommand.MESSAGE_USAGE);
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);

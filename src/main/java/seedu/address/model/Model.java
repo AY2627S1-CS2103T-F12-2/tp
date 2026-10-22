@@ -37,6 +37,40 @@ public interface Model {
     ReadOnlyAddressBook getAddressBook();
 
     /**
+     * Saves the current address book state for a future undo operation.
+     */
+    void commitAddressBook();
+
+    /**
+     * Saves the current address book state with a safe name for the action that created it.
+     *
+     * @param actionName non-sensitive action name for history logging
+     */
+    default void commitAddressBook(String actionName) {
+        commitAddressBook();
+    }
+
+    /**
+     * Restores the previous address book state.
+     */
+    void undoAddressBook();
+
+    /**
+     * Restores the next address book state.
+     */
+    void redoAddressBook();
+
+    /**
+     * Returns whether an older address book state is available.
+     */
+    boolean canUndoAddressBook();
+
+    /**
+     * Returns whether a newer address book state is available.
+     */
+    boolean canRedoAddressBook();
+
+    /**
      * Returns true if a person with the same identity as {@code person} exists in the address book.
      */
     boolean hasPerson(Person person);
