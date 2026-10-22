@@ -16,6 +16,7 @@ import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.FollowUpDate;
+import seedu.address.model.person.Interaction;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -41,6 +42,7 @@ class JsonAdaptedPerson {
     private final String followUpDate;
     private final String category;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
+    private final List<JsonAdaptedInteraction> interactions = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -51,7 +53,9 @@ class JsonAdaptedPerson {
             @JsonProperty("remark") String remark, @JsonProperty("role") String role,
             @JsonProperty("company") String company, @JsonProperty("boss") String boss,
             @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("category") String category,
-            @JsonProperty("followUpDate") String followUpDate) {
+            @JsonProperty("followUpDate") String followUpDate,
+            @JsonProperty("interactions") List<JsonAdaptedInteraction> interactions) {
+
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -65,14 +69,35 @@ class JsonAdaptedPerson {
         if (tags != null) {
             this.tags.addAll(tags);
         }
+        if (interactions != null) {
+            this.interactions.addAll(interactions);
+        }
     }
 
     /**
-     * Constructs an adapted person without a follow-up date for backwards compatibility with existing callers.
+     * Constructs an adapted person without a follow-up date or interactions.
      */
     public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
             String role, String company, String boss, List<JsonAdaptedTag> tags, String category) {
-        this(name, phone, email, address, remark, role, company, boss, tags, category, null);
+        this(name, phone, email, address, remark, role, company, boss, tags, category, null, List.of());
+    }
+
+    /**
+     * Constructs an adapted person with a follow-up date but no interactions.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
+            String role, String company, String boss, List<JsonAdaptedTag> tags, String category,
+            String followUpDate) {
+        this(name, phone, email, address, remark, role, company, boss, tags, category, followUpDate, List.of());
+    }
+
+    /**
+     * Constructs an adapted person with interactions but no follow-up date.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address, String remark,
+            String role, String company, String boss, List<JsonAdaptedTag> tags, String category,
+            List<JsonAdaptedInteraction> interactions) {
+        this(name, phone, email, address, remark, role, company, boss, tags, category, null, interactions);
     }
 
     /**
@@ -91,6 +116,9 @@ class JsonAdaptedPerson {
         category = source.getCategory().name();
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
+                .collect(Collectors.toList()));
+        interactions.addAll(source.getInteractions().stream()
+                .map(JsonAdaptedInteraction::new)
                 .collect(Collectors.toList()));
     }
 
@@ -185,8 +213,15 @@ class JsonAdaptedPerson {
         final Category modelCategory = Category.valueOf(category.toUpperCase());
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
+        final List<Interaction> modelInteractions = new ArrayList<>();
+        for (JsonAdaptedInteraction interaction : interactions) {
+            if (interaction == null) {
+                throw new IllegalValueException(Interaction.MESSAGE_CONSTRAINTS);
+            }
+            modelInteractions.add(interaction.toModelType());
+        }
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark,
-                modelCategory, modelRole, modelCompany, modelBoss, modelFollowUpDate);
+                modelCategory, modelRole, modelCompany, modelBoss, modelFollowUpDate, modelInteractions);
     }
 
 }
