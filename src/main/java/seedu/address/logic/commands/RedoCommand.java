@@ -30,6 +30,7 @@ public class RedoCommand extends Command {
             throw new CommandException(MESSAGE_NO_REDOABLE_ACTIONS);
         }
 
+        assert model.canRedoAddressBook();
         model.redoAddressBook();
         return new CommandResult(MESSAGE_SUCCESS);
     }

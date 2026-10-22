@@ -334,4 +334,7 @@ Action     | Format, Examples
 **Help**   | `help`
 **List**   | `list`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
+**Redo**   | `redo`
+**Undo**   | `undo`
+**Commit** | `commit`
 **Sort**   | `sort fd/[asc\|desc]`<br> e.g., `sort fd/`

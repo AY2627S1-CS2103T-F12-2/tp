@@ -18,6 +18,7 @@ public class CommitCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         model.commitAddressBook(COMMAND_WORD);
+        assert model.canUndoAddressBook();
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

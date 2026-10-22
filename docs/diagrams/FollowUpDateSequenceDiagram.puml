@@ -1,0 +1,73 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+title Find contacts by follow-up date
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant "p:FindCommandParser" as FindCommandParser LOGIC_COLOR
+participant "f:FindCommand" as FindCommand LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "d:FollowUpDate" as FollowUpDate MODEL_COLOR
+participant "p:FollowUpDatePredicate" as FollowUpDatePredicate MODEL_COLOR
+participant ":Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("find fd/2026-10-20")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("find fd/2026-10-20")
+activate AddressBookParser
+
+create FindCommandParser
+AddressBookParser -> FindCommandParser
+activate FindCommandParser
+
+FindCommandParser --> AddressBookParser
+deactivate FindCommandParser
+
+AddressBookParser -> FindCommandParser : parse("fd/2026-10-20")
+activate FindCommandParser
+
+create FollowUpDate
+FindCommandParser -> FollowUpDate : new("2026-10-20")
+activate FollowUpDate
+FollowUpDate --> FindCommandParser : date
+deactivate FollowUpDate
+
+create FollowUpDatePredicate
+FindCommandParser -> FollowUpDatePredicate : new(date)
+activate FollowUpDatePredicate
+FollowUpDatePredicate --> FindCommandParser : predicate
+deactivate FollowUpDatePredicate
+
+create FindCommand
+FindCommandParser -> FindCommand : new(predicate)
+activate FindCommand
+FindCommand --> FindCommandParser
+deactivate FindCommand
+
+FindCommandParser --> AddressBookParser : f
+deactivate FindCommandParser
+
+AddressBookParser --> LogicManager : f
+deactivate AddressBookParser
+
+LogicManager -> FindCommand : execute(Model)
+activate FindCommand
+
+FindCommand -> Model : updateFilteredPersonList(predicate)
+activate Model
+Model --> FindCommand
+deactivate Model
+
+FindCommand --> LogicManager : result
+deactivate FindCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
