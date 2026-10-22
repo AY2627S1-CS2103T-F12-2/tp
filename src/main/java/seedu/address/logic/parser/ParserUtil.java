@@ -33,6 +33,14 @@ public class ParserUtil {
             "Invalid phone number! Please use numbers only.";
     public static final String MESSAGE_EDIT_PHONE_SPACES =
             "Invalid phone number! Spaces are not allowed.";
+    public static final String MESSAGE_EDIT_EMAIL_AT =
+            "Invalid email! Please include an '@' symbol.";
+    public static final String MESSAGE_EDIT_EMAIL_DOMAIN =
+            "Invalid email! Please use an email address ending with '.com'.";
+    public static final String MESSAGE_EDIT_EMAIL_SPACES =
+            "Invalid email! Spaces are not allowed.";
+    public static final String MESSAGE_EDIT_EMAIL_FORMAT =
+            "Invalid email! Please use the format username@example.com.";
     public static final String MESSAGE_EDIT_ROLE =
             "Invalid role! Please use alphanumeral characters. Special symbols are not allowed.";
     public static final String MESSAGE_EDIT_COMPANY =
