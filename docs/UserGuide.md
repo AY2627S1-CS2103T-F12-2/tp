@@ -93,7 +93,7 @@ ContactFind checks every value you enter. If a value does not meet its constrain
 
 Field | Constraint | Valid example
 ------|------------|--------------
-Name | Letters only, with at least a first and last name separated by a space. When using `edit`, the name must be exactly two words. | `John Doe`
+Name | Letters only, with at least a first and last name separated by a space. | `John Doe`
 Phone number | Digits only, at least 8 digits long. | `98765432`
 Email address | Must be in the form `local-part@domain`. | `johnd@example.com`
 Address | Any value, but must not be blank. | `John street, block 123, #01-01`

@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.person.Name.parseSpaces;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,11 +25,8 @@ import seedu.address.model.tag.Tag;
  */
 public class ParserUtil {
 
-    public static final String MESSAGE_INVALID_INDEX = "Index must be a positive integer.";
-    public static final String MESSAGE_EDIT_NAME =
-            "Invalid name! Please enter the name in the format: Firstname Surname.";
-    public static final String MESSAGE_EDIT_NAME_CHARACTERS =
-            "Invalid name! Names may contain alphabetic characters only.";
+    public static final String MESSAGE_INVALID_INDEX =
+            "Index must be a positive integer.";
     public static final String MESSAGE_EDIT_PHONE_LENGTH =
             "Invalid phone number! Please enter exactly 8 digits.";
     public static final String MESSAGE_EDIT_PHONE_CHARACTERS =
@@ -47,10 +45,6 @@ public class ParserUtil {
             "Invalid role! Please use alphanumeral characters. Special symbols are not allowed.";
     public static final String MESSAGE_EDIT_COMPANY =
             "Invalid company name! Please use alphanumeral characters. Special symbols are not allowed.";
-    public static final String MESSAGE_EDIT_BOSS =
-            "Invalid boss name! Please enter the name in the format: Firstname Surname.";
-    public static final String MESSAGE_EDIT_BOSS_CHARACTERS =
-            "Invalid boss name! Names may contain alphabetic characters only.";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -73,7 +67,7 @@ public class ParserUtil {
      */
     public static Name parseName(String name) throws ParseException {
         requireNonNull(name);
-        String trimmedName = name.trim();
+        String trimmedName = parseSpaces(name);
         if (!Name.isValidName(trimmedName)) {
             throw new ParseException(Name.MESSAGE_CONSTRAINTS);
         }
@@ -161,19 +155,6 @@ public class ParserUtil {
         return new Email(trimmedEmail);
     }
 
-    /** Parses an edit name and normalizes repeated spaces. */
-    public static Name parseEditName(String name) throws ParseException {
-        requireNonNull(name);
-        String normalizedName = name.trim().replaceAll(" +", " ");
-        if (!normalizedName.matches("[A-Za-z]+ [A-Za-z]+")) {
-            if (!normalizedName.matches("[A-Za-z ]+")) {
-                throw new ParseException(MESSAGE_EDIT_NAME_CHARACTERS);
-            }
-            throw new ParseException(MESSAGE_EDIT_NAME);
-        }
-        return new Name(normalizedName);
-    }
-
     /**
      * Parses a {@code String role} into a {@code Role}.
      * Leading and trailing whitespaces will be trimmed.
@@ -226,27 +207,11 @@ public class ParserUtil {
      */
     public static Boss parseBoss(String boss) throws ParseException {
         requireNonNull(boss);
-        String trimmedBoss = boss.trim();
+        String trimmedBoss = parseSpaces(boss.trim());
         if (!Boss.isValidBoss(trimmedBoss)) {
             throw new ParseException(Boss.MESSAGE_CONSTRAINTS);
         }
         return new Boss(trimmedBoss);
-    }
-
-    /** Parses an optional two-word boss name for the edit command. */
-    public static Boss parseEditBoss(String boss) throws ParseException {
-        requireNonNull(boss);
-        String normalizedBoss = boss.trim().replaceAll(" +", " ");
-        if (normalizedBoss.isEmpty()) {
-            return new Boss("");
-        }
-        if (!normalizedBoss.matches("[A-Za-z]+ [A-Za-z]+")) {
-            if (!normalizedBoss.matches("[A-Za-z ]+")) {
-                throw new ParseException(MESSAGE_EDIT_BOSS_CHARACTERS);
-            }
-            throw new ParseException(MESSAGE_EDIT_BOSS);
-        }
-        return new Boss(normalizedBoss);
     }
 
     /** Parses a follow-up date in the format {@code yyyy-MM-dd}. */
