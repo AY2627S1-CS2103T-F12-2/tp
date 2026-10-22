@@ -159,12 +159,15 @@ public class ParserUtilTest {
     }
 
     @Test
-    public void parseEditEmail_validAndInvalidValues() throws Exception {
-        assertEquals(new Email(VALID_EMAIL), ParserUtil.parseEditEmail(VALID_EMAIL));
-        assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel walker@example.com"));
-        assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel@example.org"));
-        assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel@@example.com"));
-        assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel@.com"));
+    public void parseEmail_validAndInvalidValues() throws Exception {
+        //valid
+        assertEquals(new Email(VALID_EMAIL), ParserUtil.parseEmail(VALID_EMAIL));
+        assertEquals(new Email("rachel@example.org"), ParserUtil.parseEmail("rachel@example.org"));
+
+        //invalid
+        assertThrows(ParseException.class, () -> ParserUtil.parseEmail("rachel walker@example.com"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEmail("rachel@@example.com"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEmail("rachel@.com"));
     }
 
     @Test

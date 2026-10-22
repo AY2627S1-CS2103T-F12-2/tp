@@ -3,6 +3,9 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+// Regex 5322
+import java.util.regex.Pattern;
+
 /**
  * Represents a Person's email in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidEmail(String)}
@@ -10,17 +13,18 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Email {
 
     public static final String MESSAGE_CONSTRAINTS = "Invalid email! Please include an '@' symbol.";
-    private static final String SPECIAL_CHARACTERS = "+_.-";
 
-    // alphanumeric and special characters
-    private static final String ALPHANUMERIC_NO_UNDERSCORE = "[^\\W_]+"; // alphanumeric characters except underscore
-    private static final String LOCAL_PART_REGEX = "^" + ALPHANUMERIC_NO_UNDERSCORE + "([" + SPECIAL_CHARACTERS + "]"
-            + ALPHANUMERIC_NO_UNDERSCORE + ")*";
-    private static final String DOMAIN_PART_REGEX = ALPHANUMERIC_NO_UNDERSCORE
-            + "(-" + ALPHANUMERIC_NO_UNDERSCORE + ")*";
-    private static final String DOMAIN_LAST_PART_REGEX = "(" + DOMAIN_PART_REGEX + "){2,}$"; // At least two chars
-    private static final String DOMAIN_REGEX = "(" + DOMAIN_PART_REGEX + "\\.)+" + DOMAIN_LAST_PART_REGEX;
-    public static final String VALIDATION_REGEX = LOCAL_PART_REGEX + "@" + DOMAIN_REGEX;
+    public static final String VALIDATION_REGEX = "(?i)"
+            + "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*"
+            + "|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]"
+            + "|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")"
+            + "@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+            + "|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}"
+            + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:"
+            + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]"
+            + "|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(VALIDATION_REGEX);
 
     public final String value;
 
@@ -40,7 +44,7 @@ public class Email {
      * Returns true if a given string is a valid email.
      */
     public static boolean isValidEmail(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return EMAIL_PATTERN.matcher(test).matches();
     }
 
     @Override
