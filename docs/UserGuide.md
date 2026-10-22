@@ -91,19 +91,19 @@ Prefix | Field | Used by
 
 ContactFind checks every value you enter. If a value does not meet its constraint, the command is rejected and an error message is shown.
 
-Field | Constraint | Valid example
-------|------------|--------------
+Field | Constraint                                                                                                                     | Valid example
+------|--------------------------------------------------------------------------------------------------------------------------------|--------------
 Name | Letters only, with at least a first and last name separated by a space. When using `edit`, the name must be exactly two words. | `John Doe`
-Phone number | Digits only, at least 8 digits long. | `98765432`
-Email address | Must be in the form `local-part@domain`. | `johnd@example.com`
-Address | Any value, but must not be blank. | `John street, block 123, #01-01`
-Role | Letters and digits, with words separated by single spaces. | `Vice President`
-Company | Letters and digits, with words separated by single spaces, and at least 3 characters long. | `Example Bank`
-Boss | Same as Name, or empty. | `Alex Smith`
-Follow-up date | A valid calendar date in `yyyy-MM-dd` format. | `2026-10-20`
-Tag | Letters and digits only, with no spaces. | `priority`
-Remark | Any value. | `Prefers email over calls`
-Category | One of `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, `OTHER` (case-insensitive). | `INVESTOR`
+Phone number | Digits only, exactly 8 digits long.                                                                                            | `98765432`
+Email address | Must be in the form `local-part@domain`.                                                                                       | `johnd@example.com`
+Address | Any value, but must not be blank.                                                                                              | `John street, block 123, #01-01`
+Role | Letters and digits, with words separated by single spaces.                                                                     | `Vice President`
+Company | Letters and digits, with words separated by single spaces, and at least 3 characters long.                                     | `Example Bank`
+Boss | Same as Name, or empty.                                                                                                        | `Alex Smith`
+Follow-up date | A valid calendar date in `yyyy-MM-dd` format.                                                                                  | `2026-10-20`
+Tag | Letters and digits only, with no spaces.                                                                                       | `priority`
+Remark | Any value.                                                                                                                     | `Prefers email over calls`
+Category | One of `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, `OTHER` (case-insensitive).                | `INVESTOR`
 
 <box type="info" seamless>
 
@@ -307,7 +307,7 @@ Furthermore, certain edits can cause ContactFind to behave in unexpected ways (e
 **A**: The `edit` command replaces all of a contact's existing tags, so include every tag you want to keep. For example, if a contact is tagged `client`, use `edit INDEX t/client t/priority` to add `priority`.
 
 **Q**: Why was my phone number rejected?<br>
-**A**: Phone numbers must contain digits only and be at least 8 digits long. Remove spaces, dashes, and the `+` country code prefix. See [Field constraints](#field-constraints).
+**A**: Phone numbers must contain digits only and be exactly 8 digits long. Remove spaces, dashes, and the `+` country code prefix. See [Field constraints](#field-constraints).
 
 --------------------------------------------------------------------------------------------------------------------
 
