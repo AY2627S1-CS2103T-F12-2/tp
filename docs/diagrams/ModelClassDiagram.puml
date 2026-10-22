@@ -19,6 +19,8 @@ Class Email
 Class Name
 Class Phone
 Class Tag
+Class FollowUpDate
+Class FollowUpDatePredicate
 
 Class I #FFFFFF
 }
@@ -42,6 +44,10 @@ Person *--> Phone
 Person *--> Email
 Person *--> Address
 Person *--> "*" Tag
+Person *--> "0..1" FollowUpDate : follow-up date
+
+FollowUpDatePredicate ..> FollowUpDate
+FollowUpDatePredicate ..> Person
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I

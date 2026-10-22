@@ -99,6 +99,11 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X), but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </box>
 
+The following sequence diagram shows how the follow-up date filter is parsed and applied for the command
+`find fd/2026-10-20`.
+
+<puml src="diagrams/FollowUpDateSequenceDiagram.puml" alt="Interactions for finding contacts by follow-up date" />
+
 
 How the `Logic` component works:
 
