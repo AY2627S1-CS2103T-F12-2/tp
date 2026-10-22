@@ -86,6 +86,9 @@ Prefix | Field | Used by
 `t/` | Tag | `add`, `edit`
 `r/` | Remark | `remark`
 `c/` | Category | `category`
+`d/` | Interaction date | `interaction`
+`ty/` | Interaction type | `interaction`
+`nt/` | Interaction note | `interaction`
 
 ### Field constraints
 
@@ -202,6 +205,23 @@ Shows all available categories and the number of contacts assigned to each categ
 
 Format: `categories`
 
+### Logging an interaction: `interaction`
+
+Records an interaction (such as a meeting or call) with an existing contact.
+
+Format: `interaction INDEX d/DATE ty/TYPE nt/NOTE`
+
+* Logs an interaction with the contact at the specified `INDEX`.
+* All three of `d/`, `ty/` and `nt/` are required, and each can appear only once.
+* `DATE` must be a valid calendar date in `yyyy-MM-dd` format.
+* `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
+* `NOTE` can be any text, but cannot be empty.
+* Each interaction is added to the contact's history; existing interactions are kept.
+
+Examples:
+* `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
+* `interaction 3 d/2026-11-02 ty/call nt/Follow-up on term sheet`
+
 ### Finding contacts: `find`
 
 Finds contacts whose name, role, company or follow-up date contains any of the given keywords.
@@ -258,7 +278,7 @@ Format: `clear`
 
 ### Saving an undo checkpoint: `commit`
 
-Saves the current contact list as a manual checkpoint for a future undo operation.
+Saves the current contact list as a checkpoint that undo can return to.
 
 Format: `commit`
 
@@ -333,6 +353,7 @@ Action     | Format, Examples
 **Exit**   | `exit`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
 **Help**   | `help`
+**Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 **List**   | `list`
 **Redo**   | `redo`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
