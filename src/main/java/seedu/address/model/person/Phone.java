@@ -11,7 +11,7 @@ public class Phone {
 
 
     public static final String MESSAGE_CONSTRAINTS = "Invalid phone number! Please use numbers only.";
-    public static final String VALIDATION_REGEX = "\\d{8,}";
+    public static final String VALIDATION_REGEX = "\\d{8}";
     public final String value;
 
     /**
