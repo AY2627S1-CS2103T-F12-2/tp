@@ -22,12 +22,14 @@ import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.InteractionCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.SortCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.InteractionType;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
@@ -113,6 +115,21 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_interaction() throws Exception {
+        String date = "2026-10-20";
+        InteractionType type = InteractionType.MEETING;
+        String note = "Discussed proposal";
+
+        InteractionCommand command = (InteractionCommand) parser.parseCommand(
+                InteractionCommand.COMMAND_WORD
+                        + " " + INDEX_FIRST_PERSON.getOneBased()
+                        + " d/" + date
+                        + " ty/" + type
+                        + " nt/" + note);
+
+        assertEquals(new InteractionCommand(INDEX_FIRST_PERSON, date, type, note), command);
+    }
+
     public void parseCommand_undo() throws Exception {
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD) instanceof UndoCommand);
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD + " now") instanceof UndoCommand);

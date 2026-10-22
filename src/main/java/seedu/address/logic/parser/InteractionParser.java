@@ -1,0 +1,58 @@
+package seedu.address.logic.parser;
+
+import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_NOTE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_TYPE;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Locale;
+
+import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.InteractionCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Interaction;
+import seedu.address.model.person.InteractionType;
+
+/** Parses arguments for an {@code InteractionCommand}. */
+public class InteractionParser implements Parser<InteractionCommand> {
+
+    @Override
+    public InteractionCommand parse(String args) throws ParseException {
+        requireNonNull(args);
+        ArgumentMultimap arguments = ArgumentTokenizer.tokenize(args,
+                PREFIX_INTERACTION_DATE, PREFIX_INTERACTION_TYPE, PREFIX_INTERACTION_NOTE);
+        arguments.verifyNoDuplicatePrefixesFor(
+                PREFIX_INTERACTION_DATE, PREFIX_INTERACTION_TYPE, PREFIX_INTERACTION_NOTE);
+
+        Index index;
+        try {
+            index = ParserUtil.parseIndex(arguments.getPreamble());
+        } catch (ParseException e) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    InteractionCommand.MESSAGE_USAGE), e);
+        }
+
+        String date = arguments.getValue(PREFIX_INTERACTION_DATE).orElse("");
+        String typeText = arguments.getValue(PREFIX_INTERACTION_TYPE).orElse("");
+        String note = arguments.getValue(PREFIX_INTERACTION_NOTE).orElse("");
+        if (date.isEmpty() || typeText.isEmpty() || note.isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    InteractionCommand.MESSAGE_USAGE));
+        }
+
+        try {
+            LocalDate.parse(date, Interaction.FORMATTER);
+        } catch (DateTimeParseException e) {
+            throw new ParseException(Interaction.MESSAGE_CONSTRAINTS, e);
+        }
+
+        if (!InteractionType.isValidInteractionType(typeText)) {
+            throw new ParseException(InteractionType.MESSAGE_CONSTRAINTS);
+        }
+        InteractionType type = InteractionType.valueOf(typeText.toUpperCase(Locale.ROOT));
+        return new InteractionCommand(index, date, type, note);
+    }
+}

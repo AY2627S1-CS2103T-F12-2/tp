@@ -4,6 +4,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,6 +31,7 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final Category category;
+    private final List<Interaction> interactions;
 
     /**
      * Creates a person with the required contact details and default employment details.
@@ -37,7 +39,7 @@ public class Person {
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category) {
         this(name, phone, email, address, tags, remark, category, new Role("TEST ROLE"),
-                new Company("TEST COMPANY"), new Boss("TEST BOSS"));
+                new Company("TEST COMPANY"), new Boss("TEST BOSS"), null, List.of());
     }
 
     /**
@@ -45,7 +47,7 @@ public class Person {
      */
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss) {
-        this(name, phone, email, address, tags, remark, category, role, company, boss, null);
+        this(name, phone, email, address, tags, remark, category, role, company, boss, null, List.of());
     }
 
     /**
@@ -54,7 +56,16 @@ public class Person {
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss,
                   FollowUpDate followUpDate) {
-        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss);
+        this(name, phone, email, address, tags, remark, category, role, company, boss, followUpDate, List.of());
+    }
+
+    /**
+     * Creates a person with EVERY FIELD. {@code followUpDate} may be null. {@code interactions} may be List.of().
+     */
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss,
+                  FollowUpDate followUpDate, List<Interaction> interactions) {
+        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss, interactions);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -66,6 +77,7 @@ public class Person {
         this.followUpDate = followUpDate;
         this.tags.addAll(tags);
         this.category = category;
+        this.interactions = List.copyOf(interactions);
     }
 
     public Name getName() {
@@ -117,6 +129,10 @@ public class Person {
         return this.category;
     }
 
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
     /**
      * Returns true if both persons have the same name.
      * This defines a weaker notion of equality between two persons.
@@ -154,14 +170,16 @@ public class Person {
                 && role.equals(otherPerson.role)
                 && company.equals(otherPerson.company)
                 && boss.equals(otherPerson.boss)
+                && category.equals(otherPerson.category)
                 && Objects.equals(followUpDate, otherPerson.followUpDate)
-                && category.equals(otherPerson.category);
+                && interactions.equals(otherPerson.interactions);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, followUpDate, category);
+        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, followUpDate,
+                category, interactions);
     }
 
     @Override
@@ -178,7 +196,9 @@ public class Person {
         if (followUpDate != null) {
             builder.add("followUpDate", followUpDate);
         }
-        return builder.add("category", category).toString();
+        return builder.add("category", category)
+                .add("interactions", interactions)
+                .toString();
     }
 
 }

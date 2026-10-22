@@ -258,7 +258,7 @@ Format: `clear`
 
 ### Saving an undo checkpoint: `commit`
 
-Saves the current contact list as a checkpoint that `undo` can return to.
+Saves the current contact list as a manual checkpoint for a future undo operation.
 
 Format: `commit`
 

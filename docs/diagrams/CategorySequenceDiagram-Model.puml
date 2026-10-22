@@ -1,0 +1,22 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+participant ":AddressBook" as AddressBook MODEL_COLOR
+end box
+
+[-> Model : getUnfilteredPersonList()
+activate Model
+
+Model -> AddressBook : getPersonList()
+activate AddressBook
+
+AddressBook --> Model : Unmodifiable persons list
+deactivate AddressBook
+
+[<-- Model
+deactivate Model
+
+@enduml
