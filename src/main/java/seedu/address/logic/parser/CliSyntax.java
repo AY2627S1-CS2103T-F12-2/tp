@@ -19,5 +19,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_INTERACTION_DATE = new Prefix("d/");
     public static final Prefix PREFIX_INTERACTION_TYPE = new Prefix("ty/");
     public static final Prefix PREFIX_INTERACTION_NOTE = new Prefix("nt/");
+    public static final Prefix PREFIX_FOLLOW_UP_DATE = new Prefix("fd/");
 
 }

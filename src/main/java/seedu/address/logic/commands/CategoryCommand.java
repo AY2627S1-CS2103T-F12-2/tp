@@ -64,9 +64,11 @@ public class CategoryCommand extends Command {
                 personToCategorize.getRole(),
                 personToCategorize.getCompany(),
                 personToCategorize.getBoss(),
-                personToCategorize.getInteractions());
+                personToCategorize.getInteractions(),
+                personToCategorize.getFollowUpDate());
 
         model.setPerson(personToCategorize, editedPerson);
+        model.commitAddressBook(COMMAND_WORD);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));

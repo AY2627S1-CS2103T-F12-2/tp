@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_BOSS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_FOLLOW_UP_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
@@ -37,7 +38,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         //get the arguments
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG,
-                        PREFIX_ROLE, PREFIX_COMPANY, PREFIX_BOSS);
+                        PREFIX_ROLE, PREFIX_COMPANY, PREFIX_BOSS, PREFIX_FOLLOW_UP_DATE);
 
         Index index;
 
@@ -49,7 +50,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                PREFIX_ROLE, PREFIX_COMPANY, PREFIX_BOSS);
+                PREFIX_ROLE, PREFIX_COMPANY, PREFIX_BOSS, PREFIX_FOLLOW_UP_DATE);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
@@ -76,6 +77,10 @@ public class EditCommandParser implements Parser<EditCommand> {
         Optional<String> boss = argMultimap.getValue(PREFIX_BOSS);
         if (boss.isPresent()) {
             editPersonDescriptor.setBoss(ParserUtil.parseEditBoss(boss.get()));
+        }
+        Optional<String> followUpDate = argMultimap.getValue(PREFIX_FOLLOW_UP_DATE);
+        if (followUpDate.isPresent()) {
+            editPersonDescriptor.setFollowUpDate(ParserUtil.parseFollowUpDate(followUpDate.get()));
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
 

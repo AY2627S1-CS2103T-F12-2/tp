@@ -11,6 +11,7 @@ import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Interaction;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -44,6 +45,7 @@ public class PersonBuilder {
     private Company company;
     private Boss boss;
     private List<Interaction> interactions = new ArrayList<>();
+    private FollowUpDate followUpDate;
     /**
      * Creates a {@code PersonBuilder} with the default details.
      */
@@ -58,6 +60,7 @@ public class PersonBuilder {
         role = new Role(DEFAULT_ROLE);
         company = new Company(DEFAULT_COMPANY);
         boss = new Boss(DEFAULT_BOSS);
+        followUpDate = null;
     }
 
     /**
@@ -74,6 +77,7 @@ public class PersonBuilder {
         role = personToCopy.getRole();
         company = personToCopy.getCompany();
         boss = personToCopy.getBoss();
+        followUpDate = personToCopy.getFollowUpDate();
     }
 
     /**
@@ -148,6 +152,12 @@ public class PersonBuilder {
         return this;
     }
 
+    /** Sets the follow-up date of the person being built. */
+    public PersonBuilder withFollowUpDate(String followUpDate) {
+        this.followUpDate = new FollowUpDate(followUpDate);
+        return this;
+    }
+
     /**
      * Sets the {@code Category} of the {@code Person} that we are building.
      */
@@ -165,7 +175,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, tags, remark, category, role, company, boss);
+        return new Person(name, phone, email, address, tags, remark, category, role, company, boss, followUpDate);
     }
 
 }

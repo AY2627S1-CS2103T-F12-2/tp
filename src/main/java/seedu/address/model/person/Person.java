@@ -25,6 +25,7 @@ public class Person {
     private final Role role;
     private final Company company;
     private final Boss boss;
+    private final FollowUpDate followUpDate;
 
     // Data fields
     private final Address address;
@@ -33,7 +34,7 @@ public class Person {
     private final List<Interaction> interactions;
 
     /**
-     * Every field must be present and not null.
+     * Creates a person with the required contact details and default employment details.
      */
     public Person(Name name, Phone phone, Email email, Address address,
                   Set<Tag> tags, Remark remark, Category category) {
@@ -54,6 +55,16 @@ public class Person {
                   Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss,
                   List<Interaction> interactions) {
         requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss, interactions);
+        this(name, phone, email, address, tags, remark, category, role, company, boss, null);
+    }
+
+    /**
+     * Creates a person with all contact and employment details, including an optional follow-up date.
+     */
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Set<Tag> tags, Remark remark, Category category, Role role, Company company, Boss boss,
+                  FollowUpDate followUpDate) {
+        requireAllNonNull(name, phone, email, address, tags, remark, category, role, company, boss);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -62,6 +73,7 @@ public class Person {
         this.role = role;
         this.company = company;
         this.boss = boss;
+        this.followUpDate = followUpDate;
         this.tags.addAll(tags);
         this.category = category;
         this.interactions = List.copyOf(interactions);
@@ -97,6 +109,10 @@ public class Person {
 
     public Boss getBoss() {
         return boss;
+    }
+
+    public FollowUpDate getFollowUpDate() {
+        return followUpDate;
     }
 
     /**
@@ -155,17 +171,19 @@ public class Person {
                 && boss.equals(otherPerson.boss)
                 && category.equals(otherPerson.category)
                 && interactions.equals(otherPerson.interactions);
+                && Objects.equals(followUpDate, otherPerson.followUpDate)
+                && category.equals(otherPerson.category);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, category, interactions);
+        return Objects.hash(name, phone, email, address, tags, remark, role, company, boss, followUpDate, category, interactions);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        ToStringBuilder builder = new ToStringBuilder(this)
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
@@ -177,6 +195,11 @@ public class Person {
                 .add("category", category)
                 .add("interactions", interactions)
                 .toString();
+                .add("boss", boss);
+        if (followUpDate != null) {
+            builder.add("followUpDate", followUpDate);
+        }
+        return builder.add("category", category).toString();
     }
 
 }

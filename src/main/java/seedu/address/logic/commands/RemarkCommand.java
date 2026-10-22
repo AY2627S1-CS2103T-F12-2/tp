@@ -60,9 +60,10 @@ public class RemarkCommand extends Command {
                 personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(),
                 personToEdit.getAddress(), personToEdit.getTags(), remark, personToEdit.getCategory(),
                 personToEdit.getRole(), personToEdit.getCompany(), personToEdit.getBoss(),
-                personToEdit.getInteractions());
+                personToEdit.getInteractions(), personToEdit.getFollowUpDate());
 
         model.setPerson(personToEdit, editedPerson);
+        model.commitAddressBook(COMMAND_WORD);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         return new CommandResult(generateSuccessMessage(editedPerson));

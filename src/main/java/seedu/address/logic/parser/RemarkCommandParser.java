@@ -12,7 +12,7 @@ import seedu.address.model.person.Remark;
 /**
  * Parses input arguments and creates a {@code RemarkCommand}.
  */
-public class RemarkCommandParser implements Parser {
+public class RemarkCommandParser implements Parser<RemarkCommand> {
     /**
      * Parses the given arguments and returns a {@code RemarkCommand}.
      *
@@ -20,6 +20,7 @@ public class RemarkCommandParser implements Parser {
      * @return a remark command
      * @throws ParseException if the user input does not conform to the expected format
      */
+    @Override
     public RemarkCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,

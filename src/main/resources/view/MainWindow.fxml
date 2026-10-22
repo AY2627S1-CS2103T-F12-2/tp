@@ -3,6 +3,7 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -32,6 +33,12 @@
             <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help" />
           </Menu>
         </MenuBar>
+
+        <StackPane VBox.vgrow="NEVER" styleClass="pane-with-border">
+          <Button fx:id="dashboardButton" text="☰ Dashboard" onAction="#handleDashboard" StackPane.alignment="TOP_LEFT" />
+        </StackPane>
+
+        <StackPane fx:id="dashboardPlaceholder" visible="false" managed="false" VBox.vgrow="ALWAYS" styleClass="pane-with-border" />
 
         <StackPane VBox.vgrow="NEVER" fx:id="commandBoxPlaceholder" styleClass="pane-with-border">
           <padding>

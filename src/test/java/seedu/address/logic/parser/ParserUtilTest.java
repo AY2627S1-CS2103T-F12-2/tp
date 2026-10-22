@@ -16,6 +16,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Boss;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Role;
@@ -163,6 +164,7 @@ public class ParserUtilTest {
         assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel walker@example.com"));
         assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel@example.org"));
         assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel@@example.com"));
+        assertThrows(ParseException.class, () -> ParserUtil.parseEditEmail("rachel@.com"));
     }
 
     @Test
@@ -190,6 +192,21 @@ public class ParserUtilTest {
         assertEquals(new Boss(""), ParserUtil.parseEditBoss("   "));
         assertThrows(ParseException.class, () -> ParserUtil.parseEditBoss("Jane"));
         assertThrows(ParseException.class, () -> ParserUtil.parseEditBoss("Jane1 Smith"));
+    }
+
+    @Test
+    public void parseFollowUpDate_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseFollowUpDate(null));
+    }
+
+    @Test
+    public void parseFollowUpDate_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseFollowUpDate("2026-02-30"));
+    }
+
+    @Test
+    public void parseFollowUpDate_validValueWithWhitespace_returnsTrimmedDate() throws Exception {
+        assertEquals(new FollowUpDate("2026-10-20"), ParserUtil.parseFollowUpDate(" 2026-10-20 "));
     }
 
     @Test

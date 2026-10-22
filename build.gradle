@@ -26,7 +26,9 @@ checkstyle {
 
 test {
     useJUnitPlatform()
+    jvmArgs '--enable-native-access=javafx.graphics'
     finalizedBy jacocoTestReport
+    enableAssertions = true
 }
 
 task coverage(type: JacocoReport) {
@@ -73,6 +75,10 @@ dependencies {
 
 shadowJar {
     archiveFileName = 'contactfind.jar'
+}
+
+run {
+    enableAssertions = true
 }
 
 defaultTasks 'clean', 'test'

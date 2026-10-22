@@ -19,9 +19,12 @@ import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Name;
+import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Role;
+import seedu.address.testutil.PersonBuilder;
 
 public class JsonAdaptedPersonTest {
     private static final String INVALID_NAME = "R@chel";
@@ -47,6 +50,7 @@ public class JsonAdaptedPersonTest {
             .map(JsonAdaptedTag::new)
             .collect(Collectors.toList());
     private static final String VALID_CATEGORY = BENSON.getCategory().name();
+    private static final String VALID_FOLLOW_UP_DATE = "2026-10-20";
 
     @Test
     public void toModelType_validPersonDetails_returnsPerson() throws Exception {
@@ -128,6 +132,14 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_nullRemark_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                null, VALID_ROLE, VALID_COMPANY, VALID_BOSS, VALID_TAGS, VALID_CATEGORY);
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, "Remark");
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
     public void toModelType_invalidTags_throwsIllegalValueException() {
         List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
         invalidTags.add(new JsonAdaptedTag(INVALID_TAG));
@@ -187,6 +199,32 @@ public class JsonAdaptedPersonTest {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                 VALID_REMARK, VALID_ROLE, VALID_COMPANY, "", VALID_TAGS, VALID_CATEGORY, List.of());
         assertEquals("", person.toModelType().getBoss().fullName);
+    }
+
+    @Test
+    public void toModelType_validFollowUpDate_returnsPersonWithFollowUpDate() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                VALID_REMARK, VALID_ROLE, VALID_COMPANY, VALID_BOSS, VALID_TAGS, VALID_CATEGORY,
+                VALID_FOLLOW_UP_DATE);
+
+        assertEquals(new FollowUpDate(VALID_FOLLOW_UP_DATE), person.toModelType().getFollowUpDate());
+    }
+
+    @Test
+    public void constructor_personWithFollowUpDate_preservesFollowUpDate() throws Exception {
+        Person source = new PersonBuilder(BENSON)
+                .withFollowUpDate(VALID_FOLLOW_UP_DATE).build();
+
+        assertEquals(source, new JsonAdaptedPerson(source).toModelType());
+    }
+
+    @Test
+    public void toModelType_invalidFollowUpDate_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                VALID_REMARK, VALID_ROLE, VALID_COMPANY, VALID_BOSS, VALID_TAGS, VALID_CATEGORY,
+                "2026-02-30");
+
+        assertThrows(IllegalValueException.class, FollowUpDate.MESSAGE_CONSTRAINTS, person::toModelType);
     }
 
     @Test
