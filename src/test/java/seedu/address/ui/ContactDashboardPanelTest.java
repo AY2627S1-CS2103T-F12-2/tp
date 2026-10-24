@@ -54,7 +54,7 @@ public class ContactDashboardPanelTest {
     @BeforeAll
     public static void initJavaFx() {
         Logger.getLogger(MainWindow.class.getName()).setLevel(Level.WARNING);
-        Platform.startup(() -> {});
+        Platform.startup(() -> Platform.setImplicitExit(false));
     }
 
     @Test
