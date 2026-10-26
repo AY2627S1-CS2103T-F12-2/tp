@@ -19,8 +19,11 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose details match the specified "
             + "keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: n/KEYWORDS | rl/KEYWORDS | com/KEYWORDS | fd/FOLLOW_UP_DATE\n"
-            + "Note: A search prefix is required, and each prefix can be used only once.\n"
+            + "Parameters: one or more of n/KEYWORDS, rl/KEYWORDS, com/KEYWORDS, fd/FOLLOW_UP_DATE\n"
+            + "Note: A search prefix is required. Different search prefixes can be chained and are combined with AND, "
+            + "but each prefix can be used only once.\n"
+            + "To search for multiple values in one field, use one prefix followed by space-separated keywords; "
+            + "for example, find n/Kurz Elle Kunz.\n"
             + "Examples: " + COMMAND_WORD + " n/alice\n"
             + "         " + COMMAND_WORD + " rl/engineer\n"
             + "         " + COMMAND_WORD + " com/google";

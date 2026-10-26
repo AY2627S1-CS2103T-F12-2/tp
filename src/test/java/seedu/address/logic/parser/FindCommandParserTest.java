@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_FOLLOW_UP_DATE;
@@ -7,6 +8,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.address.testutil.TypicalPersons.AMY;
 
 import java.util.List;
 
@@ -14,6 +16,10 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.model.AddressBook;
+import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.person.CompanyContainsKeywordsPredicate;
 import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.FollowUpDatePredicate;
@@ -51,6 +57,18 @@ public class FindCommandParserTest {
     @Test
     public void parse_invalidFollowUpDate_throwsParseException() {
         assertParseFailure(parser, "fd/2026-02-30", FollowUpDate.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_chainedDistinctPrefixes_filtersUsingAnd() throws Exception {
+        FindCommand command = parser.parse("n/Amy com/Capital");
+        AddressBook addressBook = new AddressBook();
+        addressBook.addPerson(AMY);
+        Model model = new ModelManager(addressBook, new UserPrefs());
+
+        command.execute(model);
+
+        assertEquals(List.of(AMY), model.getFilteredPersonList());
     }
 
     @Test
