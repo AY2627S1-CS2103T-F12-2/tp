@@ -67,6 +67,7 @@ public class DeleteCommand extends Command {
                 throw new CommandException(String.format(MESSAGE_FOLLOW_UP_DATE_NOT_FOUND, targetFollowUpDate));
             }
             personsToDelete.forEach(model::deletePerson);
+            model.commitAddressBook(COMMAND_WORD);
             String deletedPersons = personsToDelete.stream()
                     .map(Messages::format)
                     .collect(Collectors.joining("\n"));
