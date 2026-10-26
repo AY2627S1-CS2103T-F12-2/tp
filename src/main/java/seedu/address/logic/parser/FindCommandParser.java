@@ -43,6 +43,7 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY, PREFIX_FOLLOW_UP_DATE);
+        validateNonEmptySearchValues(argMultimap, PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY);
 
         List<Predicate<Person>> predicates = new ArrayList<>();
         if (argMultimap.getValue(PREFIX_FOLLOW_UP_DATE).isPresent()) {
@@ -70,6 +71,15 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .reduce(Predicate::and)
                 .orElseThrow(() -> new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE))));
+    }
+
+    /** Throws a {@code ParseException} if any supplied keyword-based search field is empty. */
+    private void validateNonEmptySearchValues(ArgumentMultimap arguments, Prefix... prefixes) throws ParseException {
+        for (Prefix prefix : prefixes) {
+            if (arguments.getValue(prefix).filter(String::isBlank).isPresent()) {
+                throw new ParseException(FindCommand.MESSAGE_EMPTY_SEARCH_KEYWORD);
+            }
+        }
     }
 
 }

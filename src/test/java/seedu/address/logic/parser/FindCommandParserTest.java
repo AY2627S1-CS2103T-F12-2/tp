@@ -79,6 +79,13 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_emptySearchKeyword_throwsParseException() {
+        assertParseFailure(parser, "n/", FindCommand.MESSAGE_EMPTY_SEARCH_KEYWORD);
+        assertParseFailure(parser, "rl/", FindCommand.MESSAGE_EMPTY_SEARCH_KEYWORD);
+        assertParseFailure(parser, "com/", FindCommand.MESSAGE_EMPTY_SEARCH_KEYWORD);
+    }
+
+    @Test
     public void parse_repeatedPrefix_throwsParseException() {
         assertParseFailure(parser, "n/Charlotte n/David",
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));

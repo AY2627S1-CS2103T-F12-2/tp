@@ -16,6 +16,8 @@ import seedu.address.model.person.Person;
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
+    public static final String MESSAGE_EMPTY_SEARCH_KEYWORD =
+            "A search keyword is required after each search prefix.";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose details match the specified "
             + "keywords (case-insensitive) and displays them as a list with index numbers.\n"
