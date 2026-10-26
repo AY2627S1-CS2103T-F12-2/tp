@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -48,8 +49,6 @@ import seedu.address.model.person.Remark;
 import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.Assert;
-
-import org.junit.jupiter.api.Assertions;
 
 public class ContactDashboardPanelTest {
 
@@ -272,7 +271,8 @@ public class ContactDashboardPanelTest {
                 latch.countDown();
             }
         });
-        Assertions.assertTrue(latch.await(10, TimeUnit.SECONDS), "JavaFX thread timed out");        Throwable throwable = failure.get();
+        Assertions.assertTrue(latch.await(10, TimeUnit.SECONDS), "JavaFX thread timed out");
+        Throwable throwable = failure.get();
         if (throwable instanceof Exception exception) {
             throw exception;
         }
