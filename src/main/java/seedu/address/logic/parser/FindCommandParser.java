@@ -37,6 +37,9 @@ public class FindCommandParser implements Parser<FindCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs,
                 PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY, PREFIX_FOLLOW_UP_DATE);
 
+        argMultimap.verifyNoDuplicatePrefixesFor(
+                PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY, PREFIX_FOLLOW_UP_DATE);
+
         if (argMultimap.getValue(PREFIX_FOLLOW_UP_DATE).isPresent()) {
             FollowUpDate followUpDate = ParserUtil.parseFollowUpDate(
                     argMultimap.getValue(PREFIX_FOLLOW_UP_DATE).get());
