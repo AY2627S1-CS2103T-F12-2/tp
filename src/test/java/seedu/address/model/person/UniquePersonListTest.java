@@ -73,6 +73,17 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void setPerson_targetHasSameIdentityButDifferentDetails_throwsPersonNotFoundException() {
+        uniquePersonList.add(ALICE);
+        Person staleTarget = new PersonBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).build();
+
+        assertThrows(PersonNotFoundException.class, () -> uniquePersonList.setPerson(staleTarget, BOB));
+
+        assertEquals(1, uniquePersonList.asUnmodifiableObservableList().size());
+        assertSame(ALICE, uniquePersonList.asUnmodifiableObservableList().get(0));
+    }
+
+    @Test
     public void setPerson_editedPersonIsSamePerson_success() {
         uniquePersonList.add(ALICE);
         uniquePersonList.setPerson(ALICE, ALICE);
