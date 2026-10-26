@@ -24,6 +24,7 @@ public class CategoryCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Places the person identified by the index number used in the displayed person list into a category\n"
+            + "Valid categories: UNCATEGORIZED, CLIENT, INVESTOR, LAWYER, ACCOUNTANT, CONSULTANT, OTHER"
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_CATEGORY + "CATEGORY\n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CATEGORY + "INVESTOR";
