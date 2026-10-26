@@ -226,18 +226,18 @@ Examples:
 
 Finds contacts whose name, role, company or follow-up date contains any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD [MORE_KEYWORDS]...`, `find rl/KEYWORD [MORE_KEYWORDS]...`, `find com/KEYWORD [MORE_KEYWORDS]...`, or `find fd/YYYY-MM-DD`
+Format: `find n/KEYWORD [MORE_KEYWORDS]...`, `find rl/KEYWORD [MORE_KEYWORDS]...`, `find com/KEYWORD [MORE_KEYWORDS]...`, or `find fd/YYYY-MM-DD`
 
-* Without a prefix, or with `n/`, the search looks at names. With `rl/`, it looks at roles. With `com/`, it looks at companies. With `fd/`, it looks for an exact follow-up date.
+* A search prefix is required. `n/` searches names, `rl/` searches roles, `com/` searches companies, and `fd/` looks for an exact follow-up date.
 * The search is case-insensitive; for example, `hans` matches `Hans`.
 * Partial words match; for example, `Han` matches `Hans`.
 * Keyword order does not matter.
-* Contacts matching at least one keyword are returned (an `OR` search); for example, `find Hans Bo` returns `Hans Gruber` and `Bo Yang`.
-* Only one field can be searched at a time. If you enter more than one prefix, the field that takes effect is according to the priority `fd/`->`n/`->`rl/`->`com/`.
+* Contacts matching at least one keyword are returned (an `OR` search); for example, `find n/Hans Bo` returns `Hans Gruber` and `Bo Yang`.
+* Only one field can be searched at a time. Each search prefix may be used only once.
 
 Examples:
-* `find John` returns `John Doe` and `Johnny Tan`.
-* `find alex david` returns `Alex Yeoh` and `David Li`.<br>
+* `find n/John` returns `John Doe` and `Johnny Tan`.
+* `find n/alex david` returns `Alex Yeoh` and `David Li`.<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 * `find rl/analyst` returns every contact whose role contains `analyst`.
 * `find com/example` returns every contact whose company contains `example`.
@@ -351,7 +351,7 @@ Action     | Format, Examples
 **Delete** | `delete INDEX` e.g., `delete 3` (deletes based on index) OR <br> `delete fd/YYYY-MM-DD` e.g., `delete fd/1985-03-11` (deletes based on follow-up date)
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
+**Find**   | `find n/KEYWORD [MORE_KEYWORDS]...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find n/James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
 **Help**   | `help`
 **Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 **List**   | `list`
