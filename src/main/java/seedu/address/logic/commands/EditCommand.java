@@ -27,6 +27,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Boss;
+import seedu.address.model.person.BossChainValidator;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
@@ -68,8 +69,7 @@ public class EditCommand extends Command {
     public static final String MESSAGE_DUPLICATE_PERSON =
             "Error: An existing contact already uses this phone number or email address. "
                     + "Duplicate entries are not allowed.";
-    public static final String MESSAGE_BOSS_CYCLE =
-            "Error: A contact cannot be their own boss or form a cyclical management chain.";
+    public static final String MESSAGE_BOSS_CYCLE = BossChainValidator.MESSAGE_BOSS_CYCLE;
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -102,7 +102,7 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        if (createsBossCycle(model.getAddressBook().getPersonList(), personToEdit, editedPerson)) {
+        if (BossChainValidator.createsCycle(model.getAddressBook().getPersonList(), personToEdit, editedPerson)) {
             throw new CommandException(MESSAGE_BOSS_CYCLE);
         }
 
@@ -136,39 +136,6 @@ public class EditCommand extends Command {
         return new Person(updatedName, updatedPhone, updatedEmail,
                 updatedAddress, updatedTags, updatedRemark, updatedCategory,
                 updatedRole, updatedCompany, updatedBoss, updatedFollowUpDate, personToEdit.getInteractions());
-    }
-
-    /**
-     * Checks whether the edited person's boss chain contains a cycle.
-     *
-     * @param people all people in the address book
-     * @param original person being edited, which should be excluded when finding bosses
-     * @param edited updated person whose boss chain is checked
-     * @return true if the updated boss chain contains a cycle
-     */
-    private static boolean createsBossCycle(List<Person> people, Person original, Person edited) {
-        String editedName = edited.getName().fullName;
-        String bossName = edited.getBoss().fullName;
-        Set<String> visited = new HashSet<>();
-        visited.add(editedName.toLowerCase(java.util.Locale.ROOT));
-
-        while (!bossName.isEmpty()) {
-            String normalizedBossName = bossName.toLowerCase(java.util.Locale.ROOT);
-            if (!visited.add(normalizedBossName)) {
-                return true;
-            }
-            String bossToFind = bossName;
-            Person boss = people.stream()
-                    .filter(person -> person != original)
-                    .filter(person -> person.getName().fullName.equalsIgnoreCase(bossToFind))
-                    .findFirst()
-                    .orElse(null);
-            if (boss == null) {
-                return false;
-            }
-            bossName = boss.getBoss().fullName;
-        }
-        return false;
     }
 
     @Override
