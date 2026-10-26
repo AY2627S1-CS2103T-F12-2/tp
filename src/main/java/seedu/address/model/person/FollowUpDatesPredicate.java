@@ -16,7 +16,7 @@ public class FollowUpDatesPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        return followUpDates.contains(person.getFollowUpDate());
+        return person.getFollowUpDate() != null && followUpDates.contains(person.getFollowUpDate());
     }
 
     @Override
