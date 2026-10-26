@@ -49,6 +49,8 @@ import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.Assert;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class ContactDashboardPanelTest {
 
     @BeforeAll
@@ -270,7 +272,7 @@ public class ContactDashboardPanelTest {
                 latch.countDown();
             }
         });
-        assert latch.await(10, TimeUnit.SECONDS);
+        assertTrue(latch.await(10, TimeUnit.SECONDS), "JavaFX thread timed out updating ContactDashboardPanel");
         Throwable throwable = failure.get();
         if (throwable instanceof Exception exception) {
             throw exception;
