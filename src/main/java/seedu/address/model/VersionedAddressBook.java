@@ -60,6 +60,11 @@ public class VersionedAddressBook extends AddressBook {
      */
     public void commit(String actionName) {
         requireNonNull(actionName);
+        if (equals(addressBookStateList.get(currentStatePointer).state)) {
+            logger.info("History commit skipped: address book is unchanged.");
+            return;
+        }
+
         int discardedRedoStates = removeStatesAfterCurrentPointer();
         if (discardedRedoStates > 0) {
             logger.info("History branch discarded: action=" + actionName
