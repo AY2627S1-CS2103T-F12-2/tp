@@ -76,11 +76,11 @@ Use a prefix immediately before its value. Not every prefix is accepted by every
 Prefix | Field | Used by
 -------|-------|--------
 `n/` | Name | `add`, `edit`, `find`
-`p/` | Phone number | `add`, `edit`
-`e/` | Email address | `add`, `edit`
+`p/` | Phone number | `add`, `edit`, `delete`
+`e/` | Email address | `add`, `edit`, `delete`
 `a/` | Address | `add`, `edit`
 `rl/` | Role | `add`, `edit`, `find`
-`com/` | Company | `add`, `edit`, `find`
+`com/` | Company | `add`, `edit`, `find`, `delete` (preview)
 `b/` | Boss | `add`, `edit`
 `fd/` | Follow-up date | `add`, `edit`, `find`, `delete`, `sort`
 `t/` | Tag | `add`, `edit`
@@ -247,14 +247,24 @@ Examples:
 
 Deletes the specified contact from ContactFind.
 
-Format: `delete INDEX` or `delete fd/YYYY-MM-DD`
+Format: `delete INDEX`, `delete all`, `delete n/NAME`, `delete p/PHONE`, `delete e/EMAIL`, `delete rl/ROLE`, `delete com/COMPANY`, or `delete fd/YYYY-MM-DD`
 
 * Deletes the contact at the specified `INDEX`.
+* `delete all` deletes every contact in the active name, role, or company preview.
+* `delete n/NAME`, `delete rl/ROLE`, and `delete com/COMPANY` preview exact matches in the contact list without deleting them.
+* `delete p/PHONE` deletes the contact with exactly the specified phone number.
+* `delete e/EMAIL` deletes the contact with exactly the specified email address.
+* `delete com/COMPANY` displays every contact at the exact company in the contact list and does not delete any contacts.
+  While this preview is active, `delete p/PHONE` and `delete e/EMAIL` only delete contacts in that company.
 * `delete fd/YYYY-MM-DD` deletes all displayed contacts with the specified follow-up date.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd contact in ContactFind.
 * `find Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
+* `delete p/98765432` deletes the contact whose phone number is exactly `98765432`.
+* `delete e/johnd@example.com` deletes the contact whose email address is exactly `johnd@example.com`.
+* `delete com/Example Bank` previews every contact at `Example Bank` without deleting them.
+* `delete com/Example Bank` followed by `delete all` deletes every contact in that company preview.
 * `delete fd/2026-10-20` deletes every displayed contact with that follow-up date.
 
 ### Sorting contacts: `sort`
@@ -348,7 +358,7 @@ Action     | Format, Examples
 **Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
 **Clear**  | `clear`
 **Commit** | `commit`
-**Delete** | `delete INDEX` e.g., `delete 3` (deletes based on index) OR <br> `delete fd/YYYY-MM-DD` e.g., `delete fd/1985-03-11` (deletes based on follow-up date)
+**Delete** | `delete INDEX` e.g., `delete 3` (deletes based on index), `delete p/PHONE`, `delete e/EMAIL`, OR <br> `delete fd/YYYY-MM-DD` e.g., `delete fd/1985-03-11` (deletes based on follow-up date)
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
