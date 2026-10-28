@@ -66,7 +66,7 @@ public class EditCommand extends Command {
     public static final String MESSAGE_NOT_EDITED =
             "At least one field to edit must be provided (e.g., p/, e/, rl/, com/, b/).";
     public static final String MESSAGE_DUPLICATE_PERSON =
-            "Error: An existing contact already uses this phone number or email address. "
+            "Error: An existing contact already uses this name. "
                     + "Duplicate entries are not allowed.";
     public static final String MESSAGE_BOSS_CYCLE =
             "Error: A contact cannot be their own boss or form a cyclical management chain.";
@@ -129,8 +129,9 @@ public class EditCommand extends Command {
         Role updatedRole = editPersonDescriptor.getRole().orElse(personToEdit.getRole());
         Company updatedCompany = editPersonDescriptor.getCompany().orElse(personToEdit.getCompany());
         Boss updatedBoss = editPersonDescriptor.getBoss().orElse(personToEdit.getBoss());
-        FollowUpDate updatedFollowUpDate = editPersonDescriptor.getFollowUpDate()
-                .orElse(personToEdit.getFollowUpDate());
+        FollowUpDate updatedFollowUpDate = editPersonDescriptor.isFollowUpDateEdited()
+                ? editPersonDescriptor.getFollowUpDate().orElse(null)
+                : personToEdit.getFollowUpDate();
         Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
         return new Person(updatedName, updatedPhone, updatedEmail,
@@ -209,6 +210,7 @@ public class EditCommand extends Command {
         private Company company;
         private Boss boss;
         private FollowUpDate followUpDate;
+        private boolean followUpDateEdited;
         private Category category;
 
         public EditPersonDescriptor() {}
@@ -228,6 +230,7 @@ public class EditCommand extends Command {
             setCompany(toCopy.company);
             setBoss(toCopy.boss);
             setFollowUpDate(toCopy.followUpDate);
+            followUpDateEdited = toCopy.followUpDateEdited;
             setCategory(toCopy.category);
         }
 
@@ -236,7 +239,7 @@ public class EditCommand extends Command {
          */
         public boolean isAnyFieldEdited() {
             return CollectionUtil.isAnyNonNull(name, phone, email, address, tags,
-                    remark, role, company, boss, followUpDate, category);
+                    remark, role, company, boss, category) || followUpDateEdited;
         }
 
         public void setName(Name name) {
@@ -305,6 +308,18 @@ public class EditCommand extends Command {
 
         public void setFollowUpDate(FollowUpDate followUpDate) {
             this.followUpDate = followUpDate;
+            this.followUpDateEdited = followUpDate != null;
+        }
+
+        /** Marks the follow-up date for removal. */
+        public void clearFollowUpDate() {
+            this.followUpDate = null;
+            this.followUpDateEdited = true;
+        }
+
+        /** Returns whether the follow-up date was explicitly set or cleared. */
+        public boolean isFollowUpDateEdited() {
+            return followUpDateEdited;
         }
 
         public Optional<FollowUpDate> getFollowUpDate() {
@@ -358,6 +373,7 @@ public class EditCommand extends Command {
                     && Objects.equals(company, otherEditPersonDescriptor.company)
                     && Objects.equals(boss, otherEditPersonDescriptor.boss)
                     && Objects.equals(followUpDate, otherEditPersonDescriptor.followUpDate)
+                    && followUpDateEdited == otherEditPersonDescriptor.followUpDateEdited
                     && Objects.equals(category, otherEditPersonDescriptor.category);
         }
 
@@ -376,6 +392,8 @@ public class EditCommand extends Command {
                     .add("boss", boss);
             if (followUpDate != null) {
                 builder.add("followUpDate", followUpDate);
+            } else if (followUpDateEdited) {
+                builder.add("followUpDate", "cleared");
             }
             return builder.toString();
         }
