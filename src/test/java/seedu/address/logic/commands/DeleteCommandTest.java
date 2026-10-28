@@ -21,6 +21,7 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.FollowUpDate;
+import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Role;
@@ -141,6 +142,31 @@ public class DeleteCommandTest {
 
         assertCommandSuccess(new DeleteCommand(missingCompany), model,
                 String.format(DeleteCommand.MESSAGE_COMPANY_NOT_FOUND, missingCompany), expectedModel);
+    }
+
+    @Test
+    public void execute_namePreview_displaysExactNameContactsAndSetsDeleteScope() {
+        Name name = model.getUnfilteredPersonList().get(0).getName();
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.updateFilteredPersonList(person -> name.equals(person.getName()));
+
+        assertCommandSuccess(new DeleteCommand(name), model,
+                String.format(DeleteCommand.MESSAGE_NAME_CONTACTS_FOUND,
+                        expectedModel.getFilteredPersonList().size(), name), expectedModel);
+        assertTrue(model.hasDeleteScope());
+        assertEquals(expectedModel.getFilteredPersonList(), model.getDeleteScope());
+    }
+
+    @Test
+    public void execute_missingName_displaysNoContactsAndSetsEmptyDeleteScope() {
+        Name missingName = new Name("Missing Person");
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.updateFilteredPersonList(person -> missingName.equals(person.getName()));
+
+        assertCommandSuccess(new DeleteCommand(missingName), model,
+                String.format(DeleteCommand.MESSAGE_NAME_NOT_FOUND, missingName), expectedModel);
+        assertTrue(model.hasDeleteScope());
+        assertTrue(model.getDeleteScope().isEmpty());
     }
 
     @Test
