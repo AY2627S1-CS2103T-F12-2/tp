@@ -285,7 +285,7 @@ Format: `commit`
 ### Undoing a change: `undo`
 
 Restores the contact-list state before the most recent saved change. Each successful contact-changing command
-automatically saves a state (except for delete fd/ and sort.)
+automatically saves a state.
 
 Format: `undo`
 

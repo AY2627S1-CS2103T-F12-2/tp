@@ -55,6 +55,18 @@ public class SortCommandTest {
     }
 
     @Test
+    public void execute_sortThenUndo_restoresOriginalOrder() {
+        Model model = createModel(noDateZoe, lateCarol, earlyBob, noDateAaron, earlyAlice);
+
+        new SortCommand().execute(model);
+        assertTrue(model.canUndoAddressBook());
+
+        model.undoAddressBook();
+        assertEquals(List.of(noDateZoe, lateCarol, earlyBob, noDateAaron, earlyAlice),
+                model.getAddressBook().getPersonList());
+    }
+
+    @Test
     public void equals() {
         SortCommand ascending = new SortCommand();
         SortCommand descending = new SortCommand(true);
