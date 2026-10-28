@@ -20,7 +20,8 @@ import seedu.address.model.person.Person;
 public class CategoryCommand extends Command {
     public static final String COMMAND_WORD = "category";
 
-    public static final String MESSAGE_SUCCESS = "Person has been added to new category: %1$s";
+    public static final String MESSAGE_SUCCESS = "Changed %1$s's category to %2$s.";
+    public static final String MESSAGE_ALREADY_IN_CATEGORY = "%1$s is already in %2$s.";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Places the person identified by the index number used in the displayed person list into a category\n"
@@ -37,6 +38,8 @@ public class CategoryCommand extends Command {
      * @param targetCategory the category that the person should be placed into
      */
     public CategoryCommand(Index targetIndex, Category targetCategory) {
+        requireNonNull(targetIndex);
+        requireNonNull(targetCategory);
         this.targetIndex = targetIndex;
         this.targetCategory = targetCategory;
     }
@@ -51,6 +54,11 @@ public class CategoryCommand extends Command {
         }
 
         Person personToCategorize = lastShownList.get(targetIndex.getZeroBased());
+
+        if (personToCategorize.getCategory() == targetCategory) {
+            return new CommandResult(String.format(MESSAGE_ALREADY_IN_CATEGORY,
+                    personToCategorize.getName(), targetCategory));
+        }
 
         //Assigning the category to a person
         Person editedPerson = new Person(
@@ -71,7 +79,7 @@ public class CategoryCommand extends Command {
         model.commitAddressBook(COMMAND_WORD);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, editedPerson.getName(), targetCategory));
     }
 
 
