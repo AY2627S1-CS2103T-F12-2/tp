@@ -56,4 +56,10 @@ public class FindCommandParserTest {
         assertParseFailure(parser, "fd/2026-02-30", FollowUpDate.MESSAGE_CONSTRAINTS);
     }
 
+    @Test
+    public void parse_unsupportedPrefix_throwsParseException() {
+        assertParseFailure(parser, "c/CLIENT",
+                String.format(FindCommand.MESSAGE_UNSUPPORTED_PREFIX, "c/"));
+    }
+
 }
