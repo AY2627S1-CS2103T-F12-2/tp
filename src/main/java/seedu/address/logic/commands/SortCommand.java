@@ -18,7 +18,7 @@ public class SortCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Sorts contacts by follow-up date.\n"
             + "Parameters: fd/[asc|desc], if no fd/ defaults to ascending. \n"
-            + "Examples: " + COMMAND_WORD
+            + "Examples: " + COMMAND_WORD + "\n"
             + "          " + COMMAND_WORD + " fd/desc";
     public static final String MESSAGE_SUCCESS = "Contacts sorted by follow-up date (%1$s).";
 
