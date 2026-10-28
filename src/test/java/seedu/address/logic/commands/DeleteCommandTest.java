@@ -337,6 +337,31 @@ public class DeleteCommandTest {
         String expectedDateCommand = DeleteCommand.class.getCanonicalName()
                 + "{targetIndex=null, targetRole=null, targetFollowUpDate=2026-10-20}";
         assertEquals(expectedDateCommand, deleteByDate.toString());
+
+        DeleteCommand deleteByPhone = new DeleteCommand(new Phone("91234567"));
+        String expectedPhoneCommand = DeleteCommand.class.getCanonicalName()
+                + "{targetIndex=null, targetRole=null, targetPhone=91234567}";
+        assertEquals(expectedPhoneCommand, deleteByPhone.toString());
+
+        DeleteCommand deleteByEmail = new DeleteCommand(new Email("alex@example.com"));
+        String expectedEmailCommand = DeleteCommand.class.getCanonicalName()
+                + "{targetIndex=null, targetRole=null, targetEmail=alex@example.com}";
+        assertEquals(expectedEmailCommand, deleteByEmail.toString());
+
+        DeleteCommand deleteByCompany = new DeleteCommand(new Company("Example Company"));
+        String expectedCompanyCommand = DeleteCommand.class.getCanonicalName()
+                + "{targetIndex=null, targetRole=null, targetCompany=Example Company}";
+        assertEquals(expectedCompanyCommand, deleteByCompany.toString());
+
+        DeleteCommand deleteByName = new DeleteCommand(new Name("Alex Yeoh"));
+        String expectedNameCommand = DeleteCommand.class.getCanonicalName()
+                + "{targetIndex=null, targetRole=null, targetName=Alex Yeoh}";
+        assertEquals(expectedNameCommand, deleteByName.toString());
+
+        DeleteCommand deleteAll = new DeleteCommand();
+        String expectedDeleteAllCommand = DeleteCommand.class.getCanonicalName()
+                + "{targetIndex=null, targetRole=null, deleteAll=true}";
+        assertEquals(expectedDeleteAllCommand, deleteAll.toString());
     }
 
     /**
