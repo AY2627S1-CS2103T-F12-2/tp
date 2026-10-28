@@ -103,7 +103,7 @@ Address | Any value, but must not be blank.                                     
 Role | Letters and digits, with words separated by single spaces.                                                                     | `Vice President`
 Company | Letters and digits, with words separated by single spaces, and at least 3 characters long.                                     | `Example Bank`
 Boss | Same as Name, or empty.                                                                                                        | `Alex Smith`
-Follow-up date | A valid calendar date in `yyyy-MM-dd` format.                                                                                  | `2026-10-20`
+Follow-up date | A valid calendar date in exactly `yyyy-MM-dd` format, with a four-digit year.                                      | `2026-10-20`
 Tag | Letters and digits only, with no spaces.                                                                                       | `priority`
 Remark | Any value.                                                                                                                     | `Prefers email over calls`
 Category | One of `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, `OTHER` (case-insensitive).                | `INVESTOR`
@@ -161,14 +161,18 @@ Format: `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [c
 * Existing values will be updated to the input values.
 * To remove a contact's boss, enter `b/` without a name after it.
 * To set a contact's follow-up date, enter `fd/YYYY-MM-DD`.
+* To remove a contact's follow-up date, enter `fd/` without a date after it.
+* Follow-up dates must use exactly the `YYYY-MM-DD` format; invalid dates are rejected.
 * When editing tags, all of the contact's existing tags are removed and replaced with the tags you enter; adding tags this way is not cumulative.
 * To remove all of a contact's tags, enter `t/` without a tag after it.
+* The success message shows the complete updated contact record, including tags, category, remark, follow-up date, and interaction history.
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 rl/Managing Director com/Example Bank b/` Updates the role and company of the 3rd contact and removes their boss.
 * `edit 1 fd/2026-10-20` sets the follow-up date of the 1st contact.
+* `edit 1 fd/` removes the follow-up date of the 1st contact.
 
 ### Adding a remark to a contact: `remark`
 
