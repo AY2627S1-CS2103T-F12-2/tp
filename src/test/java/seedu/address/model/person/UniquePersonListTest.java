@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
@@ -72,6 +73,17 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void setPerson_targetHasSameIdentityButDifferentDetails_throwsPersonNotFoundException() {
+        uniquePersonList.add(ALICE);
+        Person staleTarget = new PersonBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).build();
+
+        assertThrows(PersonNotFoundException.class, () -> uniquePersonList.setPerson(staleTarget, BOB));
+
+        assertEquals(1, uniquePersonList.asUnmodifiableObservableList().size());
+        assertSame(ALICE, uniquePersonList.asUnmodifiableObservableList().get(0));
+    }
+
+    @Test
     public void setPerson_editedPersonIsSamePerson_success() {
         uniquePersonList.add(ALICE);
         uniquePersonList.setPerson(ALICE, ALICE);
@@ -98,6 +110,21 @@ public class UniquePersonListTest {
         UniquePersonList expectedUniquePersonList = new UniquePersonList();
         expectedUniquePersonList.add(BOB);
         assertEquals(expectedUniquePersonList, uniquePersonList);
+    }
+
+    @Test
+    public void setPerson_equalCaseVariantCopy_updatesCorrectIdentity() {
+        Person first = new PersonBuilder().withName("Alice Tan").build();
+        Person second = new PersonBuilder(first).withName("alice tan").build();
+        uniquePersonList.add(first);
+        uniquePersonList.add(second);
+        Person targetCopy = new PersonBuilder(second).build();
+        Person edited = new PersonBuilder(second).withCategory(Category.CLIENT).build();
+
+        uniquePersonList.setPerson(targetCopy, edited);
+
+        assertSame(first, uniquePersonList.asUnmodifiableObservableList().get(0));
+        assertSame(edited, uniquePersonList.asUnmodifiableObservableList().get(1));
     }
 
     @Test
