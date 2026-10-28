@@ -45,6 +45,16 @@ public class FollowUpDateTest {
     }
 
     @Test
+    public void isValidFollowUpDate_signedOrExtendedYear_returnsFalse() {
+        for (String date : new String[]{"+10000-01-01", "-0001-01-01", "+2026-01-01", "10000-01-01"}) {
+            assertFalse(FollowUpDate.isValidFollowUpDate(date));
+            assertThrows(IllegalArgumentException.class, () -> new FollowUpDate(date));
+        }
+        assertTrue(FollowUpDate.isValidFollowUpDate("0001-01-01"));
+        assertTrue(FollowUpDate.isValidFollowUpDate("9999-12-31"));
+    }
+
+    @Test
     public void constructor_trimsWhitespace() {
         FollowUpDate date = new FollowUpDate("  2026-10-20  ");
 
