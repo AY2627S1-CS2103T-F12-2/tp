@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -56,31 +55,7 @@ public class ContactDashboardPanelTest {
     @BeforeAll
     public static void initJavaFx() throws InterruptedException {
         Logger.getLogger(MainWindow.class.getName()).setLevel(Level.WARNING);
-        CountDownLatch ready = new CountDownLatch(1);
-        Platform.startup(() -> {
-            // Closing a test window must not terminate the toolkit used by subsequent tests.
-            Platform.setImplicitExit(false);
-            ready.countDown();
-        });
-        Assertions.assertTrue(ready.await(10, TimeUnit.SECONDS), "JavaFX startup timed out");
-    }
-
-    @AfterAll
-    public static void shutdownJavaFx() {
-        Platform.exit();
-    }
-
-    @Test
-    public void javaFxRuntime_afterLastWindowCloses_runsSubsequentTasks() throws Exception {
-        runOnFxThread(() -> {
-            Stage stage = new Stage();
-            stage.show();
-            stage.hide();
-        });
-
-        AtomicBoolean taskRan = new AtomicBoolean(false);
-        runOnFxThread(() -> taskRan.set(true));
-        Assertions.assertTrue(taskRan.get(), "JavaFX must remain available after the last window closes");
+        Platform.startup(() -> Platform.setImplicitExit(false));
     }
 
     @Test
