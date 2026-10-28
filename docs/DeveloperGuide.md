@@ -307,18 +307,18 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …   | I want to …                                          | So that I can…                                                   |
-|----------|----------|------------------------------------------------------|------------------------------------------------------------------|
-| `* * *`  | new user | view a user guide                                    | understand how to use ContactFind                                |
-| `* *`    | new user | learn about the main functions                       | navigate through the features                                    |
-| `* *`    | new user | start using the app without much setup               | begin managing my contacts quickly                               |
-| `* * *`  | user     | add a new contact                                    | keep track of people I meet                                      |
+| Priority | As a …   | I want to …                                                 | So that I can…                                                   |
+|----------|----------|-------------------------------------------------------------|------------------------------------------------------------------|
+| `* * *`  | new user | view a user guide                                           | understand how to use ContactFind                                |
+| `* *`    | new user | learn about the main functions                              | navigate through the features                                    |
+| `* *`    | new user | start using the app without much setup                      | begin managing my contacts quickly                               |
+| `* * *`  | user     | add a new contact                                           | keep track of people I meet                                      |
 | `* * *`  | user     | record essential information such as email and phone number | identify and reach people in my contacts easily           |
-| `* * *`  | user     | update a contact's information                       | keep my contacts manageable and up to date                       |
-| `* * *`  | user     | set a follow-up date for a contact                   | avoid missing follow-ups with clients                            |
-| `* * *`  | user     | find a contact by name, company or role              | quickly identify relevant contacts                               |
-| `* *`    | user     | categorise contacts                                  | keep my contacts organised                                       |
-| `* *`    | user     | assign one contact to multiple categories            | represent contacts with different areas of expertise             |
+| `* * *`  | user     | update a contact's information                              | keep my contacts manageable and up to date                       |
+| `* * *`  | user     | set a follow-up date for a contact                          | avoid missing follow-ups with clients                            |
+| `* * *`  | user     | find a contact by name, phone number, email, role, company, boss, tag, category, or follow-up date      | quickly identify relevant contacts                               |
+| `* *`    | user     | categorise contacts                                         | keep my contacts organised                                       |
+| `* *`    | user     | assign one contact to multiple categories                   | represent contacts with different areas of expertise             |
 
 *{More to be added}*
 
@@ -395,6 +395,29 @@ Use case ends.
     * 3a1. ContactFind shows an error message.
 
       Use case resumes at step 2.
+
+**Use case: Find contacts**
+
+**MSS**
+
+1.  User requests to find contacts using one or more search criteria.
+2.  ContactFind displays the contacts that match the supplied criteria.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. No contacts match the search criteria.
+
+    * 1a1. ContactFind displays an empty contact list.
+
+      Use case ends.
+
+* 1b. The search criteria are missing or invalid.
+
+    * 1b1. ContactFind shows an error message.
+
+      Use case ends.
 
 **Use case: Assign tags to a contact**
 

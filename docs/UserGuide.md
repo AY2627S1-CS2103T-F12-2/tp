@@ -224,31 +224,30 @@ Examples:
 
 ### Finding contacts: `find`
 
-Finds contacts whose name, phone, email, role, company, boss, tag, category or follow-up date matches the given keywords.
+Finds contacts by their name, phone number, email, role, company, boss, tag, category, or follow-up date.
 
 Format: `find PREFIX/VALUE [PREFIX/VALUE]...`
 
-* A search prefix is required before ALL search parameters. `n/` searches names, `p/` searches phone numbers, `e/` searches emails, `rl/` searches roles, `com/` searches companies, `b/` searches boss names, `t/` searches tags, `c/` searches an exact category, and `fd/` looks for an exact follow-up date.
-* A prefix's value may contain spaces. For example, `find n/Amy Rivera` searches for the full name `Amy Rivera`.
-* The search is case-insensitive; for example, `n/hans` matches `Hans`.
-* Partial words match; for example, `n/Han` matches `Hans`.
-* Repeated instances of the same prefix are combined with OR. For example, `find n/Hans Gruber n/Bo Yang` returns `Hans Gruber` and `Bo Yang`.
-* Different prefixes are combined with AND. For example, `find n/Hans com/Example` finds contacts matching both criteria. 
-* `c/` accepts only the supported category names: `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, or `OTHER`.
+* Every search value must be preceded by a prefix. `n/` searches names, `p/` phone numbers, `e/` emails, `rl/` roles, `com/` companies, `b/` boss names, `t/` tags, `c/` categories, and `fd/` follow-up dates.
+* Each prefix must have a non-empty value. A value may contain spaces; for example, `find n/Amy Rivera` searches for `Amy Rivera` in a contact's name.
+* Searches are case-insensitive. Except for categories and follow-up dates, a value matches when it appears anywhere in the selected field; for example, `find n/Han` matches `Hans`.
+* `c/` and `fd/` must match exactly. `c/` accepts: `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, and `OTHER`.
+* Repeated instances of the same prefix are combined with OR. For example, `find n/Hans Gruber n/Bo Yang` returns contacts whose names contain either `Hans Gruber` or `Bo Yang`.
+* Different prefixes are combined with AND. For example, `find n/Hans com/Example` finds contacts whose name contains `Hans` and whose company contains `Example`.
 
 Examples:
 * `find n/John` returns `John Doe` and `Johnny Tan`.
-* `find n/alex yeoh n/david li` returns `Alex Yeoh` and `David Li`.<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
 * `find p/9123` returns every contact whose phone number contains `9123`.
 * `find e/example` returns every contact whose email contains `example`.
 * `find rl/analyst` returns every contact whose role contains `analyst`.
 * `find com/example` returns every contact whose company contains `example`.
 * `find b/Alex` returns every contact whose boss name contains `Alex`.
 * `find t/friend t/important` returns every contact with a tag containing `friend` or `important`.
+* `find n/alex yeoh n/david li` returns `Alex Yeoh` and `David Li`.<br>
+![result for 'find alex david'](images/findAlexDavidResult.png)
 * `find c/client c/investor` returns every contact in either the `CLIENT` or `INVESTOR` category.
 * `find fd/2026-10-20` returns every contact with a follow-up date of `2026-10-20`.
-* `find rl/analyst rl/engineer com/ABC Labs` returns every contact whole role contains `analyst` or `engineer` in `ABC Labs`.
+* `find rl/analyst rl/engineer com/ABC Labs` returns every contact whose role contains `analyst` or `engineer` and whose company contains `ABC Labs`.
 
 ### Deleting a contact: `delete`
 
@@ -358,7 +357,7 @@ Action     | Format, Examples
 **Delete** | `delete INDEX` e.g., `delete 3` (deletes based on index) OR <br> `delete fd/YYYY-MM-DD` e.g., `delete fd/1985-03-11` (deletes based on follow-up date)
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
-**Find**   | `find PREFIX/VALUE [PREFIX/VALUE]...`<br> e.g., `find n/James Jake`, `find c/CLIENT c/INVESTOR`, `find fd/2026-10-20`. <br> Repeated prefixes are combined with OR; different prefixes are combined with AND.
+**Find**   | `find PREFIX/VALUE [PREFIX/VALUE]...`<br> Prefixes: `n/`, `p/`, `e/`, `rl/`, `com/`, `b/`, `t/`, `c/`, `fd/`.<br> e.g., `find n/James Jake`, `find c/CLIENT c/INVESTOR`, `find fd/2026-10-20`.<br> Repeated prefixes are combined with OR; different prefixes are combined with AND.
 **Help**   | `help`
 **Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 **List**   | `list`
