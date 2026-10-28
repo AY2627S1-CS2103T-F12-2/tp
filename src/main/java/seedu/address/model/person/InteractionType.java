@@ -14,7 +14,7 @@ public enum InteractionType {
     PRESENTATION;
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Interaction type should be one of: MEETING, CALL, EMAIL, PRESENTATION";
+            "Interaction type should be one of: MEETING, CALL, EMAIL, PRESENTATION (case-insensitive).";
 
     /**
      * Returns true if the given string matches a valid interaction type.
