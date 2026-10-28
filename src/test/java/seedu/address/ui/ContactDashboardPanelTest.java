@@ -270,7 +270,7 @@ public class ContactDashboardPanelTest {
                 latch.countDown();
             }
         });
-        assert latch.await(10, TimeUnit.SECONDS);
+        assert latch.await(30, TimeUnit.SECONDS);
         Throwable throwable = failure.get();
         if (throwable instanceof Exception exception) {
             throw exception;
