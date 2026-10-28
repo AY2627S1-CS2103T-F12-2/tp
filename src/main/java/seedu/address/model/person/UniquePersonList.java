@@ -5,6 +5,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -56,7 +57,12 @@ public class UniquePersonList implements Iterable<Person> {
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
 
-        int index = internalList.indexOf(target);
+        // Full equality ignores name casing, but distinct name casing is allowed by isSamePerson.
+        // Require both identity and full equality so an equal contact cannot replace the selected target.
+        int index = IntStream.range(0, internalList.size())
+                .filter(i -> internalList.get(i).isSamePerson(target) && internalList.get(i).equals(target))
+                .findFirst()
+                .orElse(-1);
         if (index == -1) {
             throw new PersonNotFoundException();
         }

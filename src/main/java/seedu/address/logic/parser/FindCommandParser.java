@@ -1,10 +1,20 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOSS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COMPANY;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_FOLLOW_UP_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_NOTE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_TYPE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.List;
 
@@ -21,6 +31,19 @@ import seedu.address.model.person.RoleContainsKeywordsPredicate;
  */
 public class FindCommandParser implements Parser<FindCommand> {
 
+    private static final Prefix[] UNSUPPORTED_PREFIXES = {
+        PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG, PREFIX_REMARK,
+        PREFIX_CATEGORY, PREFIX_BOSS, PREFIX_INTERACTION_DATE,
+        PREFIX_INTERACTION_TYPE, PREFIX_INTERACTION_NOTE
+    };
+
+    private static final Prefix[] ALL_PREFIXES = {
+        PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY, PREFIX_FOLLOW_UP_DATE,
+        PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG, PREFIX_REMARK,
+        PREFIX_CATEGORY, PREFIX_BOSS, PREFIX_INTERACTION_DATE,
+        PREFIX_INTERACTION_TYPE, PREFIX_INTERACTION_NOTE
+    };
+
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
      * and returns a FindCommand object for execution.
@@ -34,8 +57,13 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs,
-                PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY, PREFIX_FOLLOW_UP_DATE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(trimmedArgs, ALL_PREFIXES);
+
+        for (Prefix prefix : UNSUPPORTED_PREFIXES) {
+            if (argMultimap.getValue(prefix).isPresent()) {
+                throw new ParseException(String.format(FindCommand.MESSAGE_UNSUPPORTED_PREFIX, prefix));
+            }
+        }
 
         argMultimap.verifyNoDuplicatePrefixesFor(
                 PREFIX_NAME, PREFIX_ROLE, PREFIX_COMPANY, PREFIX_FOLLOW_UP_DATE);

@@ -84,6 +84,9 @@ public class ParserUtil {
         requireNonNull(phone);
         String trimmedPhone = phone.trim();
         if (!Phone.isValidPhone(trimmedPhone)) {
+            if (trimmedPhone.matches("[0-9]*")) {
+                throw new ParseException(Phone.MESSAGE_LENGTH);
+            }
             throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
         }
         return new Phone(trimmedPhone);

@@ -42,6 +42,9 @@ public class FollowUpDate {
      */
     public static boolean isValidFollowUpDate(String test) {
         requireNonNull(test);
+        if (!test.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
+            return false;
+        }
         try {
             LocalDate.parse(test, FORMATTER);
             return true;
