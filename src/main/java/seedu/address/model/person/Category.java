@@ -13,7 +13,7 @@ public enum Category {
     OTHER;
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Category should be one of: UNCATEGORIZED, CLIENT, INVESTOR, LAWYER, ACCOUNTANT";
+            "Category should be one of: UNCATEGORIZED, CLIENT, INVESTOR, LAWYER, ACCOUNTANT, CONSULTANT, OTHER";
 
     /**
      * Returns true if the given string matches a valid category.
