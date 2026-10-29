@@ -145,28 +145,23 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_namePreview_displaysExactNameContactsAndSetsDeleteScope() {
-        Name name = model.getUnfilteredPersonList().get(0).getName();
+    public void execute_validName_deletesExactMatch() {
+        Person personToDelete = model.getUnfilteredPersonList().get(0);
+        Name name = personToDelete.getName();
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.updateFilteredPersonList(person -> name.equals(person.getName()));
+        expectedModel.deletePerson(personToDelete);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
 
-        assertCommandSuccess(new DeleteCommand(name), model,
-                String.format(DeleteCommand.MESSAGE_NAME_CONTACTS_FOUND,
-                        expectedModel.getFilteredPersonList().size(), name), expectedModel);
-        assertTrue(model.hasDeleteScope());
-        assertEquals(expectedModel.getFilteredPersonList(), model.getDeleteScope());
+        assertCommandSuccess(new DeleteCommand(name), model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_missingName_displaysNoContactsAndSetsEmptyDeleteScope() {
+    public void execute_missingName_throwsCommandException() {
         Name missingName = new Name("Missing Person");
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.updateFilteredPersonList(person -> missingName.equals(person.getName()));
 
-        assertCommandSuccess(new DeleteCommand(missingName), model,
-                String.format(DeleteCommand.MESSAGE_NAME_NOT_FOUND, missingName), expectedModel);
-        assertTrue(model.hasDeleteScope());
-        assertTrue(model.getDeleteScope().isEmpty());
+        assertCommandFailure(new DeleteCommand(missingName), model,
+                String.format(DeleteCommand.MESSAGE_NAME_NOT_FOUND, missingName));
     }
 
     @Test

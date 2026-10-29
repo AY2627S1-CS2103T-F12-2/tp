@@ -54,15 +54,11 @@ public class DeleteCommand extends Command {
             + "To delete one, use delete INDEX, delete p/PHONE, or delete e/EMAIL.\n"
             + "To remove all displayed contacts, enter delete all.\n"
             + "To return, enter list.";
-    public static final String MESSAGE_NAME_CONTACTS_FOUND = "%1$d person(s) found named %2$s.\n"
-            + "To delete one, use delete INDEX, delete p/PHONE, or delete e/EMAIL.\n"
-            + "To remove all displayed contacts, enter delete all.\n"
-            + "To return, enter list.";
     public static final String MESSAGE_FOLLOW_UP_DATE_NOT_FOUND = "No person found with follow-up date: %s";
     public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted persons: %1$s";
     public static final String MESSAGE_DELETE_ALL_SUCCESS = "Deleted %d contact(s).";
     public static final String MESSAGE_DELETE_ALL_REQUIRES_COMPANY_PREVIEW =
-            "Delete all is only available after a name, role, or company preview.\n"
+            "Delete all is only available after a role or company preview.\n"
             + "To clear address book, enter clear.";
     public static final String MESSAGE_NO_CONTACTS_TO_DELETE = "There are no displayed contacts to delete.";
 
@@ -190,13 +186,15 @@ public class DeleteCommand extends Command {
         }
 
         if (targetName != null) {
-            List<Person> nameContacts = model.getUnfilteredPersonList().stream()
+            Person personToDelete = model.getUnfilteredPersonList().stream()
                     .filter(person -> targetName.equals(person.getName()))
-                    .collect(Collectors.toList());
-            model.setDeleteScope(nameContacts);
-            model.updateFilteredPersonList(person -> targetName.equals(person.getName()));
-            return new CommandResult(getPreviewMessage(model.getFilteredPersonList().size(),
-                    MESSAGE_NAME_CONTACTS_FOUND, MESSAGE_NAME_NOT_FOUND, targetName));
+                    .findFirst()
+                    .orElseThrow(() -> new CommandException(String.format(MESSAGE_NAME_NOT_FOUND, targetName)));
+            ensureInActiveDeleteScope(model, personToDelete);
+            model.deletePerson(personToDelete);
+            model.removeFromDeleteScope(personToDelete);
+            model.commitAddressBook(COMMAND_WORD);
+            return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }
 
         if (targetRole != null) {

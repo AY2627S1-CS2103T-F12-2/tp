@@ -319,7 +319,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user             | find a contact by name, company or role                     | quickly identify relevant contacts                   |
 | `* *`    | user             | categorise contacts                                         | keep my contacts organised                           |
 | `* *`    | user             | assign one contact to multiple tags                         | represent contacts with different areas of expertise |
-| `* * *`  | user             | delete contact with email, phone, index                     | keep my contacts updated                             |
+| `* * *`  | user             | delete contact with name, email, phone, or index            | keep my contacts updated                             |
 | `* *`    | experienced user | bulk delete contacts with same company or role              | quickly keep my contacts relevant                    |
 
 
@@ -399,19 +399,19 @@ Use case ends.
 
       Use case resumes at step 2.
 
-* 3b. The user requests to delete a contact by the phone number or email address of an existing contact.
+* 3b. The user requests to delete a contact by the exact name, phone number, or email address of an existing contact.
 
     * 3b1. ContactFind finds the contact and deletes it.
 
       Use case ends.
 
-* 3c. The user requests to delete a contact by a phone number or email address that does not belong to a contact.
+* 3c. The user requests to delete a contact by an exact name, phone number, or email address that does not belong to a contact.
 
     * 3c1. ContactFind shows an error message.
 
       Use case resumes at step 2.
 
-* 3d. The user requests to delete contacts with an exact name, role, or company that matches one or more contacts.
+* 3d. The user requests to delete contacts with an exact role or company that matches one or more contacts.
 
     * 3d1. ContactFind shows only the matching contacts without deleting them.
     * 3d2. User requests to delete all contacts in the preview.
@@ -419,15 +419,15 @@ Use case ends.
 
       Use case ends.
 
-* 3e. The user requests to delete contacts with an exact name, role, or company that matches one or more contacts.
+* 3e. The user requests to delete contacts with an exact role or company that matches one or more contacts.
 
     * 3e1. ContactFind shows only the matching contacts without deleting them.
-    * 3e2. The user requests to delete contact with exact name, email or index. 
+    * 3e2. The user requests to delete a contact with an exact name, phone number, email address, or index.
     * 3e3. ContactFind deletes the requested contact.
 
       Use case ends.
 
-* 3f. The user requests to delete contacts with an exact name, role, or company.
+* 3f. The user requests to delete contacts with an exact role or company.
 
     * 3f1. ContactFind shows only the matching contacts without deleting them.
     * 3f2. User requests to delete contact that is not displayed.
@@ -435,7 +435,7 @@ Use case ends.
 
       Use case ends.
 
-* 3h. The user requests to delete contacts with an exact name, role, or company that matches no contacts.
+* 3h. The user requests to delete contacts with an exact role or company that matches no contacts.
 
     * 3h1. ContactFind shows no matching contacts and an error message.
 
@@ -662,15 +662,15 @@ testers are expected to do more *exploratory* testing.
    3. Test case: enter `delete com/Orion Bank`, then `delete 1`. 
       Expected: Alex is deleted first. Blair remains in the active preview.
    
-   5. Test case: enter `undo`, enter `delete com/Orion`. 
+   4. Test case: enter `undo`, enter `delete com/Orion`.
       Expected: The command is rejected because Orion keyword is incomplete. 
 
 2. Deleting by an exact identifier
 
    1. Prerequisites: Restore the prepared contacts above.
 
-   2. Test case: `delete n/Casey Ng`, followed by `delete e/casey.ng@example.com`.<br>
-      Expected: The first command only shows Casey. The second deletes Casey and reports that contact.
+   2. Test case: `delete n/Casey Ng`.<br>
+      Expected: Casey is deleted immediately and identified in the status message.
 
    3. Test case: after `list`, enter `delete p/90000004`.<br>
       Expected: Drew is deleted and identified in the status message.
