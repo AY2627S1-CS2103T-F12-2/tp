@@ -64,7 +64,7 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Contact: %1$s";
     public static final String MESSAGE_NOT_EDITED =
-            "At least one field to edit must be provided (e.g., p/, e/, rl/, com/, b/).";
+            "At least one field to edit must be provided (e.g. p/, e/, rl/, com/, b/).";
     public static final String MESSAGE_DUPLICATE_PERSON =
             "Error: An existing contact already uses this phone number or email address. "
                     + "Duplicate entries are not allowed.";
