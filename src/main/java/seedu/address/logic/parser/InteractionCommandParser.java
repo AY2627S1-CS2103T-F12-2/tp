@@ -43,13 +43,13 @@ public class InteractionCommandParser implements Parser<InteractionCommand> {
         String note = arguments.getValue(PREFIX_INTERACTION_NOTE).orElse("");
 
         if (!Interaction.isValidDate(date)) {
-            throw new ParseException(Interaction.MESSAGE_CONSTRAINTS);
+            throw new ParseException(Interaction.MESSAGE_INVALID_DATE);
         }
 
         if (!InteractionType.isValidInteractionType(typeText)) {
             throw new ParseException(InteractionType.MESSAGE_CONSTRAINTS);
         }
-        
+
         InteractionType type = InteractionType.valueOf(typeText.toUpperCase(Locale.ROOT));
         return new InteractionCommand(index, date, type, note);
     }
