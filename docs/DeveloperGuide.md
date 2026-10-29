@@ -73,6 +73,10 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, `ContactDashboardPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
 
+`MainWindow` uses a permanent two-pane layout. The left pane contains `PersonListPanel`, which displays all contacts as rounded contact cards. The right pane embeds `ContactDashboardPanel` as the Overview pane; the former standalone Dashboard page and Dashboard button are no longer used. The Overview pane displays the total contact count, follow-up count, category counts, and a **One week follow ups** list.
+
+`ContactDashboardPanel` refreshes its statistics and deadline list whenever the command result changes. Its deadline list includes contacts with an overdue follow-up date or a follow-up date from today through the next seven days. `DashboardPersonCard` highlights overdue dates in red and dates within the next seven days in yellow. The statistics are computed from the complete contact list, while the deadline list uses this date-based filter.
+
 The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java).
 
 The `UI` component,
@@ -351,7 +355,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user             | record essential information such as email and phone number | identify and reach people in my contacts easily      |
 | `* * *`  | user             | update a contact's information                              | keep my contacts manageable and up to date           |
 | `* * *`  | user             | set a follow-up date for a contact                          | avoid missing follow-ups with clients                |
-| `* * *`  | user             | find a contact by name, company or role                     | quickly identify relevant contacts                   |
+| `* * *`  | user             | find a contact by name, phone, email, role, company, boss, tag, category, or follow-up date | quickly identify relevant contacts |
 | `* *`    | user             | categorise contacts                                         | keep my contacts organised                           |
 | `* *`    | user             | assign one contact to multiple tags                         | represent contacts with different areas of expertise |
 | `* * *`  | user             | delete contact with name, email, phone, or index            | keep my contacts updated                             |
@@ -462,6 +466,29 @@ Use case ends.
 * 1g. The command syntax is invalid, including an unsupported prefix or multiple delete criteria.
 
     * 1g1. ContactFind shows an error message with the required format.
+
+      Use case ends.
+
+**Use case: Find contacts**
+
+**MSS**
+
+1. User requests to find contacts using one or more search criteria.
+2. ContactFind displays contacts that match every supplied criterion.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. No contacts match the search criteria.
+
+    * 1a1. ContactFind displays an empty contact list.
+
+      Use case ends.
+
+* 1b. The search criteria are missing or invalid.
+
+    * 1b1. ContactFind shows an error message.
 
       Use case ends.
 

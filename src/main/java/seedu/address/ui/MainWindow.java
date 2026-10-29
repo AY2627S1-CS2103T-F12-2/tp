@@ -11,6 +11,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
@@ -56,6 +57,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane dashboardPlaceholder;
+
+    @FXML
+    private VBox personList;
 
     /**
      * Creates a {@code MainWindow} with the given {@code Stage}, {@code Logic},

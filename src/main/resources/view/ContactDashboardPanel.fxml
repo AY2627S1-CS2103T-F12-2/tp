@@ -40,7 +40,7 @@
         </VBox>
 
         <VBox spacing="8" VBox.vgrow="ALWAYS">
-          <Label text="Upcoming deadlines" styleClass="overview-section-title" />
+          <Label text="One week follow ups" styleClass="overview-section-title" />
           <Label text="Overdue and due within the next 7 days" styleClass="overview-subtitle" wrapText="true" />
           <ListView fx:id="peopleListView" styleClass="overview-deadline-list" prefHeight="260"
                     VBox.vgrow="ALWAYS" />

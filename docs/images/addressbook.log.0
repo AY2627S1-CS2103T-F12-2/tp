@@ -1,0 +1,42 @@
+Oct 23, 2026 10:49:05 PM seedu.address.Main main
+WARNING: The warnings about a 'restricted method in java.lang.System' and 'enabling native access' appearing below (if any) can be ignored.
+Oct 23, 2026 10:49:06 PM seedu.address.MainApp init
+INFO: =============================[ Initializing AddressBook ]===========================
+Oct 23, 2026 10:49:06 PM seedu.address.MainApp initPrefs
+INFO: Using preference file : preferences.json
+Oct 23, 2026 10:49:06 PM seedu.address.MainApp initPrefs
+INFO: Creating new preference file preferences.json
+Oct 23, 2026 10:49:06 PM seedu.address.MainApp initModelManager
+INFO: Using data file : data\addressbook.json
+Oct 23, 2026 10:49:06 PM seedu.address.commons.util.JsonUtil readJsonFile
+INFO: JSON file data\addressbook.json found.
+Oct 23, 2026 10:49:06 PM seedu.address.MainApp start
+INFO: Starting AddressBook V1.3
+Oct 23, 2026 10:49:06 PM seedu.address.ui.UiManager start
+INFO: Starting UI...
+Oct 23, 2026 10:51:09 PM seedu.address.logic.LogicManager execute
+INFO: ----------------[USER COMMAND][delete 12]
+Oct 23, 2026 10:51:09 PM seedu.address.ui.MainWindow executeCommand
+INFO: An error occurred while executing command: delete 12
+Oct 23, 2026 10:51:12 PM seedu.address.logic.LogicManager execute
+INFO: ----------------[USER COMMAND][delete 1]
+Oct 23, 2026 10:51:12 PM seedu.address.ui.MainWindow executeCommand
+INFO: Result: Deleted person: Alex Yeoh; Phone: 91234545; Email: alexyeoh@example.com; Address: Blk 30 Geylang Street 29, #06-40; Tags: [client][priority]; Role: CEO; Company: ABC Labs; Boss: Jane Smith; Category: INVESTOR
+Oct 23, 2026 10:51:14 PM seedu.address.logic.LogicManager execute
+INFO: ----------------[USER COMMAND][undo]
+Oct 23, 2026 10:51:14 PM seedu.address.ui.MainWindow executeCommand
+INFO: An error occurred while executing command: undo
+Oct 23, 2026 10:51:17 PM seedu.address.logic.LogicManager execute
+INFO: ----------------[USER COMMAND][undo]
+Oct 23, 2026 10:51:17 PM seedu.address.ui.MainWindow executeCommand
+INFO: An error occurred while executing command: undo
+Oct 23, 2026 10:51:20 PM seedu.address.logic.LogicManager execute
+INFO: ----------------[USER COMMAND][undo]
+Oct 23, 2026 10:51:20 PM seedu.address.ui.MainWindow executeCommand
+INFO: An error occurred while executing command: undo
+Oct 23, 2026 10:51:22 PM seedu.address.logic.LogicManager execute
+INFO: ----------------[USER COMMAND][redo]
+Oct 23, 2026 10:51:22 PM seedu.address.ui.MainWindow executeCommand
+INFO: An error occurred while executing command: redo
+Oct 23, 2026 10:51:25 PM seedu.address.MainApp stop
+INFO: ============================ [ Stopping AddressBook ] =============================
