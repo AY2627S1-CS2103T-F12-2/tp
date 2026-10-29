@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -33,12 +34,31 @@ public class CategoryCommandTest {
         CategoryCommand categoryCommand = new CategoryCommand(INDEX_FIRST_PERSON, Category.INVESTOR);
 
         Person editedPerson = new PersonBuilder(personToCategorize).withCategory(Category.INVESTOR).build();
-        String expectedMessage = String.format(CategoryCommand.MESSAGE_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(CategoryCommand.MESSAGE_SUCCESS,
+                editedPerson.getName(), Category.INVESTOR);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(personToCategorize, editedPerson);
 
         assertCommandSuccess(categoryCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void constructor_nullArguments_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> new CategoryCommand(null, Category.CLIENT));
+        assertThrows(NullPointerException.class, () -> new CategoryCommand(INDEX_FIRST_PERSON, null));
+    }
+
+    @Test
+    public void execute_alreadyInCategory_showsMessageWithoutChanges() {
+        Person person = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String expectedMessage = String.format(CategoryCommand.MESSAGE_ALREADY_IN_CATEGORY,
+                person.getName(), person.getCategory());
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(new CategoryCommand(INDEX_FIRST_PERSON, person.getCategory()),
+                model, expectedMessage, expectedModel);
+        assertFalse(model.canUndoAddressBook());
     }
 
     @Test

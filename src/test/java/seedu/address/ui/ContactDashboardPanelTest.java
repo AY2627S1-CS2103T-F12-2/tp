@@ -24,8 +24,6 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -94,26 +92,6 @@ public class ContactDashboardPanelTest {
 
             assert totalContactsLabel.getText().equals("Total contacts: 3");
             assert panel.getDueSoonPeople().size() == 3;
-        });
-    }
-
-    @Test
-    public void constructor_nullBackActionAndCellFactory_areHandled() throws Exception {
-        ObservableList<Person> people = FXCollections.observableArrayList();
-        Person person = createPerson("Alice Tan", LocalDate.now());
-        people.add(person);
-
-        runOnFxThread(() -> {
-            ContactDashboardPanel panel = new ContactDashboardPanel(people, null);
-            ListView<Person> peopleListView = getField(panel, "peopleListView", ListView.class);
-            ListCell<Person> cell = peopleListView.getCellFactory().call(peopleListView);
-
-            invoke(cell, "updateItem", Person.class, null, boolean.class, true);
-            assert cell.getGraphic() == null;
-            invoke(cell, "updateItem", Person.class, null, boolean.class, false);
-            assert cell.getGraphic() == null;
-            invoke(cell, "updateItem", Person.class, person, boolean.class, false);
-            assert cell.getGraphic() != null;
         });
     }
 

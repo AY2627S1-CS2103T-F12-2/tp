@@ -6,8 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_NOTE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_TYPE;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 import seedu.address.commons.core.index.Index;
@@ -35,18 +33,17 @@ public class InteractionParser implements Parser<InteractionCommand> {
                     InteractionCommand.MESSAGE_USAGE), e);
         }
 
-        String date = arguments.getValue(PREFIX_INTERACTION_DATE).orElse("");
-        String typeText = arguments.getValue(PREFIX_INTERACTION_TYPE).orElse("");
-        String note = arguments.getValue(PREFIX_INTERACTION_NOTE).orElse("");
-        if (date.isEmpty() || typeText.isEmpty() || note.isEmpty()) {
+        if (arguments.getValue(PREFIX_INTERACTION_DATE).isEmpty()
+                || arguments.getValue(PREFIX_INTERACTION_TYPE).isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     InteractionCommand.MESSAGE_USAGE));
         }
+        String date = arguments.getValue(PREFIX_INTERACTION_DATE).get();
+        String typeText = arguments.getValue(PREFIX_INTERACTION_TYPE).get();
+        String note = arguments.getValue(PREFIX_INTERACTION_NOTE).orElse("");
 
-        try {
-            LocalDate.parse(date, Interaction.FORMATTER);
-        } catch (DateTimeParseException e) {
-            throw new ParseException(Interaction.MESSAGE_CONSTRAINTS, e);
+        if (!Interaction.isValidDate(date)) {
+            throw new ParseException(Interaction.MESSAGE_INVALID_DATE);
         }
 
         if (!InteractionType.isValidInteractionType(typeText)) {

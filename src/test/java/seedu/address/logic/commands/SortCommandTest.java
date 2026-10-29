@@ -45,13 +45,25 @@ public class SortCommandTest {
         CommandResult result = new SortCommand(true).execute(model);
 
         assertEquals("Contacts sorted by follow-up date (descending).", result.getFeedbackToUser());
-        assertEquals(List.of(lateCarol, earlyAlice, earlyBob, noDateAaron, noDateZoe),
+        assertEquals(List.of(lateCarol, earlyBob, earlyAlice, noDateZoe, noDateAaron),
                 model.getAddressBook().getPersonList());
     }
 
     @Test
     public void execute_nullModel_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> new SortCommand().execute(null));
+    }
+
+    @Test
+    public void execute_sortThenUndo_restoresOriginalOrder() {
+        Model model = createModel(noDateZoe, lateCarol, earlyBob, noDateAaron, earlyAlice);
+
+        new SortCommand().execute(model);
+        assertTrue(model.canUndoAddressBook());
+
+        model.undoAddressBook();
+        assertEquals(List.of(noDateZoe, lateCarol, earlyBob, noDateAaron, earlyAlice),
+                model.getAddressBook().getPersonList());
     }
 
     @Test

@@ -13,6 +13,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
 import seedu.address.model.person.Person;
 
@@ -25,7 +26,9 @@ public class InteractionCommandTest {
         InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
                 "2026-10-20", InteractionType.MEETING, "Discussed proposal");
 
-        command.execute(model);
+        CommandResult result = command.execute(model);
+        assertEquals(String.format(InteractionCommand.MESSAGE_SUCCESS,
+                InteractionType.MEETING, original.getName(), "2026-10-20"), result.getFeedbackToUser());
 
         Person updated = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         assertEquals(original.getInteractions().size() + 1, updated.getInteractions().size());
@@ -39,7 +42,8 @@ public class InteractionCommandTest {
         InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
                 "invalid-date", InteractionType.MEETING, "Discussed proposal");
 
-        assertThrows(CommandException.class, () -> command.execute(model));
+        CommandException exception = assertThrows(CommandException.class, () -> command.execute(model));
+        assertEquals(Interaction.MESSAGE_INVALID_DATE, exception.getMessage());
     }
 
     @Test

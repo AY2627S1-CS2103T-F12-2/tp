@@ -63,7 +63,7 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
 * `INDEX` refers to the index number shown in the displayed contact list. It **must be a positive integer** 1, 2, 3, ...
 
-* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `categories`, `exit`, and `clear`, are ignored.<br>
+* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `categories`, `interactions`, `exit`, and `clear`, are ignored.<br>
   For example, `help 123` is interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
@@ -75,12 +75,12 @@ Use a prefix immediately before its value. Not every prefix is accepted by every
 
 Prefix | Field | Used by
 -------|-------|--------
-`n/` | Name | `add`, `edit`, `find`
-`p/` | Phone number | `add`, `edit`
-`e/` | Email address | `add`, `edit`
+`n/` | Name | `add`, `edit`, `find`, `delete`
+`p/` | Phone number | `add`, `edit`, `delete`
+`e/` | Email address | `add`, `edit`, `delete`
 `a/` | Address | `add`, `edit`
-`rl/` | Role | `add`, `edit`, `find`
-`com/` | Company | `add`, `edit`, `find`
+`rl/` | Role | `add`, `edit`, `find`, `delete` (preview)
+`com/` | Company | `add`, `edit`, `find`, `delete` (preview)
 `b/` | Boss | `add`, `edit`
 `fd/` | Follow-up date | `add`, `edit`, `find`, `delete`, `sort`
 `t/` | Tag | `add`, `edit`
@@ -103,14 +103,14 @@ Address | Any value, but must not be blank.                                     
 Role | Letters and digits, with words separated by single spaces.                                                                     | `Vice President`
 Company | Letters and digits, with words separated by single spaces, and at least 3 characters long.                                     | `Example Bank`
 Boss | Same as Name, or empty.                                                                                                        | `Alex Smith`
-Follow-up date | A valid calendar date in `yyyy-MM-dd` format.                                                                                  | `2026-10-20`
+Follow-up date | A valid calendar date in exactly `yyyy-MM-dd` format, with a four-digit year.                                      | `2026-10-20`
 Tag | Letters and digits only, with no spaces.                                                                                       | `priority`
 Remark | Any value.                                                                                                                     | `Prefers email over calls`
 Category | One of `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, `OTHER` (case-insensitive).                | `INVESTOR`
 
 <box type="info" seamless>
 
-**Note:** Two contacts with exactly the same name are treated as duplicates. ContactFind will not let you add a contact, or edit a contact's name, if another contact already has that name.
+**Note:** Contact names must be unique, regardless of letter case. For example, `Alice Tan` and `alice tan` are duplicates. ContactFind rejects an `add` or `edit` command if its name belongs to another contact. You can still change the capitalization of a contact's own name. If your existing `data/addressbook.json` contains case-only duplicates, resolve them before opening it with this version; ContactFind cannot load that file until the names are unique.
 </box>
 
 ### Viewing help: `help`
@@ -131,6 +131,7 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS rl/ROLE com/COMPANY [b/BOSS
 
 * Name, phone number, email address, address, role, and company are required.
 * Boss, follow-up date, and tags are optional.
+* A contact cannot be their own boss or create a circular management chain. Boss names are matched case-insensitively.
 * New contacts start in the `UNCATEGORIZED` category. Use [`category`](#categorizing-a-contact-category) to change it.
 
 <box type="tip" seamless>
@@ -161,14 +162,18 @@ Format: `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [c
 * Existing values will be updated to the input values.
 * To remove a contact's boss, enter `b/` without a name after it.
 * To set a contact's follow-up date, enter `fd/YYYY-MM-DD`.
+* To remove a contact's follow-up date, enter `fd/` without a date after it.
+* Follow-up dates must use exactly the `YYYY-MM-DD` format; invalid dates are rejected.
 * When editing tags, all of the contact's existing tags are removed and replaced with the tags you enter; adding tags this way is not cumulative.
 * To remove all of a contact's tags, enter `t/` without a tag after it.
+* The success message shows the complete updated contact record, including tags, category, remark, follow-up date, and interaction history.
 
 Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st contact to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd contact to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 rl/Managing Director com/Example Bank b/` Updates the role and company of the 3rd contact and removes their boss.
 * `edit 1 fd/2026-10-20` sets the follow-up date of the 1st contact.
+* `edit 1 fd/` removes the follow-up date of the 1st contact.
 
 ### Adding a remark to a contact: `remark`
 
@@ -209,18 +214,24 @@ Format: `categories`
 
 Records an interaction (such as a meeting or call) with an existing contact.
 
-Format: `interaction INDEX d/DATE ty/TYPE nt/NOTE`
+Format: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`
 
 * Logs an interaction with the contact at the specified `INDEX`.
-* All three of `d/`, `ty/` and `nt/` are required, and each can appear only once.
+* `d/` and `ty/` are required. Each prefix can appear only once.
 * `DATE` must be a valid calendar date in `yyyy-MM-dd` format.
 * `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
-* `NOTE` can be any text, but cannot be empty.
+* `NOTE` is optional and can be empty.
 * Each interaction is added to the contact's history; existing interactions are kept.
 
 Examples:
 * `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 * `interaction 3 d/2026-11-02 ty/call nt/Follow-up on term sheet`
+
+### Listing all interactions: `interactions`
+
+Shows recorded interactions for all contacts, including those hidden by the current filter. Shows `No interactions recorded.` when empty.
+
+Format: `interactions`
 
 ### Finding contacts: `find`
 
@@ -247,14 +258,37 @@ Examples:
 
 Deletes the specified contact from ContactFind.
 
-Format: `delete INDEX` or `delete fd/YYYY-MM-DD`
+Format: `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, `delete e/EMAIL`, `delete rl/ROLE`, `delete com/COMPANY`, or `delete fd/YYYY-MM-DD`
 
-* Deletes the contact at the specified `INDEX`.
-* `delete fd/YYYY-MM-DD` deletes all displayed contacts with the specified follow-up date.
+All keyword parameters must be exact; partial keywords are not supported.
 
-Examples:
+* `delete INDEX` deletes the contact at the specified index in the current list.
+* `delete p/PHONE` deletes the contact with the exact phone number.
+* `delete e/EMAIL` deletes the contact with the exact email address.
+* `delete n/NAME` deletes the contact with the exact name.
+
+Examples: 
 * `list` followed by `delete 2` deletes the 2nd contact in ContactFind.
 * `find Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
+* `delete p/98765432` deletes the contact whose phone number is exactly `98765432`.
+* `delete e/johnd@example.com` deletes the contact whose email address is exactly `johnd@example.com`.
+* `delete n/John Doe` deletes the contact whose name is exactly `John Doe`.
+
+#### Bulk delete
+
+Use a role or company to preview the matching contacts before deleting them.
+
+Format: `delete rl/ROLE` or `delete com/COMPANY`
+
+* While a bulk-delete preview is active, `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, and `delete e/EMAIL` can delete one of the contacts in that preview instead. Enter `list` to leave the preview without deleting all of its contacts.
+* Use `delete all` to delete all contacts in the corresponding ROLE or COMPANY preview.
+
+`delete fd/YYYY-MM-DD` is also a bulk-delete command: it immediately deletes every contact displayed in the current list whose follow-up date exactly matches the date.
+
+Examples:
+* `delete com/Example Bank` previews every contact at `Example Bank` without deleting them.
+* `delete com/Example Bank` followed by `delete all` deletes every contact in that company preview.
+* `delete rl/Software Engineer` followed by `delete 1` deletes the 1st contact in that role preview.
 * `delete fd/2026-10-20` deletes every displayed contact with that follow-up date.
 
 ### Sorting contacts: `sort`
@@ -285,7 +319,7 @@ Format: `commit`
 ### Undoing a change: `undo`
 
 Restores the contact-list state before the most recent saved change. Each successful contact-changing command
-automatically saves a state (except for delete fd/ and sort.)
+automatically saves a state (except for sort.)
 
 Format: `undo`
 
@@ -348,12 +382,13 @@ Action     | Format, Examples
 **Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
 **Clear**  | `clear`
 **Commit** | `commit`
-**Delete** | `delete INDEX` e.g., `delete 3` (deletes based on index) OR <br> `delete fd/YYYY-MM-DD` e.g., `delete fd/1985-03-11` (deletes based on follow-up date)
+**Delete** | `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, or `delete e/EMAIL` delete one contact; `delete rl/ROLE` or `delete com/COMPANY` preview an exact-match scope; `delete all` deletes that active scope; `delete fd/YYYY-MM-DD` deletes every displayed contact with that date.<br> e.g., `delete com/Example Bank`, then `delete all`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
 **Help**   | `help`
 **Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
+**Interactions** | `interactions`
 **List**   | `list`
 **Redo**   | `redo`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`

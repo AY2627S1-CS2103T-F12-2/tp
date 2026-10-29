@@ -15,6 +15,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.BossChainValidator;
 import seedu.address.model.person.Person;
 
 /**
@@ -23,6 +24,7 @@ import seedu.address.model.person.Person;
 public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
+    public static final String MESSAGE_BOSS_CYCLE = BossChainValidator.MESSAGE_BOSS_CYCLE;
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
             + "Parameters: "
@@ -65,6 +67,10 @@ public class AddCommand extends Command {
 
         if (model.hasPerson(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
+        if (BossChainValidator.createsCycle(model.getAddressBook().getPersonList(), null, toAdd)) {
+            throw new CommandException(MESSAGE_BOSS_CYCLE);
         }
 
         model.addPerson(toAdd);

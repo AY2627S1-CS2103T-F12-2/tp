@@ -21,12 +21,15 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.tag.Tag;
 
 /**
  * Parses input arguments and creates a new EditCommand object
  */
 public class EditCommandParser implements Parser<EditCommand> {
+
+    private static final String FOLLOW_UP_DATE_FORMAT_REGEX = "[0-9]{4}-[0-9]{2}-[0-9]{2}";
 
     /**
      * Parses the given {@code String} of arguments in the context of the EditCommand
@@ -80,7 +83,14 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         Optional<String> followUpDate = argMultimap.getValue(PREFIX_FOLLOW_UP_DATE);
         if (followUpDate.isPresent()) {
-            editPersonDescriptor.setFollowUpDate(ParserUtil.parseFollowUpDate(followUpDate.get()));
+            String followUpDateValue = followUpDate.get().trim();
+            if (followUpDateValue.isEmpty()) {
+                editPersonDescriptor.clearFollowUpDate();
+            } else if (!followUpDateValue.matches(FOLLOW_UP_DATE_FORMAT_REGEX)) {
+                throw new ParseException(FollowUpDate.MESSAGE_CONSTRAINTS);
+            } else {
+                editPersonDescriptor.setFollowUpDate(ParserUtil.parseFollowUpDate(followUpDateValue));
+            }
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
 
