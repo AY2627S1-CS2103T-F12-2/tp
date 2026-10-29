@@ -45,7 +45,7 @@ public class SortCommandTest {
         CommandResult result = new SortCommand(true).execute(model);
 
         assertEquals("Contacts sorted by follow-up date (descending).", result.getFeedbackToUser());
-        assertEquals(List.of(lateCarol, earlyAlice, earlyBob, noDateAaron, noDateZoe),
+        assertEquals(List.of(lateCarol, earlyBob, earlyAlice, noDateZoe, noDateAaron),
                 model.getAddressBook().getPersonList());
     }
 

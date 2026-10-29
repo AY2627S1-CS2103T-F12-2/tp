@@ -121,6 +121,12 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name, e.g., `AddCommandParser`). The parser uses the other classes shown above to parse the user command and create an `XYZCommand` object (e.g., `AddCommand`). The `AddressBookParser` returns that object as a `Command` object.
 * All `XYZCommandParser` classes, such as `AddCommandParser` and `DeleteCommandParser`, implement the `Parser` interface so they can be treated similarly where appropriate, for example during testing.
 
+#### Edit command and follow-up dates
+
+`EditCommandParser` validates follow-up dates in the exact `YYYY-MM-DD` format before constructing a `FollowUpDate`, which also rejects invalid calendar dates. An empty `fd/` is treated as an explicit request to clear the existing follow-up date; omitting `fd/` preserves the current date. `EditPersonDescriptor` tracks this explicit clear operation separately from an omitted field.
+
+Contact identity is name-based through `Person#isSamePerson(Person)`, so the edit duplicate check and its error message refer to duplicate names. The edit success message formats the complete updated contact record, including tags, category, remark, follow-up date, and interaction history.
+
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
@@ -164,12 +170,11 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### Undo/redo feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
-
+The undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 * `VersionedAddressBook#commit()` -- Saves the current address book state in its history.
 * `VersionedAddressBook#undo()` -- Restores the previous address book state from its history.
 * `VersionedAddressBook#redo()` -- Restores a previously undone address book state from its history.
@@ -457,30 +462,81 @@ Use case ends.
 
 MSS
 
-1. User requests to list contacts.
-2. ContactFind shows a list of contacts.
-3. User requests to assign one or more tags (e.g. priority, or specialization) to a specific contact in the list.
-4. ContactFind updates the contact with the specified tag(s).
+1. User requests to assign a category (e.g. INVESTOR, CLIENT) to a contact.
+2. ContactFind updates the contact with the specified category.
 
-   Use case ends.
+    Use case ends.
 
 Extensions
 
-* 2a. The contacts list is empty.
+* 1a. The given index is invalid.
 
-   Use case ends.
-
-* 3a. The given index is invalid.
-
-   * 3a1. ContactFind shows an error message.
+   * 1a1. ContactFind shows an error message.
 
       Use case resumes at step 2.
 
-* 3b. The specified tag format or syntax is invalid.
+* 1b. The specified category format or syntax is invalid.
 
-   * 3b1. ContactFind shows an error message.
+   * 1b1. ContactFind shows an error message.
 
       Use case resumes at step 2.
+
+**Use case: List categories**
+
+MSS
+
+1. User requests to view category counts using `categories`.
+2. ContactFind shows all categories and the number of contacts in each category.
+
+    Use case ends.
+
+Extensions
+
+* 2a. The contact list is empty.
+
+   * 2a1. ContactFind shows all categories with zero counts.
+
+      Use case ends.
+
+**Use case: Log an interaction**
+
+MSS
+
+1. User requests to log an interaction with a contact using `interaction`.
+2. ContactFind adds the interaction to the contact's history.
+
+    Use case ends.
+
+Extensions
+
+* 1a. The given index is invalid.
+
+   * 1a1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+* 1b. The specified interaction details or command syntax are invalid.
+
+   * 1b1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+**Use case: List interactions**
+
+MSS
+
+1. User requests to view recorded interactions using `interactions`.
+2. ContactFind shows recorded interactions across all contacts.
+
+    Use case ends.
+
+Extensions
+
+* 2a. No interactions have been recorded.
+
+   * 2a1. ContactFind shows a message indicating that no interactions are recorded.
+
+      Use case ends.
 
 **Use case: View usage instructions**
 
