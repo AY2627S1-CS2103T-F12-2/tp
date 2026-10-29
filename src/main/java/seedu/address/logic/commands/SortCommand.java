@@ -41,6 +41,7 @@ public class SortCommand extends Command {
         sortedPersons.sort(followUpDateComparator());
         sortedAddressBook.setPersons(sortedPersons);
         model.setAddressBook(sortedAddressBook);
+        model.commitAddressBook(COMMAND_WORD);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, descending ? "descending" : "ascending"));
     }
