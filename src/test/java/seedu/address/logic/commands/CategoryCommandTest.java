@@ -50,6 +50,18 @@ public class CategoryCommandTest {
     }
 
     @Test
+    public void execute_alreadyInCategory_showsMessageWithoutChanges() {
+        Person person = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String expectedMessage = String.format(CategoryCommand.MESSAGE_ALREADY_IN_CATEGORY,
+                person.getName(), person.getCategory());
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(new CategoryCommand(INDEX_FIRST_PERSON, person.getCategory()),
+                model, expectedMessage, expectedModel);
+        assertFalse(model.canUndoAddressBook());
+    }
+
+    @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         CategoryCommand categoryCommand = new CategoryCommand(outOfBoundIndex, Category.INVESTOR);
