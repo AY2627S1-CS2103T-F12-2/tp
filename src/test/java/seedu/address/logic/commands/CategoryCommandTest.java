@@ -77,6 +77,8 @@ public class CategoryCommandTest {
         CategoryCommand categorizeFirstAsClient = new CategoryCommand(INDEX_FIRST_PERSON, Category.CLIENT);
 
         assertTrue(categorizeFirstAsInvestor.equals(categorizeFirstAsInvestor));
+        assertEquals(categorizeFirstAsInvestor.hashCode(),
+                new CategoryCommand(INDEX_FIRST_PERSON, Category.INVESTOR).hashCode());
         assertFalse(categorizeFirstAsInvestor.equals(1));
         assertFalse(categorizeFirstAsInvestor.equals(null));
         assertFalse(categorizeFirstAsInvestor.equals(categorizeSecondAsInvestor));

@@ -55,6 +55,8 @@ public class InteractionTest {
 
         // same object -> returns true
         assertTrue(interaction.equals(interaction));
+        assertEquals(interaction.hashCode(),
+                new Interaction("2026-10-20", InteractionType.CALL, "Discussed proposal").hashCode());
 
         // same values -> returns true
         assertTrue(interaction.equals(

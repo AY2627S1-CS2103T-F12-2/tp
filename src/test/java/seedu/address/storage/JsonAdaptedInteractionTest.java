@@ -22,6 +22,16 @@ public class JsonAdaptedInteractionTest {
     }
 
     @Test
+    public void toModelType_missingFields_throwsIllegalValueException() {
+        assertThrows(IllegalValueException.class, Interaction.MESSAGE_CONSTRAINTS, () ->
+                new JsonAdaptedInteraction(null, "CALL", "Note").toModelType());
+        assertThrows(IllegalValueException.class, Interaction.MESSAGE_CONSTRAINTS, () ->
+                new JsonAdaptedInteraction("2026-10-20", null, "Note").toModelType());
+        assertThrows(IllegalValueException.class, Interaction.MESSAGE_CONSTRAINTS, () ->
+                new JsonAdaptedInteraction("2026-10-20", "CALL", null).toModelType());
+    }
+
+    @Test
     public void toModelType_invalidDate_throwsIllegalValueException() {
         JsonAdaptedInteraction interaction =
                 new JsonAdaptedInteraction("2026-02-30", "CALL", "Discussed proposal");
