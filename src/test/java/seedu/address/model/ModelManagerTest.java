@@ -110,6 +110,16 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void removeFromDeleteScope_personInScope_removesOnlyThatPerson() {
+        modelManager.setDeleteScope(List.of(ALICE, BENSON));
+
+        modelManager.removeFromDeleteScope(ALICE);
+
+        assertTrue(modelManager.hasDeleteScope());
+        assertEquals(List.of(BENSON), modelManager.getDeleteScope());
+    }
+
+    @Test
     public void equals() {
         AddressBook addressBook = new AddressBookBuilder().withPerson(ALICE).withPerson(BENSON).build();
         AddressBook differentAddressBook = new AddressBook();

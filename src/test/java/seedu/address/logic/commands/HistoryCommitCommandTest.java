@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Category;
+import seedu.address.model.person.FollowUpDate;
 import seedu.address.model.person.Remark;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 /**
  * Verifies that every data-changing command records one address book history state.
@@ -22,6 +24,16 @@ public class HistoryCommitCommandTest {
         CommitTrackingModel model = modelWithTypicalPersons();
 
         new DeleteCommand(INDEX_FIRST_PERSON).execute(model);
+
+        assertEquals(1, model.commitCount);
+    }
+
+    @Test
+    public void deleteByFollowUpDate_successfulExecution_commitsOnce() throws Exception {
+        CommitTrackingModel model = modelWithTypicalPersons();
+        model.addPerson(new PersonBuilder().withName("Follow Up Contact").withFollowUpDate("2026-10-20").build());
+
+        new DeleteCommand(new FollowUpDate("2026-10-20")).execute(model);
 
         assertEquals(1, model.commitCount);
     }

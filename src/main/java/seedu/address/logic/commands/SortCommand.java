@@ -41,6 +41,7 @@ public class SortCommand extends Command {
         sortedPersons.sort(followUpDateComparator());
         sortedAddressBook.setPersons(sortedPersons);
         model.setAddressBook(sortedAddressBook);
+        model.commitAddressBook(COMMAND_WORD);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, descending ? "descending" : "ascending"));
     }
@@ -48,7 +49,7 @@ public class SortCommand extends Command {
     private Comparator<Person> followUpDateComparator() {
         return (first, second) -> {
             if (first.getFollowUpDate() == null && second.getFollowUpDate() == null) {
-                return first.getName().fullName.compareToIgnoreCase(second.getName().fullName);
+                return compareNames(first, second);
             }
             if (first.getFollowUpDate() == null) {
                 return 1;
@@ -60,8 +61,14 @@ public class SortCommand extends Command {
             if (dateComparison != 0) {
                 return descending ? -dateComparison : dateComparison;
             }
-            return first.getName().fullName.compareToIgnoreCase(second.getName().fullName);
+            return compareNames(first, second);
         };
+    }
+
+    /* Helper for sort comparator*/
+    private int compareNames(Person first, Person second) {
+        int nameComparison = first.getName().fullName.compareToIgnoreCase(second.getName().fullName);
+        return descending ? -nameComparison : nameComparison;
     }
 
     @Override

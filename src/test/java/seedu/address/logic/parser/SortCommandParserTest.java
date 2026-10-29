@@ -14,7 +14,6 @@ public class SortCommandParserTest {
 
     @Test
     public void parse_validArguments_returnsSortCommand() {
-        assertParseSuccess(parser, "", new SortCommand());
         assertParseSuccess(parser, "fd/", new SortCommand());
         assertParseSuccess(parser, "fd/ ASC ", new SortCommand());
         assertParseSuccess(parser, "fd/desc", new SortCommand(true));
@@ -23,6 +22,7 @@ public class SortCommandParserTest {
     @Test
     public void parse_invalidArguments_throwsParseException() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "", expectedMessage);
         assertParseFailure(parser, "unexpected", expectedMessage);
         assertParseFailure(parser, "fd/up", expectedMessage);
         assertParseFailure(parser, "fd/asc fd/desc", expectedMessage);

@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
@@ -57,6 +58,14 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void add_nameDiffersOnlyInCase_throwsDuplicatePersonException() {
+        uniquePersonList.add(ALICE);
+        Person caseVariant = new PersonBuilder(ALICE).withName(ALICE.getName().fullName.toLowerCase())
+                .withAddress(VALID_ADDRESS_BOB).build();
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(caseVariant));
+    }
+
+    @Test
     public void setPerson_nullTargetPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> uniquePersonList.setPerson(null, ALICE));
     }
@@ -69,6 +78,17 @@ public class UniquePersonListTest {
     @Test
     public void setPerson_targetPersonNotInList_throwsPersonNotFoundException() {
         assertThrows(PersonNotFoundException.class, () -> uniquePersonList.setPerson(ALICE, ALICE));
+    }
+
+    @Test
+    public void setPerson_targetHasSameIdentityButDifferentDetails_throwsPersonNotFoundException() {
+        uniquePersonList.add(ALICE);
+        Person staleTarget = new PersonBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).build();
+
+        assertThrows(PersonNotFoundException.class, () -> uniquePersonList.setPerson(staleTarget, BOB));
+
+        assertEquals(1, uniquePersonList.asUnmodifiableObservableList().size());
+        assertSame(ALICE, uniquePersonList.asUnmodifiableObservableList().get(0));
     }
 
     @Test
@@ -98,6 +118,16 @@ public class UniquePersonListTest {
         UniquePersonList expectedUniquePersonList = new UniquePersonList();
         expectedUniquePersonList.add(BOB);
         assertEquals(expectedUniquePersonList, uniquePersonList);
+    }
+
+    @Test
+    public void setPerson_editedPersonNameDiffersOnlyInCase_throwsDuplicatePersonException() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+        Person caseVariant = new PersonBuilder(ALICE).withName(BOB.getName().fullName.toLowerCase()).build();
+
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPerson(ALICE, caseVariant));
+        assertSame(ALICE, uniquePersonList.asUnmodifiableObservableList().get(0));
     }
 
     @Test
@@ -158,6 +188,12 @@ public class UniquePersonListTest {
     public void setPersons_listWithDuplicatePersons_throwsDuplicatePersonException() {
         List<Person> listWithDuplicatePersons = List.of(ALICE, ALICE);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPersons(listWithDuplicatePersons));
+    }
+
+    @Test
+    public void setPersons_listWithCaseVariantNames_throwsDuplicatePersonException() {
+        Person caseVariant = new PersonBuilder(ALICE).withName(ALICE.getName().fullName.toLowerCase()).build();
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPersons(List.of(ALICE, caseVariant)));
     }
 
     @Test

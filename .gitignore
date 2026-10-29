@@ -7,12 +7,14 @@ src/main/resources/docs/
 /.idea/
 /out/
 /*.iml
+/bin/
 
 # Storage/log files
 /data/
 /preferences.json
 /*.log.*
 hs_err_pid[0-9]*.log
+
 
 # Test sandbox files
 src/test/data/sandbox/

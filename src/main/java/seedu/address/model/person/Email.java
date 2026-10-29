@@ -12,7 +12,8 @@ import java.util.regex.Pattern;
  */
 public class Email {
 
-    public static final String MESSAGE_CONSTRAINTS = "Invalid email! Please include an '@' symbol.";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Invalid email! Please provide a local part, '@', and a valid domain (e.g. name@example.com).";
 
     public static final String VALIDATION_REGEX = "(?i)"
             + "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*"

@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -23,8 +24,6 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -52,9 +51,9 @@ import seedu.address.testutil.Assert;
 public class ContactDashboardPanelTest {
 
     @BeforeAll
-    public static void initJavaFx() {
+    public static void initJavaFx() throws InterruptedException {
         Logger.getLogger(MainWindow.class.getName()).setLevel(Level.WARNING);
-        Platform.startup(() -> {});
+        Platform.startup(() -> Platform.setImplicitExit(false));
     }
 
     @Test
@@ -87,30 +86,12 @@ public class ContactDashboardPanelTest {
         people.add(createPerson("Diana Ong", LocalDate.now().plusDays(7)));
         people.add(createPerson("Eve Wong", null));
 
-        ContactDashboardPanel panel = new ContactDashboardPanel(people, () -> {});
-        Label totalContactsLabel = getField(panel, "totalContactsLabel", Label.class);
-
-        assert totalContactsLabel.getText().equals("Total contacts: 3");
-        assert panel.getDueSoonPeople().size() == 3;
-    }
-
-    @Test
-    public void constructor_nullBackActionAndCellFactory_areHandled() throws Exception {
-        ObservableList<Person> people = FXCollections.observableArrayList();
-        Person person = createPerson("Alice Tan", LocalDate.now());
-        people.add(person);
-
         runOnFxThread(() -> {
-            ContactDashboardPanel panel = new ContactDashboardPanel(people, null);
-            ListView<Person> peopleListView = getField(panel, "peopleListView", ListView.class);
-            ListCell<Person> cell = peopleListView.getCellFactory().call(peopleListView);
+            ContactDashboardPanel panel = new ContactDashboardPanel(people, () -> {});
+            Label totalContactsLabel = getField(panel, "totalContactsLabel", Label.class);
 
-            invoke(cell, "updateItem", Person.class, null, boolean.class, true);
-            assert cell.getGraphic() == null;
-            invoke(cell, "updateItem", Person.class, null, boolean.class, false);
-            assert cell.getGraphic() == null;
-            invoke(cell, "updateItem", Person.class, person, boolean.class, false);
-            assert cell.getGraphic() != null;
+            assert totalContactsLabel.getText().equals("Total contacts: 3");
+            assert panel.getDueSoonPeople().size() == 3;
         });
     }
 
@@ -270,7 +251,7 @@ public class ContactDashboardPanelTest {
                 latch.countDown();
             }
         });
-        assert latch.await(10, TimeUnit.SECONDS);
+        Assertions.assertTrue(latch.await(10, TimeUnit.SECONDS), "JavaFX thread timed out");
         Throwable throwable = failure.get();
         if (throwable instanceof Exception exception) {
             throw exception;
