@@ -62,7 +62,11 @@
         "non-functional-requirements": "Non-Functional Requirements",
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
         "launch-and-shutdown": "Launch and shutdown",
+        "adding-contacts": "Adding contacts",
+        "editing-contacts": "Editing contacts",
         "deleting-contacts": "Deleting contacts",
+        "recording-interactions": "Recording interactions",
+        "categorizing-contacts": "Categorizing contacts",
         "saving-data": "Saving data"
       },
       "headingKeywords": {}
