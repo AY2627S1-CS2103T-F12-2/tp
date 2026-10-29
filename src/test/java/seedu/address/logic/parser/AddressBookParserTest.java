@@ -104,7 +104,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_sort() throws Exception {
-        assertEquals(new SortCommand(), parser.parseCommand(SortCommand.COMMAND_WORD));
+        assertEquals(new SortCommand(), parser.parseCommand(SortCommand.COMMAND_WORD + " fd/"));
     }
 
     @Test

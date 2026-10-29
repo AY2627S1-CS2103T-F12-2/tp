@@ -47,11 +47,11 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_CONTACT_NOT_IN_COMPANY_SCOPE =
             "This contact is not in the active delete preview.";
     public static final String MESSAGE_COMPANY_CONTACTS_FOUND = "%1$d person(s) found working at %2$s.\n"
-            + "To delete one, use delete INDEX, delete p/PHONE, or delete e/EMAIL.\n"
+            + "To delete one, use delete INDEX, delete p/PHONE, delete n/NAME or delete e/EMAIL.\n"
             + "To remove all displayed contacts, enter delete all.\n"
             + "To return, enter list.";
     public static final String MESSAGE_ROLE_CONTACTS_FOUND = "%1$d person(s) found with role %2$s.\n"
-            + "To delete one, use delete INDEX, delete p/PHONE, or delete e/EMAIL.\n"
+            + "To delete one, use delete INDEX, delete p/PHONE, delete n/NAME or delete e/EMAIL.\n"
             + "To remove all displayed contacts, enter delete all.\n"
             + "To return, enter list.";
     public static final String MESSAGE_FOLLOW_UP_DATE_NOT_FOUND = "No person found with follow-up date: %s";
