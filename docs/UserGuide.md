@@ -214,13 +214,13 @@ Format: `categories`
 
 Records an interaction (such as a meeting or call) with an existing contact.
 
-Format: `interaction INDEX d/DATE ty/TYPE nt/NOTE`
+Format: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`
 
 * Logs an interaction with the contact at the specified `INDEX`.
-* All three of `d/`, `ty/` and `nt/` are required, and each can appear only once.
+* `d/` and `ty/` are required. Each prefix can appear only once.
 * `DATE` must be a valid calendar date in `yyyy-MM-dd` format.
 * `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
-* `NOTE` can be any text, but cannot be empty.
+* `NOTE` is optional and can be empty.
 * Each interaction is added to the contact's history; existing interactions are kept.
 
 Examples:

@@ -16,6 +16,8 @@ import java.util.Objects;
 public class Interaction {
     public static final String MESSAGE_CONSTRAINTS =
             "Interaction requires a valid name, date (yyyy-MM-dd), type, and non-null note.";
+    public static final String MESSAGE_INVALID_DATE =
+            "Interaction date must be a valid calendar date in yyyy-MM-dd format, e.g. 2026-10-20.";
 
     /**
      * uuuu as Java STRICT uses uuuu instead of yyyy.
@@ -35,7 +37,7 @@ public class Interaction {
         String trimmedDate = date.trim();
 
         checkArgument(Name.isValidName(name), Name.MESSAGE_CONSTRAINTS);
-        checkArgument(isValidDate(trimmedDate), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidDate(trimmedDate), MESSAGE_INVALID_DATE);
 
         this.name = new Name(name);
         this.date = LocalDate.parse(trimmedDate, FORMATTER);
