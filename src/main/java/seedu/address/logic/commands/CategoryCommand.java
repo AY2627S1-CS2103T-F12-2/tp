@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
+import java.util.Objects;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -37,6 +38,8 @@ public class CategoryCommand extends Command {
      * @param targetCategory the category that the person should be placed into
      */
     public CategoryCommand(Index targetIndex, Category targetCategory) {
+        requireNonNull(targetIndex);
+        requireNonNull(targetCategory);
         this.targetIndex = targetIndex;
         this.targetCategory = targetCategory;
     }
@@ -89,6 +92,11 @@ public class CategoryCommand extends Command {
 
         return targetIndex.equals(otherCategoryCommand.targetIndex)
                 && targetCategory.equals(otherCategoryCommand.targetCategory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(targetIndex, targetCategory);
     }
 
     @Override
