@@ -139,7 +139,7 @@ public class ContactDashboardPanelTest {
             invoke(mainWindow, "handleDashboard");
 
             assert isVisible(mainWindow, "dashboardPlaceholder");
-            assert !isVisible(mainWindow, "personListPanelPlaceholder");
+            assert isVisible(mainWindow, "personListPanelPlaceholder");
             assert !isManaged(mainWindow, "commandBoxPlaceholder");
 
             ContactDashboardPanel dashboard = getField(mainWindow, "contactDashboardPanel",
