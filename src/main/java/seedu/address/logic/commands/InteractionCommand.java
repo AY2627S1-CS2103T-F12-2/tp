@@ -24,7 +24,7 @@ public class InteractionCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Logs an interaction with the person at INDEX.\n"
             + "Parameters: INDEX " + PREFIX_INTERACTION_DATE + "yyyy-MM-dd "
-            + PREFIX_INTERACTION_TYPE + "TYPE " + PREFIX_INTERACTION_NOTE + "NOTE\n"
+            + PREFIX_INTERACTION_TYPE + "TYPE [" + PREFIX_INTERACTION_NOTE + "NOTE]\n"
             + "Example: interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal";
     public static final String MESSAGE_SUCCESS = "Logged interaction for: %1$s";
 

@@ -1,5 +1,7 @@
 package seedu.address.model.person;
 
+import java.util.Locale;
+
 /**
  * Represents the category assigned to a person.
  */
@@ -20,7 +22,7 @@ public enum Category {
      */
     public static boolean isValidCategory(String test) {
         try {
-            Category.valueOf(test.toUpperCase());
+            Category.valueOf(test.toUpperCase(Locale.ROOT));
             return true;
         } catch (IllegalArgumentException e) {
             return false;

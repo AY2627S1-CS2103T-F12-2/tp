@@ -65,6 +65,9 @@ public class Interaction {
      */
     public static boolean isValidDate(String date) {
         requireNonNull(date);
+        if (!date.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
+            return false;
+        }
 
         try {
             LocalDate.parse(date, FORMATTER);
