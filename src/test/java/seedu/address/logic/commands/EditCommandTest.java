@@ -175,6 +175,28 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_clearFollowUpDate_success() {
+        Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person datedPerson = new PersonBuilder(originalPerson).withFollowUpDate("2026-10-20").build();
+        model.setPerson(originalPerson, datedPerson);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.clearFollowUpDate();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        Person editedPerson = new Person(datedPerson.getName(), datedPerson.getPhone(), datedPerson.getEmail(),
+                datedPerson.getAddress(), datedPerson.getTags(), datedPerson.getRemark(), datedPerson.getCategory(),
+                datedPerson.getRole(), datedPerson.getCompany(), datedPerson.getBoss(), null,
+                datedPerson.getInteractions());
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(datedPerson, editedPerson);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.formatEditedPerson(editedPerson));
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
