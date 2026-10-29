@@ -20,5 +20,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_INTERACTION_TYPE = new Prefix("ty/");
     public static final Prefix PREFIX_INTERACTION_NOTE = new Prefix("nt/");
     public static final Prefix PREFIX_FOLLOW_UP_DATE = new Prefix("fd/");
+    public static final Prefix PREFIX_FILE_NAME = new Prefix("fn/");
 
 }

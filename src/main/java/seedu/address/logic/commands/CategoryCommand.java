@@ -29,6 +29,7 @@ public class CategoryCommand extends Command {
             + "Valid categories: UNCATEGORIZED, CLIENT, INVESTOR, LAWYER, ACCOUNTANT, CONSULTANT, OTHER"
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_CATEGORY + "CATEGORY\n"
+            + Category.MESSAGE_CONSTRAINTS + "\n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CATEGORY + "INVESTOR";
 
     private final Index targetIndex;

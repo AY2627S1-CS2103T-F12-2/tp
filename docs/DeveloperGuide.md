@@ -321,7 +321,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user             | record essential information such as email and phone number | identify and reach people in my contacts easily      |
 | `* * *`  | user             | update a contact's information                              | keep my contacts manageable and up to date           |
 | `* * *`  | user             | set a follow-up date for a contact                          | avoid missing follow-ups with clients                |
-| `* * *`  | user             | find a contact by name, company or role                     | quickly identify relevant contacts                   |
+| `* * *`  | user             | find a contact by name, phone, email, role, company, boss, tag, category, or follow-up date | quickly identify relevant contacts |
 | `* *`    | user             | categorise contacts                                         | keep my contacts organised                           |
 | `* *`    | user             | assign one contact to multiple tags                         | represent contacts with different areas of expertise |
 | `* * *`  | user             | delete contact with name, email, phone, or index            | keep my contacts updated                             |
@@ -440,6 +440,29 @@ Use case ends.
 * 1g. The command syntax is invalid, including an unsupported prefix or multiple delete criteria.
 
     * 1g1. ContactFind shows an error message with the required format.
+
+      Use case ends.
+
+**Use case: Find contacts**
+
+**MSS**
+
+1. User requests to find contacts using one or more search criteria.
+2. ContactFind displays contacts that match every supplied criterion.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. No contacts match the search criteria.
+
+    * 1a1. ContactFind displays an empty contact list.
+
+      Use case ends.
+
+* 1b. The search criteria are missing or invalid.
+
+    * 1b1. ContactFind shows an error message.
 
       Use case ends.
 

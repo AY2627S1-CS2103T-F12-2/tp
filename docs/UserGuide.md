@@ -73,22 +73,24 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
 Use a prefix immediately before its value. Not every prefix is accepted by every command; refer to each command's format.
 
-Prefix | Field | Used by
--------|-------|--------
-`n/` | Name | `add`, `edit`, `find`, `delete`
-`p/` | Phone number | `add`, `edit`, `delete`
-`e/` | Email address | `add`, `edit`, `delete`
-`a/` | Address | `add`, `edit`
-`rl/` | Role | `add`, `edit`, `find`, `delete` (preview)
-`com/` | Company | `add`, `edit`, `find`, `delete` (preview)
-`b/` | Boss | `add`, `edit`
-`fd/` | Follow-up date | `add`, `edit`, `find`, `delete`, `sort`
-`t/` | Tag | `add`, `edit`
-`r/` | Remark | `remark`
-`c/` | Category | `category`
+Prefix | Field            | Used by
+-------|------------------|--------
+`n/` | Name             | `add`, `edit`, `find`, `delete`
+`p/` | Phone number     | `add`, `edit`, `delete`
+`e/` | Email address    | `add`, `edit`, `delete`
+`a/` | Address          | `add`, `edit`
+`rl/` | Role             | `add`, `edit`, `find`, `delete` (preview)
+`com/` | Company          | `add`, `edit`, `find`, `delete` (preview)
+`b/` | Boss             | `add`, `edit`
+`fd/` | Follow-up date   | `add`, `edit`, `find`, `delete`, `sort`
+`t/` | Tag              | `add`, `edit`
+`r/` | Remark           | `remark`
+`c/` | Category         | `category`
 `d/` | Interaction date | `interaction`
 `ty/` | Interaction type | `interaction`
 `nt/` | Interaction note | `interaction`
+`fn/` | File name        | `export`
+
 
 ### Field constraints
 
@@ -235,24 +237,30 @@ Format: `interactions`
 
 ### Finding contacts: `find`
 
-Finds contacts whose name, role, company or follow-up date contains any of the given keywords.
+Finds contacts by their name, phone number, email, role, company, boss, tag, category, or follow-up date.
 
-Format: `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD [MORE_KEYWORDS]...`, `find rl/KEYWORD [MORE_KEYWORDS]...`, `find com/KEYWORD [MORE_KEYWORDS]...`, or `find fd/YYYY-MM-DD`
+Format: `find PREFIX/VALUE [PREFIX/VALUE]...`
 
-* Without a prefix, or with `n/`, the search looks at names. With `rl/`, it looks at roles. With `com/`, it looks at companies. With `fd/`, it looks for an exact follow-up date.
-* The search is case-insensitive; for example, `hans` matches `Hans`.
-* Partial words match; for example, `Han` matches `Hans`.
-* Keyword order does not matter.
-* Contacts matching at least one keyword are returned (an `OR` search); for example, `find Hans Bo` returns `Hans Gruber` and `Bo Yang`.
-* Only one field can be searched at a time. If you enter more than one prefix, the field that takes effect is according to the priority `fd/`->`n/`->`rl/`->`com/`.
+* Every search value must be preceded by a prefix. `n/` searches names, `p/` phone numbers, `e/` emails, `rl/` roles, `com/` companies, `b/` boss names, `t/` tags, `c/` categories, and `fd/` follow-up dates.
+* Each prefix must have a non-empty value. A value may contain spaces; for example, `find n/Amy Rivera` searches for `Amy Rivera` in a contact's name.
+* Searches are case-insensitive. Except for categories and follow-up dates, a value matches when it appears anywhere in the selected field; for example, `find n/Han` matches `Hans`.
+* `c/` and `fd/` must match exactly. `c/` accepts: `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, and `OTHER`.
+* Repeated instances of the same prefix are combined with OR. For example, `find n/Hans Gruber n/Bo Yang` returns contacts whose names contain either `Hans Gruber` or `Bo Yang`.
+* Different prefixes are combined with AND. For example, `find n/Hans com/Example` finds contacts whose name contains `Hans` and whose company contains `Example`.
 
 Examples:
-* `find John` returns `John Doe` and `Johnny Tan`.
-* `find alex david` returns `Alex Yeoh` and `David Li`.<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find n/John` returns `John Doe` and `Johnny Tan`.
+* `find p/9123` returns every contact whose phone number contains `9123`.
+* `find e/example` returns every contact whose email contains `example`.
 * `find rl/analyst` returns every contact whose role contains `analyst`.
 * `find com/example` returns every contact whose company contains `example`.
+* `find b/Alex` returns every contact whose boss name contains `Alex`.
+* `find t/friend t/important` returns every contact with a tag containing `friend` or `important`.
+* `find n/alex yeoh n/david li` returns `Alex Yeoh` and `David Li`.<br>
+![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find c/client c/investor` returns every contact in either the `CLIENT` or `INVESTOR` category.
 * `find fd/2026-10-20` returns every contact with a follow-up date of `2026-10-20`.
+* `find rl/analyst rl/engineer com/ABC Labs` returns every contact whose role contains `analyst` or `engineer` and whose company contains `ABC Labs`.
 
 ### Deleting a contact: `delete`
 
@@ -330,6 +338,25 @@ checkpoint is run.
 
 Format: `redo`
 
+### Exporting contacts: `export`
+
+Exports all contacts from ContactFind to a CSV file.
+
+Format: `export`, `export fn/FILENAME`
+
+All keyword parameters must be exact; partial keywords are not supported.
+
+* `export` exports currently displayed contacts to "export.csv" located in the data folder.
+* `export fn/FILENAME` exports currently displayed to "FILENAME.CSV" in the data folder.
+* Currently displayed contacts: all contacts, or the remaining contacts after find is executed.
+* FILENAME can only contain alphanumeric characters, dash and underscore.
+* Trailing ".csv" characters in the input file name will be automatically truncated.
+
+Examples:
+* `export` (default)
+* `export fn/favorites`
+* `export fn/important.csv`
+
 ### Exiting the program: `exit`
 
 Exits the program.
@@ -385,7 +412,8 @@ Action     | Format, Examples
 **Delete** | `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, or `delete e/EMAIL` delete one contact; `delete rl/ROLE` or `delete com/COMPANY` preview an exact-match scope; `delete all` deletes that active scope; `delete fd/YYYY-MM-DD` deletes every displayed contact with that date.<br> e.g., `delete com/Example Bank`, then `delete all`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
+**Export**   | `export`, `export fn/FILENAME`
+**Find**   | `find PREFIX/VALUE [PREFIX/VALUE]...`<br> Prefixes: `n/`, `p/`, `e/`, `rl/`, `com/`, `b/`, `t/`, `c/`, `fd/`.<br> e.g., `find n/James Jake`, `find c/CLIENT c/INVESTOR`, `find fd/2026-10-20`.<br> Repeated prefixes are combined with OR; different prefixes are combined with AND.
 **Help**   | `help`
 **Interaction** | `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 **Interactions** | `interactions`
