@@ -312,18 +312,21 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …   | I want to …                                          | So that I can…                                                   |
-|----------|----------|------------------------------------------------------|------------------------------------------------------------------|
-| `* * *`  | new user | view a user guide                                    | understand how to use ContactFind                                |
-| `* *`    | new user | learn about the main functions                       | navigate through the features                                    |
-| `* *`    | new user | start using the app without much setup               | begin managing my contacts quickly                               |
-| `* * *`  | user     | add a new contact                                    | keep track of people I meet                                      |
-| `* * *`  | user     | record essential information such as email and phone number | identify and reach people in my contacts easily           |
-| `* * *`  | user     | update a contact's information                       | keep my contacts manageable and up to date                       |
-| `* * *`  | user     | set a follow-up date for a contact                   | avoid missing follow-ups with clients                            |
-| `* * *`  | user     | find a contact by name, company or role              | quickly identify relevant contacts                               |
-| `* *`    | user     | categorise contacts                                  | keep my contacts organised                                       |
-| `* *`    | user     | assign one contact to multiple categories            | represent contacts with different areas of expertise             |
+| Priority | As a …           | I want to …                                                 | So that I can…                                       |
+|----------|------------------|-------------------------------------------------------------|------------------------------------------------------|
+| `* * *`  | new user         | view a user guide                                           | understand how to use ContactFind                    |
+| `* *`    | new user         | learn about the main functions                              | navigate through the features                        |
+| `* *`    | new user         | start using the app without much setup                      | begin managing my contacts quickly                   |
+| `* * *`  | user             | add a new contact                                           | keep track of people I meet                          |
+| `* * *`  | user             | record essential information such as email and phone number | identify and reach people in my contacts easily      |
+| `* * *`  | user             | update a contact's information                              | keep my contacts manageable and up to date           |
+| `* * *`  | user             | set a follow-up date for a contact                          | avoid missing follow-ups with clients                |
+| `* * *`  | user             | find a contact by name, company or role                     | quickly identify relevant contacts                   |
+| `* *`    | user             | categorise contacts                                         | keep my contacts organised                           |
+| `* *`    | user             | assign one contact to multiple tags                         | represent contacts with different areas of expertise |
+| `* * *`  | user             | delete contact with name, email, phone, or index            | keep my contacts updated                             |
+| `* *`    | experienced user | bulk delete contacts with same company or role              | quickly keep my contacts relevant                    |
+
 
 *{More to be added}*
 
@@ -382,10 +385,10 @@ Use case ends.
 
 **MSS**
 
-1.  User requests to list persons
-2.  ContactFind shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  ContactFind deletes the person
+1.  User requests to list contacts
+2.  ContactFind shows the contact list
+3.  User requests to delete a listed contact
+4.  ContactFind deletes the contact and shows a confirmation
 
     Use case ends.
 
@@ -395,13 +398,67 @@ Use case ends.
 
   Use case ends.
 
-* 3a. The given index is invalid.
+* 3a. The user identifies an invalid listed contact.
 
     * 3a1. ContactFind shows an error message.
 
       Use case resumes at step 2.
 
-**Use case: Assign a contact to a category**
+* 3b. The user requests to delete a contact by the exact name, phone number, or email address of an existing contact.
+
+    * 3b1. ContactFind finds the contact and deletes it.
+
+      Use case ends.
+
+* 3c. The user requests to delete a contact by an exact name, phone number, or email address that does not belong to a contact.
+
+    * 3c1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+* 3d. The user requests to delete contacts with an exact role or company that matches one or more contacts.
+
+    * 3d1. ContactFind shows only the matching contacts without deleting them.
+    * 3d2. User requests to delete all contacts in the preview.
+    * 3d3. ContactFind deletes every contact in the preview.
+
+      Use case ends.
+
+* 3e. The user requests to delete contacts with an exact role or company that matches one or more contacts.
+
+    * 3e1. ContactFind shows only the matching contacts without deleting them.
+    * 3e2. The user requests to delete a contact with an exact name, phone number, email address, or index.
+    * 3e3. ContactFind deletes the requested contact.
+
+      Use case ends.
+
+* 3f. The user requests to delete contacts with an exact role or company.
+
+    * 3f1. ContactFind shows only the matching contacts without deleting them.
+    * 3f2. User requests to delete contact that is not displayed.
+    * 3f3. ContactFind shows an error message.
+
+      Use case ends.
+
+* 3h. The user requests to delete contacts with an exact role or company that matches no contacts.
+
+    * 3h1. ContactFind shows no matching contacts and an error message.
+
+      Use case ends.
+
+* 3i. The user requests to delete contacts with an exact follow-up date.
+
+    * 3i1. ContactFind deletes every contact with that follow-up date in the displayed list.
+
+      Use case ends.
+
+* 3j. The user requests to delete contacts using a follow-up date that no displayed contact has.
+
+    * 3j1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+**Use case: Assign tags to a contact**
 
 MSS
 
@@ -634,22 +691,68 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases … }_
 
-### Deleting a person
+### Deleting contacts
 
-1. Deleting a person while all persons are being shown
+1. Prepare predictable contacts. Enter each command separately:
+
+   ```text
+   clear
+   add n/Alex Tan p/90000001 e/alex.tan@example.com a/1 Alpha Road rl/Analyst com/Orion Bank fd/2026-10-20
+   add n/Blair Lim p/90000002 e/blair.lim@example.com a/2 Beta Road rl/Analyst com/Orion Bank fd/2026-10-20
+   add n/Casey Ng p/90000003 e/casey.ng@example.com a/3 Cedar Road rl/Associate com/Zenith Group fd/2026-10-21
+   add n/Drew Koh p/90000004 e/drew.koh@example.com a/4 Delta Road rl/Analyst com/Zenith Group fd/2026-10-22
+   add n/Evan Goh p/90000005 e/evan.goh@example.com a/5 Elm Road rl/Director com/Nova Capital fd/2026-10-25
+   ```
+
+   Expected: Five contacts are displayed. The data deliberately provides two
+   matching-company contacts, an additional `Analyst`, and distinct follow-up dates.
+
+1. Previewing a company before bulk deletion
+
+   1. Test case: `delete com/Orion Bank`<br>
+      Expected: Only Alex and Blair are displayed; neither is deleted.
+
+   2. Test case: after the company preview, enter `delete p/90000003`.<br>
+      Expected: The command is rejected because Casey is outside the active preview; the two displayed contacts remain unchanged.
+
+   3. Test case: enter `delete com/Orion Bank`, then `delete 1`. 
+      Expected: Alex is deleted first. Blair remains in the active preview.
+   
+   4. Test case: enter `undo`, enter `delete com/Orion`.
+      Expected: The command is rejected because Orion keyword is incomplete. 
+
+2. Deleting by an exact identifier
+
+   1. Prerequisites: Restore the prepared contacts above.
+
+   2. Test case: `delete n/Casey Ng`.<br>
+      Expected: Casey is deleted immediately and identified in the status message.
+
+   3. Test case: after `list`, enter `delete p/90000004`.<br>
+      Expected: Drew is deleted and identified in the status message.
+
+3. Deleting displayed contacts with a follow-up date
+
+   1. Prerequisites: Restore the prepared contacts above and enter `list`.
+
+   2. Test case: `delete fd/2026-10-25`<br>
+      Expected: Evan is deleted immediately. Drew remains, demonstrating that only contacts with the exact follow-up date are removed.
+
+   3. Other incorrect commands to try: `delete com/Orion` and `delete fd/2026-10-99`.<br>
+      Expected: No contact is deleted. The status message shows an error.
+
+4. Deleting a contact while all contacts are being shown
 
    1. Prerequisites: List all persons using the `list` command, with multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
-      Expected: The first contact is deleted from the list. The status message shows the deleted contact's details.
+   2. Test case: `delete 1`<br>
+      Expected: The first contact is deleted from the list. The status message shows the deleted contact’s details.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. The status message shows error details.
+   3. Test case: `delete 0`<br>
+      Expected: No person is deleted. The status message shows an error.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
-
-1. _{ more test cases … }_
+   4. Other incorrect commands to try: `delete`, `delete x`, and an index larger than the list size.<br>
+      Expected: No person is deleted. The status message shows an error.
 
 ### Saving data
 

@@ -40,7 +40,7 @@ import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 
 /**
- * Edits the details of an existing person in the address book.
+ * Edits the details of an existing contact in the address book.
  */
 public class EditCommand extends Command {
 
@@ -65,7 +65,7 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Contact: %1$s";
     public static final String MESSAGE_NOT_EDITED =
-            "At least one field to edit must be provided (e.g., p/, e/, rl/, com/, b/).";
+            "At least one field to edit must be provided (e.g. p/, e/, rl/, com/, b/).";
     public static final String MESSAGE_DUPLICATE_PERSON =
             "Error: An existing contact already uses this name. "
                     + "Duplicate entries are not allowed.";
