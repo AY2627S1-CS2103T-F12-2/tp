@@ -110,7 +110,7 @@ Category | One of `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`,
 
 <box type="info" seamless>
 
-**Note:** Two contacts with exactly the same name are treated as duplicates. ContactFind will not let you add a contact, or edit a contact's name, if another contact already has that name.
+**Note:** Contact names must be unique, regardless of letter case. For example, `Alice Tan` and `alice tan` are duplicates. ContactFind rejects an `add` or `edit` command if its name belongs to another contact. You can still change the capitalization of a contact's own name. If your existing `data/addressbook.json` contains case-only duplicates, resolve them before opening it with this version; ContactFind cannot load that file until the names are unique.
 </box>
 
 ### Viewing help: `help`
