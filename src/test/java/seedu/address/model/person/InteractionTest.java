@@ -12,21 +12,19 @@ public class InteractionTest {
     @Test
     public void constructor_anyNull_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () ->
-                new Interaction(null, "2026-10-20", InteractionType.CALL, "Note"));
+                new Interaction(null, InteractionType.CALL, "Note"));
         assertThrows(NullPointerException.class, () ->
-                new Interaction("Peter Tan", null, InteractionType.CALL, "Note"));
+                new Interaction("2026-10-20", null, "Note"));
         assertThrows(NullPointerException.class, () ->
-                new Interaction("Peter Tan", "2026-10-20", null, "Note"));
-        assertThrows(NullPointerException.class, () ->
-                new Interaction("Peter Tan", "2026-10-20", InteractionType.CALL, null));
+                new Interaction("2026-10-20", InteractionType.CALL, null));
     }
 
     @Test
-    public void constructor_invalidName_throwsIllegalArgumentException() {
+    public void constructor_invalidDate_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () ->
-                new Interaction("", "2026-10-20", InteractionType.CALL, "Note"));
+                new Interaction("", InteractionType.CALL, "Note"));
         assertThrows(IllegalArgumentException.class, () ->
-                new Interaction("invalid-name", "2026-10-20", InteractionType.CALL, "Note"));
+                new Interaction("2026-02-30", InteractionType.CALL, "Note"));
     }
 
     @Test
@@ -53,30 +51,26 @@ public class InteractionTest {
     @Test
     public void equals() {
         Interaction interaction =
-                new Interaction("Alice Pauline", "2026-10-20", InteractionType.CALL, "Discussed proposal");
+                new Interaction("2026-10-20", InteractionType.CALL, "Discussed proposal");
 
         // same object -> returns true
         assertTrue(interaction.equals(interaction));
 
         // same values -> returns true
         assertTrue(interaction.equals(
-                new Interaction("Alice Pauline", "2026-10-20", InteractionType.CALL, "Discussed proposal")));
-
-        // different name -> returns false
-        assertFalse(interaction.equals(
-                new Interaction("Bob Ross", "2026-10-20", InteractionType.CALL, "Discussed proposal")));
+                new Interaction("2026-10-20", InteractionType.CALL, "Discussed proposal")));
 
         // different date -> returns false
         assertFalse(interaction.equals(
-                new Interaction("Alice Pauline", "2026-10-21", InteractionType.CALL, "Discussed proposal")));
+                new Interaction("2026-10-21", InteractionType.CALL, "Discussed proposal")));
 
         // different type -> returns false
         assertFalse(interaction.equals(
-                new Interaction("Alice Pauline", "2026-10-20", InteractionType.EMAIL, "Discussed proposal")));
+                new Interaction("2026-10-20", InteractionType.EMAIL, "Discussed proposal")));
 
         // different note -> returns false
         assertFalse(interaction.equals(
-                new Interaction("Alice Pauline", "2026-10-20", InteractionType.CALL, "Different note")));
+                new Interaction("2026-10-20", InteractionType.CALL, "Different note")));
 
         // null -> returns false
         assertFalse(interaction.equals(null));
@@ -88,9 +82,9 @@ public class InteractionTest {
     @Test
     public void toStringMethod() {
         Interaction interaction =
-                new Interaction("Alice Pauline", "2026-10-20", InteractionType.CALL, "Discussed proposal");
+                new Interaction("2026-10-20", InteractionType.CALL, "Discussed proposal");
 
-        String expected = "Interaction with: Alice Pauline, Date: 2026-10-20, "
+        String expected = "Date: 2026-10-20, "
                 + "Type: CALL, Note: Discussed proposal";
 
         assertEquals(expected, interaction.toString());

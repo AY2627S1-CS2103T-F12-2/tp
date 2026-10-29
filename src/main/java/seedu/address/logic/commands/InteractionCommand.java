@@ -54,7 +54,7 @@ public class InteractionCommand extends Command {
         if (!Interaction.isValidDate(date)) {
             throw new CommandException(Interaction.MESSAGE_INVALID_DATE);
         }
-        Interaction interaction = new Interaction(original.getName().fullName, date, type, note);
+        Interaction interaction = new Interaction(date, type, note);
         List<Interaction> history = new ArrayList<>(original.getInteractions());
         history.add(interaction);
         Person updated = new Person(original.getName(), original.getPhone(), original.getEmail(),
