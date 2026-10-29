@@ -12,6 +12,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
@@ -61,6 +62,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane dashboardPlaceholder;
+
+    @FXML
+    private VBox personList;
 
     /**
      * Creates a {@code MainWindow} with the given {@code Stage}, {@code Logic},
@@ -235,8 +239,8 @@ public class MainWindow extends UiPart<Stage> {
         dashboardPlaceholder.getChildren().setAll(contactDashboardPanel.getRoot());
         dashboardPlaceholder.setVisible(true);
         dashboardPlaceholder.setManaged(true);
-        personListPanelPlaceholder.setVisible(false);
-        personListPanelPlaceholder.setManaged(false);
+        personList.setVisible(false);
+        personList.setManaged(false);
         commandBoxPlaceholder.setVisible(false);
         commandBoxPlaceholder.setManaged(false);
         resultDisplayPlaceholder.setVisible(false);
@@ -249,8 +253,8 @@ public class MainWindow extends UiPart<Stage> {
         dashboardVisible = false;
         dashboardPlaceholder.setVisible(false);
         dashboardPlaceholder.setManaged(false);
-        personListPanelPlaceholder.setVisible(true);
-        personListPanelPlaceholder.setManaged(true);
+        personList.setVisible(true);
+        personList.setManaged(true);
         commandBoxPlaceholder.setVisible(true);
         commandBoxPlaceholder.setManaged(true);
         resultDisplayPlaceholder.setVisible(true);
