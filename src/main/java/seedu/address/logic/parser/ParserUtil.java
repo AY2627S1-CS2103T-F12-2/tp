@@ -164,11 +164,11 @@ public class ParserUtil {
      */
     public static Role parseRole(String role) throws ParseException {
         requireNonNull(role);
-        String trimmedRole = role.trim();
-        if (!Role.isValidRole(trimmedRole)) {
+        String normalizedRole = role.trim().replaceAll(" +", " ");
+        if (!Role.isValidRole(normalizedRole)) {
             throw new ParseException(Role.MESSAGE_CONSTRAINTS);
         }
-        return new Role(trimmedRole);
+        return new Role(normalizedRole);
     }
 
     /** Parses a role for the edit command. */
@@ -187,11 +187,11 @@ public class ParserUtil {
      */
     public static Company parseCompany(String company) throws ParseException {
         requireNonNull(company);
-        String trimmedCompany = company.trim();
-        if (!Company.isValidCompanyName(trimmedCompany)) {
+        String normalizedCompany = company.trim().replaceAll(" +", " ");
+        if (!Company.isValidCompanyName(normalizedCompany)) {
             throw new ParseException(Company.MESSAGE_CONSTRAINTS);
         }
-        return new Company(trimmedCompany);
+        return new Company(normalizedCompany);
     }
 
     /** Parses a company for the edit command. */
