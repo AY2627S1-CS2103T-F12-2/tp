@@ -5,7 +5,7 @@
 
 .list-cell:empty {
     /* Empty cells will not have alternating colours */
-    -fx-background: #383838;
+    -fx-background: #202f3d;
 }
 
 .tag-selector {
@@ -17,4 +17,301 @@
 
 .tooltip-text {
     -fx-text-fill: white;
+}
+
+.app-header {
+    -fx-background-color: #182735;
+    -fx-padding: 8 14 8 14;
+}
+
+.app-header-title {
+    -fx-font-family: "Arial";
+    -fx-font-size: 20px;
+    -fx-font-style: normal;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e1dcf4;
+}
+
+.cli-icon {
+    -fx-font-family: "Arial";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #aaa0e2;
+}
+
+.dashboard-card {
+    -fx-background-color: #403b5a;
+    -fx-border-color: #756bb0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
+.dashboard-card-index,
+.dashboard-card-name {
+    -fx-font-family: "Arial";
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-text-fill: #f1eeff;
+}
+
+.dashboard-card-name {
+    -fx-font-size: 17px;
+}
+
+.dashboard-card-detail,
+.dashboard-card-follow-up {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-text-fill: #e1dcf4;
+}
+
+.dashboard-card-category {
+    -fx-background-color: #756bb0;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-padding: 3 8 3 8;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-text-fill: white;
+}
+
+.list-cell .dashboard-overdue-date {
+    -fx-font-weight: bold;
+    -fx-text-fill: #ff5b5b;
+}
+
+.list-cell .dashboard-upcoming-date {
+    -fx-font-weight: bold;
+    -fx-text-fill: #f4d35e;
+}
+
+/* Main contact cards */
+.list-cell:filled {
+    -fx-background-color: transparent;
+    -fx-padding: 6 8;
+}
+
+.list-cell #cardPane {
+    -fx-background-color: #403b5a;
+    -fx-border-color: #756bb0;
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
+.list-cell:filled:selected #cardPane {
+    -fx-border-color: #aaa0e2;
+    -fx-border-width: 2;
+}
+
+.list-cell #cardPane .cell_big_label {
+    -fx-font-family: "Arial";
+    -fx-font-size: 17px;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-text-fill: #f1eeff;
+}
+
+.list-cell #cardPane .cell_small_label {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-font-style: normal;
+    -fx-font-weight: normal;
+    -fx-text-fill: #e1dcf4;
+}
+
+.list-cell #cardPane .category-label,
+.list-cell #cardPane #tags .label {
+    -fx-background-color: #756bb0;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-text-fill: white;
+}
+
+/* Two-pane overview */
+.main-content {
+    -fx-background-color: #182735;
+}
+
+.contacts-pane-title {
+    -fx-font-family: "Arial";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #f1eeff;
+}
+
+.overview-container {
+    -fx-background-color: #202f3d;
+    -fx-border-color: #53627a;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+}
+
+.overview-pane {
+    -fx-background-color: #202f3d;
+    -fx-background-radius: 16;
+}
+
+.overview-title {
+    -fx-font-family: "Arial";
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #f1eeff;
+}
+
+.overview-subtitle {
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-font-style: normal;
+    -fx-text-fill: #b8b0d0;
+}
+
+.overview-section-title {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #d8d0f0;
+}
+
+.overview-stat-card {
+    -fx-background-color: #403b5a;
+    -fx-border-color: #756bb0;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-padding: 12;
+}
+
+.overview-stat-label {
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-font-style: normal;
+    -fx-text-fill: #d8d0f0;
+}
+
+.overview-stat-number {
+    -fx-font-family: "Arial";
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #ffffff;
+}
+
+.overview-category-row {
+    -fx-background-color: #29304e;
+    -fx-background-radius: 8;
+    -fx-padding: 7 10 7 10;
+}
+
+.overview-category-name {
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-font-style: normal;
+    -fx-text-fill: #d8d0f0;
+}
+
+.overview-category-count {
+    -fx-font-family: "Arial";
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #ffffff;
+}
+
+.overview-scroll-pane,
+.overview-scroll-pane > .viewport,
+.overview-deadline-list {
+    -fx-background-color: transparent;
+}
+
+.overview-scroll-pane {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+.overview-deadline-list {
+    -fx-padding: 0;
+}
+
+/* Tinder-style corporate contact cards */
+.list-cell #cardPane.contact-card {
+    -fx-background-color: #403b5a;
+    -fx-border-color: #756bb0;
+    -fx-border-width: 1;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+}
+
+.list-cell #cardPane.contact-card:hover {
+    -fx-border-color: #aaa0e2;
+}
+
+.contact-card-index {
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #aaa0e2;
+}
+
+.contact-card-name {
+    -fx-font-family: "Arial";
+    -fx-font-size: 23px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #ffffff;
+}
+
+.contact-card-company {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-font-style: normal;
+    -fx-text-fill: #c8c0e2;
+}
+
+.contact-card-detail,
+.contact-card-follow-up,
+.contact-card-remark {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-font-style: normal;
+    -fx-text-fill: #e1dcf4;
+}
+
+.contact-card-follow-up {
+    -fx-font-weight: bold;
+}
+
+.contact-card-remark {
+    -fx-text-fill: #b8b0d0;
+}
+
+.contact-card-category {
+    -fx-background-color: #756bb0;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-padding: 5 10 5 10;
+    -fx-text-fill: #ffffff;
+}
+
+.contact-card-tags .label {
+    -fx-background-color: #5b548a;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-family: "Arial";
+    -fx-font-size: 11px;
+    -fx-font-style: normal;
+    -fx-padding: 3 8 3 8;
+    -fx-text-fill: #f1eeff;
 }
