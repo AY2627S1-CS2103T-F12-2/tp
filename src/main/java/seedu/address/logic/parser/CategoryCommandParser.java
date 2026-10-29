@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY;
 
+import java.util.Locale;
+
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.CategoryCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -44,13 +46,15 @@ public class CategoryCommandParser implements Parser<CategoryCommand> {
 
         String categoryFieldInput = argMultimap.getValue(PREFIX_CATEGORY).get();
 
-        //exception if category is not found within category list
-        try {
-            Category category = Category.valueOf(categoryFieldInput.toUpperCase());
-            return new CategoryCommand(index, category);
-        } catch (IllegalArgumentException e) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CategoryCommand.MESSAGE_USAGE), e);
+        if (categoryFieldInput.isBlank()) {
+            throw new ParseException(Category.MESSAGE_EMPTY_CATEGORY);
         }
+        if (!Category.isValidCategory(categoryFieldInput)) {
+            throw new ParseException(Category.MESSAGE_CONSTRAINTS);
+        }
+
+        Category category = Category.valueOf(categoryFieldInput.toUpperCase(Locale.ROOT));
+        return new CategoryCommand(index, category);
 
     }
 
