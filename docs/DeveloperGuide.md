@@ -326,9 +326,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user             | assign one contact to multiple tags                         | represent contacts with different areas of expertise |
 | `* * *`  | user             | delete contact with name, email, phone, or index            | keep my contacts updated                             |
 | `* *`    | experienced user | bulk delete contacts with same company or role              | quickly keep my contacts relevant                    |
-
-
-*{More to be added}*
+| `* *`    | detail-oriented user | add, update, or remove a remark for a contact            | retain useful context about the relationship         |
+| `* * *`  | relationship-focused user | log an interaction with a contact                  | keep a record of my communications                   |
+| `* *`    | busy user        | view interactions across my contacts                        | review my recent relationship activity               |
+| `* *`    | organised user   | view the number of contacts in each category                | understand how my contacts are distributed           |
+| `* *`    | time-conscious user | sort contacts by their follow-up date                    | prioritise the people I need to contact next         |
+| `* *`    | user restarting their contact list | clear all contacts                            | start again with an empty contact list               |
+| `* *`    | cautious user    | undo or redo a recent change                                | recover from mistakes without re-entering data       |
+| `* *`    | cautious user    | save a checkpoint before making changes                     | return to a known contact-list state                 |
+| `* *`    | well-connected user | record a contact's manager                               | keep track of reporting relationships                |
+| `* *`    | privacy-conscious user | have my contact data saved locally and automatically | keep it private and avoid losing updates             |
 
 ### Use cases
 (For all use cases below, the **System** is `ContactFind` and the **Actor** is the `user`, unless specified otherwise)
