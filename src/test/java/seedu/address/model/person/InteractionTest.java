@@ -40,6 +40,12 @@ public class InteractionTest {
 
         // invalid dates
         assertFalse(Interaction.isValidDate("2026-13-45")); // invalid month and day
+        assertFalse(Interaction.isValidDate("-0001-01-01"));
+        assertFalse(Interaction.isValidDate("+10000-01-01"));
+        assertFalse(Interaction.isValidDate("2025-02-29"));
+        assertTrue(Interaction.isValidDate("2024-02-29"));
+        assertTrue(Interaction.isValidDate("0000-01-01"));
+        assertTrue(Interaction.isValidDate("9999-12-31"));
         assertTrue(Interaction.isValidDate("2026-10-20"));
     }
 

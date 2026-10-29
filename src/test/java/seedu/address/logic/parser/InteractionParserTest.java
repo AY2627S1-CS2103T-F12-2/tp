@@ -24,10 +24,15 @@ public class InteractionParserTest {
     @Test
     public void parse_invalidDate_throwsParseException() {
         assertThrows(ParseException.class, () -> parser.parse("1 d/2026-02-30 ty/MEETING nt/Discussed proposal"));
+        assertThrows(ParseException.class, () -> parser.parse("1 d/-0001-01-01 ty/MEETING"));
+        assertThrows(ParseException.class, () -> parser.parse("1 d/+10000-01-01 ty/MEETING"));
     }
 
     @Test
-    public void parse_missingNote_throwsParseException() {
-        assertThrows(ParseException.class, () -> parser.parse("1 d/2026-10-20 ty/MEETING"));
+    public void parse_optionalNote_createsCommand() throws ParseException {
+        InteractionCommand expected = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-20", InteractionType.MEETING, "");
+        assertEquals(expected, parser.parse("1 d/2026-10-20 ty/MEETING"));
+        assertEquals(expected, parser.parse("1 d/2026-10-20 ty/MEETING nt/   "));
     }
 }
