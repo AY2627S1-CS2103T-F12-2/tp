@@ -401,34 +401,85 @@ Use case ends.
 
       Use case resumes at step 2.
 
-**Use case: Assign tags to a contact**
+**Use case: Assign a contact to a category**
 
 MSS
 
-1. User requests to list contacts.
-2. ContactFind shows a list of contacts.
-3. User requests to assign one or more tags (e.g. priority, or specialization) to a specific contact in the list.
-4. ContactFind updates the contact with the specified tag(s).
+1. User requests to assign a category (e.g. INVESTOR, CLIENT) to a contact.
+2. ContactFind updates the contact with the specified category.
 
-   Use case ends.
+    Use case ends.
 
 Extensions
 
-* 2a. The contacts list is empty.
+* 1a. The given index is invalid.
 
-   Use case ends.
-
-* 3a. The given index is invalid.
-
-   * 3a1. ContactFind shows an error message.
+   * 1a1. ContactFind shows an error message.
 
       Use case resumes at step 2.
 
-* 3b. The specified tag format or syntax is invalid.
+* 1b. The specified category format or syntax is invalid.
 
-   * 3b1. ContactFind shows an error message.
+   * 1b1. ContactFind shows an error message.
 
       Use case resumes at step 2.
+
+**Use case: List categories**
+
+MSS
+
+1. User requests to view category counts using `categories`.
+2. ContactFind shows all categories and the number of contacts in each category.
+
+    Use case ends.
+
+Extensions
+
+* 2a. The contact list is empty.
+
+   * 2a1. ContactFind shows all categories with zero counts.
+
+      Use case ends.
+
+**Use case: Log an interaction**
+
+MSS
+
+1. User requests to log an interaction with a contact using `interaction`.
+2. ContactFind adds the interaction to the contact's history.
+
+    Use case ends.
+
+Extensions
+
+* 1a. The given index is invalid.
+
+   * 1a1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+* 1b. The specified interaction details or command syntax are invalid.
+
+   * 1b1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+**Use case: List interactions**
+
+MSS
+
+1. User requests to view recorded interactions using `interactions`.
+2. ContactFind shows recorded interactions across all contacts.
+
+    Use case ends.
+
+Extensions
+
+* 2a. No interactions have been recorded.
+
+   * 2a1. ContactFind shows a message indicating that no interactions are recorded.
+
+      Use case ends.
 
 **Use case: View usage instructions**
 
