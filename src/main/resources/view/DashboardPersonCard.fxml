@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox id="dashboardCardPane" fx:id="cardPane" spacing="12" styleClass="dashboard-card"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+  <padding>
+    <Insets top="10" right="14" bottom="10" left="14" />
+  </padding>
+  <VBox spacing="3" HBox.hgrow="ALWAYS">
+    <HBox spacing="4" alignment="CENTER_LEFT">
+      <Label fx:id="id" styleClass="dashboard-card-index" />
+      <Label fx:id="name" styleClass="dashboard-card-name" />
+    </HBox>
+    <Label fx:id="company" styleClass="dashboard-card-detail" />
+    <Label fx:id="role" styleClass="dashboard-card-detail" />
+    <Label fx:id="followUpDate" styleClass="dashboard-card-follow-up" />
+  </VBox>
+  <Label fx:id="category" styleClass="dashboard-card-category" />
+</HBox>

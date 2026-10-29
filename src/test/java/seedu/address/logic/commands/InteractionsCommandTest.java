@@ -33,10 +33,8 @@ public class InteractionsCommandTest {
     @Test
     public void execute_filteredList_showsAllInteractionsWithoutChangingModel() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        Interaction aliceInteraction = new Interaction(ALICE.getName().fullName,
-                "2026-10-20", InteractionType.MEETING, "Discussed proposal");
-        Interaction bensonInteraction = new Interaction(BENSON.getName().fullName,
-                "2026-10-21", InteractionType.CALL, "Followed up");
+        Interaction aliceInteraction = new Interaction("2026-10-20", InteractionType.MEETING, "Discussed proposal");
+        Interaction bensonInteraction = new Interaction("2026-10-21", InteractionType.CALL, "Followed up");
         Person updatedAlice = new PersonBuilder(ALICE).withInteractions(List.of(aliceInteraction)).build();
         Person updatedBenson = new PersonBuilder(BENSON).withInteractions(List.of(bensonInteraction)).build();
         model.setPerson(ALICE, updatedAlice);
@@ -46,7 +44,8 @@ public class InteractionsCommandTest {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
         String expectedMessage = String.format(InteractionsCommand.MESSAGE_SUCCESS,
-                aliceInteraction + "\n" + bensonInteraction);
+                "Interaction with: " + ALICE.getName() + ", " + aliceInteraction
+                        + "\nInteraction with: " + BENSON.getName() + ", " + bensonInteraction);
 
         assertCommandSuccess(new InteractionsCommand(), model, expectedMessage, expectedModel);
     }

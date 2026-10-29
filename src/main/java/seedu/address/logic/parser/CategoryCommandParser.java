@@ -49,13 +49,13 @@ public class CategoryCommandParser implements Parser<CategoryCommand> {
         if (categoryFieldInput.isBlank()) {
             throw new ParseException(Category.MESSAGE_EMPTY_CATEGORY);
         }
+
         if (!Category.isValidCategory(categoryFieldInput)) {
             throw new ParseException(Category.MESSAGE_CONSTRAINTS);
         }
 
         Category category = Category.valueOf(categoryFieldInput.toUpperCase(Locale.ROOT));
         return new CategoryCommand(index, category);
-
     }
 
 }

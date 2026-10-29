@@ -13,8 +13,8 @@ import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
 
 /** Tests parsing of interaction commands. */
-public class InteractionParserTest {
-    private final InteractionParser parser = new InteractionParser();
+public class InteractionCommandParserTest {
+    private final InteractionCommandParser parser = new InteractionCommandParser();
 
     @Test
     public void parse_validInput_createsCommand() throws ParseException {
@@ -25,8 +25,14 @@ public class InteractionParserTest {
 
     @Test
     public void parse_invalidDate_throwsParseException() {
-        assertParseFailure(parser, "1 d/2026-02-30 ty/MEETING nt/Discussed proposal", Interaction.MESSAGE_INVALID_DATE);
-        assertParseFailure(parser, "1 d/ ty/MEETING nt/Discussed proposal", Interaction.MESSAGE_INVALID_DATE);
+        assertParseFailure(parser, "1 d/2026-02-30 ty/MEETING nt/Discussed proposal",
+                Interaction.MESSAGE_INVALID_DATE);
+        assertParseFailure(parser, "1 d/ ty/MEETING nt/Discussed proposal",
+                Interaction.MESSAGE_INVALID_DATE);
+        assertParseFailure(parser, "1 d/-0001-01-01 ty/MEETING",
+                Interaction.MESSAGE_INVALID_DATE);
+        assertParseFailure(parser, "1 d/+10000-01-01 ty/MEETING",
+                Interaction.MESSAGE_INVALID_DATE);
     }
 
     @Test

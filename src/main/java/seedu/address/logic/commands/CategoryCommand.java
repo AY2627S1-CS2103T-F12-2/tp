@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_CATEGORY;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
+import java.util.Objects;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -25,6 +26,7 @@ public class CategoryCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Places the person identified by the index number used in the displayed person list into a category\n"
+            + "Valid categories: UNCATEGORIZED, CLIENT, INVESTOR, LAWYER, ACCOUNTANT, CONSULTANT, OTHER"
             + "Parameters: INDEX (must be a positive integer) "
             + PREFIX_CATEGORY + "CATEGORY\n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_CATEGORY + "INVESTOR";
@@ -97,6 +99,11 @@ public class CategoryCommand extends Command {
 
         return targetIndex.equals(otherCategoryCommand.targetIndex)
                 && targetCategory.equals(otherCategoryCommand.targetCategory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(targetIndex, targetCategory);
     }
 
     @Override
