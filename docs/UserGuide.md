@@ -96,12 +96,12 @@ ContactFind checks every value you enter. If a value does not meet its constrain
 
 Field | Constraint                                                                                                                     | Valid example
 ------|--------------------------------------------------------------------------------------------------------------------------------|--------------
-Name | Letters only, with at least a first and last name separated by a space. When using `edit`, the name must be exactly two words. | `John Doe`
+Name | Letters only, with at least a first and last name separated by a space. | `John Doe`
 Phone number | Digits only, exactly 8 digits long.                                                                                            | `98765432`
 Email address | Must be in the form `local-part@domain`.                                                                                       | `johnd@example.com`
 Address | Any value, but must not be blank.                                                                                              | `John street, block 123, #01-01`
-Role | Letters and digits, with words separated by single spaces.                                                                     | `Vice President`
-Company | Letters and digits, with words separated by single spaces, and at least 3 characters long.                                     | `Example Bank`
+Role | Letters and digits only; surrounding and repeated spaces are normalized.                                                       | `Vice President`
+Company | Letters and digits only, at least 3 characters long; surrounding and repeated spaces are normalized.                           | `Example Bank`
 Boss | Same as Name, or empty.                                                                                                        | `Alex Smith`
 Follow-up date | A valid calendar date in exactly `yyyy-MM-dd` format, with a four-digit year.                                      | `2026-10-20`
 Tag | Letters and digits only, with no spaces.                                                                                       | `priority`
@@ -281,7 +281,7 @@ Use a role or company to preview the matching contacts before deleting them.
 Format: `delete rl/ROLE` or `delete com/COMPANY`
 
 * While a bulk-delete preview is active, `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, and `delete e/EMAIL` can delete one of the contacts in that preview instead. Enter `list` to leave the preview without deleting all of its contacts.
-* Use `delete all` to delete all contacts in the corresponding ROLE or COMPANY preview.
+* Use `delete all` to delete every contact currently displayed by the active ROLE or COMPANY preview.
 
 `delete fd/YYYY-MM-DD` is also a bulk-delete command: it immediately deletes every contact displayed in the current list whose follow-up date exactly matches the date.
 
@@ -318,15 +318,16 @@ Format: `commit`
 
 ### Undoing a change: `undo`
 
-Restores the contact-list state before the most recent saved change. Each successful contact-changing command
-automatically saves a state (except for sort.)
+Restores the contact-list state before the most recent saved change. The `add`, `edit`, `delete`, `clear`,
+`remark`, `category`, `sort`, and `commit` commands create undo checkpoints. Logged interactions are saved but do
+not currently create an undo checkpoint.
 
 Format: `undo`
 
 ### Redoing a change: `redo`
 
-Reapplies the contact-list state most recently undone. Redo is unavailable after a new contact-changing command is
-run.
+Reapplies the contact-list state most recently undone. Redo is unavailable after a command that creates an undo
+checkpoint is run.
 
 Format: `redo`
 
@@ -338,7 +339,7 @@ Format: `exit`
 
 ### Saving the data
 
-ContactFind automatically saves data after every command. You do not need to save manually.
+ContactFind automatically saves data after every successfully executed command. You do not need to save manually.
 
 ### Editing the data file
 
@@ -347,7 +348,7 @@ ContactFind data is saved automatically as a JSON file `[JAR file location]/data
 <box type="warning" seamless>
 
 **Caution:**
-If your changes make the data file invalid, ContactFind starts with an empty contact list at the next run. The invalid file remains on disk until you run a command (ContactFind saves after every command). Still, we recommend backing up the file before editing it.<br>
+If your changes make the data file invalid, ContactFind starts with an empty contact list at the next run. The invalid file remains on disk until a command completes successfully (ContactFind then saves the current data). Still, we recommend backing up the file before editing it.<br>
 Furthermore, certain edits can cause ContactFind to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
@@ -387,7 +388,7 @@ Action     | Format, Examples
 **Exit**   | `exit`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
 **Help**   | `help`
-**Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
+**Interaction** | `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 **Interactions** | `interactions`
 **List**   | `list`
 **Redo**   | `redo`
