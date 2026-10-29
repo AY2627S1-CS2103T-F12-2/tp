@@ -273,10 +273,40 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 <puml src="diagrams/CategoriesSequenceDiagram-Model.puml" width="250" />
 
-### \[Proposed\] Data archiving
+### Export feature
 
-_{Explain here how the data archiving feature will be implemented}_
+#### Implementation
 
+`export [fn/FILE_NAME]` is parsed by `ExportCommandParser`. The parser removes a trailing `.csv` (case-insensitive), uses `export` when `fn/` is omitted, and accepts only letters, digits, `-` and `_`, so the name cannot point outside the data folder (e.g. `../x`) or contain characters that are invalid on some operating systems.
+
+`ExportCommand` reads `Model#getFilteredPersonList()`, so only the contacts currently displayed are exported. It builds one CSV row per contact with `CsvUtil#toRow`, which escapes values containing commas, double quotes or line breaks. The file is then written to `data/FILE_NAME.csv` through `CsvUtil#writeCsv`, which uses `FileUtil` to create missing folders and overwrite any existing file. An `IOException` (e.g. the file is open in another program) is converted into a `CommandException`, so the user sees an error message instead of the app crashing. The model is not modified, so `export` does not create an undo state.
+
+<puml src="diagrams/ExportSequenceDiagram.puml" width="550" />
+
+#### Design considerations:
+
+**Aspect: Which contacts are exported**
+
+* **Alternative 1 (current choice):** Export the displayed (filtered) list.
+    * Pros: Users can export the intended subset by running `find` first, e.g. all contacts at one company.
+    * Cons: Users must run `list` first to export everyone.
+* **Alternative 2:** Always export every contact.
+    * Pros: Simpler to explain.
+    * Cons: Exporting a subset needs a separate filter syntax inside `export`.
+
+**Aspect: Where the file is written**
+
+* **Alternative 1 (current choice):** A fixed `data` folder, with a restricted file name.
+    * Pros: Cannot overwrite files elsewhere on the user's computer; the name is valid on every OS.
+    * Cons: Users cannot choose another folder.
+* **Alternative 2:** Accept any file path.
+    * Pros: More flexible.
+    * Cons: Needs path validation for each OS and risks overwriting unrelated files.
+
+**Aspect: Exporting interactions**
+
+Each contact can have many interactions, which do not fit in a single CSV row (one-to-many).
+Interactions export are therefore a planned enhancement, which will write to another file, `NAME-interactions.csv`, with one row per interaction.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -873,11 +903,28 @@ testers are expected to do more *exploratory* testing.
 
 3. Test case: repeat `category 3 c/CONSULTANT`.<br>
    Expected: The status message reports that Casey is already in that category; no duplicate category is created.
-              
 
 
+### Exporting contacts
 
+1. Prerequisites: Restore the prepared contacts in [Deleting contacts](#deleting-contacts), then enter `list`.
 
+2. Test case: `edit 1 a/1 Alpha Road, #02-01`, then `export fn/test`<br>
+   Expected: The status message reports 5 exported contacts and the full path of `data/test.csv`. Opening the file shows a header row and five contact rows; Alex's address stays in one column despite the comma.
+
+3. Test case: `find com/Orion Bank`, then `export fn/orion.csv`<br>
+   Expected: `data/orion.csv` is created (the `.csv` is not doubled) and contains only Alex and Blair.
+
+4. Test case: `export`<br>
+   Expected: The displayed contacts are written to `data/export.csv`.
+
+5. Test case: `export fn/my file`<br>
+   Expected: No file is created. An invalid file name error is shown.
+
+6. Test case: open `data/test.csv` in Excel (keep it open), then `export fn/test`<br>
+   Expected (Windows): An error message says the export file could not be written; the app keeps running.
+
+   
 ### Saving data
 
 1. Dealing with missing/corrupted data files
