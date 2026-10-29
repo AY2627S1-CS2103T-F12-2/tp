@@ -73,22 +73,24 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
 Use a prefix immediately before its value. Not every prefix is accepted by every command; refer to each command's format.
 
-Prefix | Field | Used by
--------|-------|--------
-`n/` | Name | `add`, `edit`, `find`, `delete`
-`p/` | Phone number | `add`, `edit`, `delete`
-`e/` | Email address | `add`, `edit`, `delete`
-`a/` | Address | `add`, `edit`
-`rl/` | Role | `add`, `edit`, `find`, `delete` (preview)
-`com/` | Company | `add`, `edit`, `find`, `delete` (preview)
-`b/` | Boss | `add`, `edit`
-`fd/` | Follow-up date | `add`, `edit`, `find`, `delete`, `sort`
-`t/` | Tag | `add`, `edit`
-`r/` | Remark | `remark`
-`c/` | Category | `category`
+Prefix | Field            | Used by
+-------|------------------|--------
+`n/` | Name             | `add`, `edit`, `find`, `delete`
+`p/` | Phone number     | `add`, `edit`, `delete`
+`e/` | Email address    | `add`, `edit`, `delete`
+`a/` | Address          | `add`, `edit`
+`rl/` | Role             | `add`, `edit`, `find`, `delete` (preview)
+`com/` | Company          | `add`, `edit`, `find`, `delete` (preview)
+`b/` | Boss             | `add`, `edit`
+`fd/` | Follow-up date   | `add`, `edit`, `find`, `delete`, `sort`
+`t/` | Tag              | `add`, `edit`
+`r/` | Remark           | `remark`
+`c/` | Category         | `category`
 `d/` | Interaction date | `interaction`
 `ty/` | Interaction type | `interaction`
 `nt/` | Interaction note | `interaction`
+`fn/` | File name        | `export`
+
 
 ### Field constraints
 
@@ -330,6 +332,24 @@ run.
 
 Format: `redo`
 
+### Exporting contacts: `export`
+
+Exports all contacts from ContactFind to a CSV file.
+
+Format: `export`, `export fn/FILENAME`
+
+All keyword parameters must be exact; partial keywords are not supported.
+
+* `export` exports all contacts to "export.csv" located in the data folder.
+* `export fn/FILENAME` exports all contacts to "FILENAME.CSV" in the data folder.
+* FILENAME can only contain alphanumeric characters, dash and underscore.
+* Trailing ".csv" characters in the input file name will be automatically truncated.
+
+Examples:
+* `export` (default)
+* `export fn/favorites`
+* `export fn/important.csv`
+
 ### Exiting the program: `exit`
 
 Exits the program.
@@ -385,6 +405,7 @@ Action     | Format, Examples
 **Delete** | `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, or `delete e/EMAIL` delete one contact; `delete rl/ROLE` or `delete com/COMPANY` preview an exact-match scope; `delete all` deletes that active scope; `delete fd/YYYY-MM-DD` deletes every displayed contact with that date.<br> e.g., `delete com/Example Bank`, then `delete all`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
+**Export**   | `export`, `export fn/FILENAME`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
 **Help**   | `help`
 **Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
