@@ -17,6 +17,7 @@ import seedu.address.logic.commands.CommitCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.InteractionCommand;
@@ -62,13 +63,16 @@ public class AddressBookParser {
 
         return switch (commandWord) {
             case AddCommand.COMMAND_WORD -> new AddCommandParser().parse(arguments);
-            case EditCommand.COMMAND_WORD -> new EditCommandParser().parse(arguments);
-            case DeleteCommand.COMMAND_WORD -> new DeleteCommandParser().parse(arguments);
+            case CategoryCommand.COMMAND_WORD -> new CategoryCommandParser().parse(arguments);
+            case CategoriesCommand.COMMAND_WORD -> new CategoriesCommand();
             case ClearCommand.COMMAND_WORD -> new ClearCommand();
             case CommitCommand.COMMAND_WORD -> new CommitCommand();
+            case DeleteCommand.COMMAND_WORD -> new DeleteCommandParser().parse(arguments);
+            case EditCommand.COMMAND_WORD -> new EditCommandParser().parse(arguments);
+            case ExitCommand.COMMAND_WORD -> new ExitCommand();
+            case ExportCommand.COMMAND_WORD -> new ExportCommandParser().parse(arguments);
             case FindCommand.COMMAND_WORD -> new FindCommandParser().parse(arguments);
             case ListCommand.COMMAND_WORD -> new ListCommand();
-            case ExitCommand.COMMAND_WORD -> new ExitCommand();
             case HelpCommand.COMMAND_WORD -> new HelpCommand();
             case RemarkCommand.COMMAND_WORD -> new RemarkCommandParser().parse(arguments);
             case InteractionCommand.COMMAND_WORD -> new InteractionCommandParser().parse(arguments);
@@ -76,8 +80,7 @@ public class AddressBookParser {
             case UndoCommand.COMMAND_WORD -> new UndoCommand();
             case RedoCommand.COMMAND_WORD -> new RedoCommand();
             case SortCommand.COMMAND_WORD -> new SortCommandParser().parse(arguments);
-            case CategoryCommand.COMMAND_WORD -> new CategoryCommandParser().parse(arguments);
-            case CategoriesCommand.COMMAND_WORD -> new CategoriesCommand();
+
             default -> {
                 logger.finer("This user input caused a ParseException: " + userInput);
                 throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

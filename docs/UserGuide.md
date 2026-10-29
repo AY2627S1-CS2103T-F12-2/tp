@@ -73,22 +73,24 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
 Use a prefix immediately before its value. Not every prefix is accepted by every command; refer to each command's format.
 
-Prefix | Field | Used by
--------|-------|--------
-`n/` | Name | `add`, `edit`, `find`, `delete`
-`p/` | Phone number | `add`, `edit`, `delete`
-`e/` | Email address | `add`, `edit`, `delete`
-`a/` | Address | `add`, `edit`
-`rl/` | Role | `add`, `edit`, `find`, `delete` (preview)
-`com/` | Company | `add`, `edit`, `find`, `delete` (preview)
-`b/` | Boss | `add`, `edit`
-`fd/` | Follow-up date | `add`, `edit`, `find`, `delete`, `sort`
-`t/` | Tag | `add`, `edit`
-`r/` | Remark | `remark`
-`c/` | Category | `category`
+Prefix | Field            | Used by
+-------|------------------|--------
+`n/` | Name             | `add`, `edit`, `find`, `delete`
+`p/` | Phone number     | `add`, `edit`, `delete`
+`e/` | Email address    | `add`, `edit`, `delete`
+`a/` | Address          | `add`, `edit`
+`rl/` | Role             | `add`, `edit`, `find`, `delete` (preview)
+`com/` | Company          | `add`, `edit`, `find`, `delete` (preview)
+`b/` | Boss             | `add`, `edit`
+`fd/` | Follow-up date   | `add`, `edit`, `find`, `delete`, `sort`
+`t/` | Tag              | `add`, `edit`
+`r/` | Remark           | `remark`
+`c/` | Category         | `category`
 `d/` | Interaction date | `interaction`
 `ty/` | Interaction type | `interaction`
 `nt/` | Interaction note | `interaction`
+`fn/` | File name        | `export`
+
 
 ### Field constraints
 
@@ -336,6 +338,25 @@ checkpoint is run.
 
 Format: `redo`
 
+### Exporting contacts: `export`
+
+Exports all contacts from ContactFind to a CSV file.
+
+Format: `export`, `export fn/FILENAME`
+
+All keyword parameters must be exact; partial keywords are not supported.
+
+* `export` exports currently displayed contacts to "export.csv" located in the data folder.
+* `export fn/FILENAME` exports currently displayed to "FILENAME.CSV" in the data folder.
+* Currently displayed contacts: all contacts, or the remaining contacts after find is executed.
+* FILENAME can only contain alphanumeric characters, dash and underscore.
+* Trailing ".csv" characters in the input file name will be automatically truncated.
+
+Examples:
+* `export` (default)
+* `export fn/favorites`
+* `export fn/important.csv`
+
 ### Exiting the program: `exit`
 
 Exits the program.
@@ -391,6 +412,7 @@ Action     | Format, Examples
 **Delete** | `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, or `delete e/EMAIL` delete one contact; `delete rl/ROLE` or `delete com/COMPANY` preview an exact-match scope; `delete all` deletes that active scope; `delete fd/YYYY-MM-DD` deletes every displayed contact with that date.<br> e.g., `delete com/Example Bank`, then `delete all`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
+**Export**   | `export`, `export fn/FILENAME`
 **Find**   | `find PREFIX/VALUE [PREFIX/VALUE]...`<br> Prefixes: `n/`, `p/`, `e/`, `rl/`, `com/`, `b/`, `t/`, `c/`, `fd/`.<br> e.g., `find n/James Jake`, `find c/CLIENT c/INVESTOR`, `find fd/2026-10-20`.<br> Repeated prefixes are combined with OR; different prefixes are combined with AND.
 **Help**   | `help`
 **Interaction** | `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
