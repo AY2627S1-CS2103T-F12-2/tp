@@ -15,7 +15,7 @@ import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
 
 /** Parses arguments for an {@code InteractionCommand}. */
-public class InteractionParser implements Parser<InteractionCommand> {
+public class InteractionCommandParser implements Parser<InteractionCommand> {
 
     @Override
     public InteractionCommand parse(String args) throws ParseException {
@@ -49,6 +49,7 @@ public class InteractionParser implements Parser<InteractionCommand> {
         if (!InteractionType.isValidInteractionType(typeText)) {
             throw new ParseException(InteractionType.MESSAGE_CONSTRAINTS);
         }
+
         InteractionType type = InteractionType.valueOf(typeText.toUpperCase(Locale.ROOT));
         return new InteractionCommand(index, date, type, note);
     }

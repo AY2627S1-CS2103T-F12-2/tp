@@ -387,7 +387,7 @@ Action     | Format, Examples
 **Exit**   | `exit`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
 **Help**   | `help`
-**Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
+**Interaction** | `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 **Interactions** | `interactions`
 **List**   | `list`
 **Redo**   | `redo`
