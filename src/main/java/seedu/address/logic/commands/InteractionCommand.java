@@ -24,9 +24,9 @@ public class InteractionCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Logs an interaction with the person at INDEX.\n"
             + "Parameters: INDEX " + PREFIX_INTERACTION_DATE + "yyyy-MM-dd "
-            + PREFIX_INTERACTION_TYPE + "TYPE " + PREFIX_INTERACTION_NOTE + "NOTE\n"
+            + PREFIX_INTERACTION_TYPE + "TYPE [" + PREFIX_INTERACTION_NOTE + "NOTE]\n"
             + "Example: interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal";
-    public static final String MESSAGE_SUCCESS = "Logged interaction for: %1$s";
+    public static final String MESSAGE_SUCCESS = "Logged %1$s interaction with %2$s on %3$s.";
 
     private final Index index;
     private final String date;
@@ -52,16 +52,17 @@ public class InteractionCommand extends Command {
 
         Person original = shownPersons.get(index.getZeroBased());
         if (!Interaction.isValidDate(date)) {
-            throw new CommandException(Interaction.MESSAGE_CONSTRAINTS);
+            throw new CommandException(Interaction.MESSAGE_INVALID_DATE);
         }
-        Interaction interaction = new Interaction(original.getName().fullName, date, type, note);
+        Interaction interaction = new Interaction(date, type, note);
         List<Interaction> history = new ArrayList<>(original.getInteractions());
         history.add(interaction);
         Person updated = new Person(original.getName(), original.getPhone(), original.getEmail(),
                 original.getAddress(), original.getTags(), original.getRemark(), original.getCategory(),
                 original.getRole(), original.getCompany(), original.getBoss(), original.getFollowUpDate(), history);
         model.setPerson(original, updated);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, original.getName()));
+        model.commitAddressBook(COMMAND_WORD);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, type, original.getName(), date));
     }
 
     @Override

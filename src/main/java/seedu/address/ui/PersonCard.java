@@ -63,7 +63,7 @@ public class PersonCard extends UiPart<Region> {
         name.setText(person.getName().fullName);
         phone.setText("Phone: " + person.getPhone().value);
         address.setText("Address: " + person.getAddress().value);
-        email.setText(person.getEmail().value);
+        email.setText("Email: " + person.getEmail().value);
         role.setText("Role: " + person.getRole().value);
         company.setText("Company: " + person.getCompany().value);
         boss.setText("Boss: " + person.getBoss().fullName);

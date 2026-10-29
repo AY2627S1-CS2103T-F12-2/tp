@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
@@ -15,6 +16,8 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -25,6 +28,8 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Boss;
+import seedu.address.model.person.Interaction;
+import seedu.address.model.person.InteractionType;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
@@ -35,6 +40,23 @@ import seedu.address.testutil.PersonBuilder;
 public class EditCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+    @Test
+    public void execute_renameContact_displaysCurrentNameWithUnchangedInteractions() throws Exception {
+        Person original = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Interaction entry = new Interaction("2026-10-20", InteractionType.MEETING, "Discussed proposal");
+        model.setPerson(original, new PersonBuilder(original).withInteractions(List.of(entry)).build());
+
+        for (String newName : List.of("Renamed Contact", "renamed contact")) {
+            EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(newName).build();
+            new EditCommand(INDEX_FIRST_PERSON, descriptor).execute(model);
+            Interaction updated = model.getFilteredPersonList().get(0).getInteractions().get(0);
+
+            assertSame(entry, updated);
+            assertTrue(new InteractionsCommand().execute(model).getFeedbackToUser()
+                    .contains("Interaction with: " + newName + ", "));
+        }
+    }
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -128,6 +150,32 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_nameDiffersOnlyInCaseFromAnotherContact_failure() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withName(firstPerson.getName().fullName.toLowerCase()).build();
+
+        assertCommandFailure(new EditCommand(INDEX_SECOND_PERSON, descriptor), model,
+                EditCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
+    public void execute_changeOwnNameCapitalization_success() {
+        Person original = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person edited = new PersonBuilder(original).withName(original.getName().fullName.toLowerCase()).build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withName(edited.getName().fullName).build();
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(original, edited);
+
+        assertCommandSuccess(new EditCommand(INDEX_FIRST_PERSON, descriptor), model,
+                String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.formatEditedPerson(edited)),
+                expectedModel);
+        assertEquals(edited.getName().fullName,
+                model.getAddressBook().getPersonList().get(INDEX_FIRST_PERSON.getZeroBased()).getName().fullName);
+    }
+
+    @Test
     public void execute_bossCycle_failure() {
         Person firstPerson = model.getAddressBook().getPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person secondPerson = model.getAddressBook().getPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
@@ -168,6 +216,28 @@ public class EditCommandTest {
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(originalPerson, editedPerson);
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.formatEditedPerson(editedPerson));
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_clearFollowUpDate_success() {
+        Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person datedPerson = new PersonBuilder(originalPerson).withFollowUpDate("2026-10-20").build();
+        model.setPerson(originalPerson, datedPerson);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptor();
+        descriptor.clearFollowUpDate();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        Person editedPerson = new Person(datedPerson.getName(), datedPerson.getPhone(), datedPerson.getEmail(),
+                datedPerson.getAddress(), datedPerson.getTags(), datedPerson.getRemark(), datedPerson.getCategory(),
+                datedPerson.getRole(), datedPerson.getCompany(), datedPerson.getBoss(), null,
+                datedPerson.getInteractions());
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(datedPerson, editedPerson);
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
                 Messages.formatEditedPerson(editedPerson));
 

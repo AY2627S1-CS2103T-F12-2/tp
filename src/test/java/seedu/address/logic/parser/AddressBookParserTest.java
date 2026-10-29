@@ -23,6 +23,7 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.InteractionCommand;
+import seedu.address.logic.commands.InteractionsCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemarkCommand;
@@ -85,7 +86,8 @@ public class AddressBookParserTest {
     public void parseCommand_find() throws Exception {
         List<String> keywords = List.of("foo", "bar", "baz");
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
+                FindCommand.COMMAND_WORD + " "
+                        + keywords.stream().map(keyword -> "n/" + keyword).collect(Collectors.joining(" ")));
         assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
     }
 
@@ -103,7 +105,7 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_sort() throws Exception {
-        assertEquals(new SortCommand(), parser.parseCommand(SortCommand.COMMAND_WORD));
+        assertEquals(new SortCommand(), parser.parseCommand(SortCommand.COMMAND_WORD + " fd/"));
     }
 
     @Test
@@ -128,6 +130,11 @@ public class AddressBookParserTest {
                         + " nt/" + note);
 
         assertEquals(new InteractionCommand(INDEX_FIRST_PERSON, date, type, note), command);
+    }
+
+    @Test
+    public void parseCommand_interactions() throws Exception {
+        assertTrue(parser.parseCommand(InteractionsCommand.COMMAND_WORD) instanceof InteractionsCommand);
     }
 
     public void parseCommand_undo() throws Exception {

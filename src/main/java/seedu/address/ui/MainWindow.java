@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -40,10 +39,6 @@ public class MainWindow extends UiPart<Stage> {
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
     private ContactDashboardPanel contactDashboardPanel;
-    private boolean dashboardVisible;
-
-    @FXML
-    private Button dashboardButton;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -84,9 +79,8 @@ public class MainWindow extends UiPart<Stage> {
         setAccelerators();
 
         helpWindow = new HelpWindow();
-        dashboardVisible = false;
-        contactDashboardPanel = new ContactDashboardPanel(FXCollections.observableArrayList(), this::showMainView);
-        contactDashboardPanel.refresh(logic.getFilteredPersonList());
+        contactDashboardPanel = new ContactDashboardPanel(FXCollections.observableArrayList());
+        contactDashboardPanel.refresh(logic.getUnfilteredPersonList());
     }
 
     public Stage getPrimaryStage() {
@@ -133,6 +127,7 @@ public class MainWindow extends UiPart<Stage> {
     void fillInnerParts() {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+        dashboardPlaceholder.getChildren().setAll(contactDashboardPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
@@ -196,6 +191,7 @@ public class MainWindow extends UiPart<Stage> {
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
             CommandResult commandResult = logic.execute(commandText);
+            contactDashboardPanel.refresh(logic.getUnfilteredPersonList());
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
@@ -215,51 +211,4 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
-    /**
-     * Toggles the dashboard.
-     */
-    @FXML
-    private void handleToggleDashboard() {
-        dashboardVisible = !dashboardVisible;
-        dashboardPlaceholder.setVisible(dashboardVisible);
-        personListPanelPlaceholder.setVisible(!dashboardVisible);
-        commandBoxPlaceholder.setVisible(!dashboardVisible);
-        resultDisplayPlaceholder.setVisible(!dashboardVisible);
-        statusbarPlaceholder.setVisible(!dashboardVisible);
-    }
-
-    @FXML
-    private void handleDashboard() {
-        showDashboardView();
-    }
-
-    private void showDashboardView() {
-        dashboardVisible = true;
-        contactDashboardPanel.refresh(logic.getFilteredPersonList());
-        dashboardPlaceholder.getChildren().setAll(contactDashboardPanel.getRoot());
-        dashboardPlaceholder.setVisible(true);
-        dashboardPlaceholder.setManaged(true);
-        personList.setVisible(false);
-        personList.setManaged(false);
-        commandBoxPlaceholder.setVisible(false);
-        commandBoxPlaceholder.setManaged(false);
-        resultDisplayPlaceholder.setVisible(false);
-        resultDisplayPlaceholder.setManaged(false);
-        statusbarPlaceholder.setVisible(false);
-        statusbarPlaceholder.setManaged(false);
-    }
-
-    private void showMainView() {
-        dashboardVisible = false;
-        dashboardPlaceholder.setVisible(false);
-        dashboardPlaceholder.setManaged(false);
-        personList.setVisible(true);
-        personList.setManaged(true);
-        commandBoxPlaceholder.setVisible(true);
-        commandBoxPlaceholder.setManaged(true);
-        resultDisplayPlaceholder.setVisible(true);
-        resultDisplayPlaceholder.setManaged(true);
-        statusbarPlaceholder.setVisible(true);
-        statusbarPlaceholder.setManaged(true);
-    }
 }

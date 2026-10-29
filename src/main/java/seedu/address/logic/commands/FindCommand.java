@@ -16,13 +16,16 @@ import seedu.address.model.person.Person;
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
-
-    public static final String MESSAGE_UNSUPPORTED_PREFIX =
-            "Prefix '%1$s' is not supported by the find command.";
+    public static final String MESSAGE_EMPTY_SEARCH_KEYWORD =
+            "A search keyword is required after each search prefix.";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose details match the specified "
             + "keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: [n/NAME] [rl/ROLE] [com/COMPANY] [fd/FOLLOW_UP_DATE] or KEYWORD [MORE_KEYWORDS]...\n"
+            + "Parameters: one or more of n/NAME, p/PHONE, e/EMAIL, rl/ROLE, com/COMPANY, b/BOSS, "
+            + "t/TAG, c/CATEGORY, fd/FOLLOW_UP_DATE\n"
+            + "Note: A search prefix is required before EVERY search parameter. A prefix's value may contain spaces. "
+            + "Repeated prefixes are combined with OR; different prefixes are combined with AND.\n"
+            + "Example: " + COMMAND_WORD + " n/Amy Rivera n/Bob Smith\n"
             + "Examples: " + COMMAND_WORD + " n/alice\n"
             + "         " + COMMAND_WORD + " rl/engineer\n"
             + "         " + COMMAND_WORD + " com/google";

@@ -249,7 +249,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidInteractionDate_throwsIllegalValueException() {
         JsonAdaptedInteraction invalidInteraction =
-                new JsonAdaptedInteraction(VALID_NAME, "2026-02-30", "MEETING", "Discussed proposal");
+                new JsonAdaptedInteraction("2026-02-30", "MEETING", "Discussed proposal");
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                 VALID_REMARK, VALID_ROLE, VALID_COMPANY, VALID_BOSS, VALID_TAGS, VALID_CATEGORY,
                 List.of(invalidInteraction));
@@ -260,7 +260,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidInteractionType_throwsIllegalValueException() {
         JsonAdaptedInteraction invalidInteraction =
-                new JsonAdaptedInteraction(VALID_NAME, "2026-10-20", "TEXT", "Discussed proposal");
+                new JsonAdaptedInteraction("2026-10-20", "TEXT", "Discussed proposal");
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                 VALID_REMARK, VALID_ROLE, VALID_COMPANY, VALID_BOSS, VALID_TAGS, VALID_CATEGORY,
                 List.of(invalidInteraction));
@@ -271,7 +271,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_followUpDateAndInteractions_returnsPersonWithBoth() throws Exception {
         JsonAdaptedInteraction interaction =
-                new JsonAdaptedInteraction(VALID_NAME, "2026-10-20", "MEETING", "Discussed proposal");
+                new JsonAdaptedInteraction("2026-10-20", "MEETING", "Discussed proposal");
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                 VALID_REMARK, VALID_ROLE, VALID_COMPANY, VALID_BOSS, VALID_TAGS, VALID_CATEGORY,
                 VALID_FOLLOW_UP_DATE, List.of(interaction));

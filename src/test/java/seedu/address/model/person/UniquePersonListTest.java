@@ -58,6 +58,14 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void add_nameDiffersOnlyInCase_throwsDuplicatePersonException() {
+        uniquePersonList.add(ALICE);
+        Person caseVariant = new PersonBuilder(ALICE).withName(ALICE.getName().fullName.toLowerCase())
+                .withAddress(VALID_ADDRESS_BOB).build();
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.add(caseVariant));
+    }
+
+    @Test
     public void setPerson_nullTargetPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> uniquePersonList.setPerson(null, ALICE));
     }
@@ -113,18 +121,13 @@ public class UniquePersonListTest {
     }
 
     @Test
-    public void setPerson_equalCaseVariantCopy_updatesCorrectIdentity() {
-        Person first = new PersonBuilder().withName("Alice Tan").build();
-        Person second = new PersonBuilder(first).withName("alice tan").build();
-        uniquePersonList.add(first);
-        uniquePersonList.add(second);
-        Person targetCopy = new PersonBuilder(second).build();
-        Person edited = new PersonBuilder(second).withCategory(Category.CLIENT).build();
+    public void setPerson_editedPersonNameDiffersOnlyInCase_throwsDuplicatePersonException() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+        Person caseVariant = new PersonBuilder(ALICE).withName(BOB.getName().fullName.toLowerCase()).build();
 
-        uniquePersonList.setPerson(targetCopy, edited);
-
-        assertSame(first, uniquePersonList.asUnmodifiableObservableList().get(0));
-        assertSame(edited, uniquePersonList.asUnmodifiableObservableList().get(1));
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPerson(ALICE, caseVariant));
+        assertSame(ALICE, uniquePersonList.asUnmodifiableObservableList().get(0));
     }
 
     @Test
@@ -185,6 +188,12 @@ public class UniquePersonListTest {
     public void setPersons_listWithDuplicatePersons_throwsDuplicatePersonException() {
         List<Person> listWithDuplicatePersons = List.of(ALICE, ALICE);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPersons(listWithDuplicatePersons));
+    }
+
+    @Test
+    public void setPersons_listWithCaseVariantNames_throwsDuplicatePersonException() {
+        Person caseVariant = new PersonBuilder(ALICE).withName(ALICE.getName().fullName.toLowerCase()).build();
+        assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPersons(List.of(ALICE, caseVariant)));
     }
 
     @Test
