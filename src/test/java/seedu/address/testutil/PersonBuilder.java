@@ -78,6 +78,7 @@ public class PersonBuilder {
         company = personToCopy.getCompany();
         boss = personToCopy.getBoss();
         followUpDate = personToCopy.getFollowUpDate();
+        interactions = new ArrayList<>(personToCopy.getInteractions());
     }
 
     /**
@@ -174,8 +175,10 @@ public class PersonBuilder {
         return this;
     }
 
+    /** Builds a person with the configured fields. */
     public Person build() {
-        return new Person(name, phone, email, address, tags, remark, category, role, company, boss, followUpDate);
+        return new Person(name, phone, email, address, tags, remark, category, role, company, boss,
+                followUpDate, interactions);
     }
 
 }

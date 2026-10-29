@@ -17,6 +17,9 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
+    public static final String MESSAGE_UNSUPPORTED_PREFIX =
+            "Prefix '%1$s' is not supported by the find command.";
+
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose details match the specified "
             + "keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Supports partial keyword search\n"

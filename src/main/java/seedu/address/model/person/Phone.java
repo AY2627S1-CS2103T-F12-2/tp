@@ -10,8 +10,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Phone {
 
 
-    public static final String MESSAGE_CONSTRAINTS = "Invalid phone number! Please enter exactly 8 digits.";
+    public static final String MESSAGE_CONSTRAINTS = "Invalid phone number! Please use numbers only.";
     public static final String MESSAGE_NUMBERS_ONLY = "Invalid phone number! Please use numbers only.";
+    public static final String MESSAGE_LENGTH = "Invalid phone number! Please enter exactly 8 digits.";
     public static final String VALIDATION_REGEX = "\\d{8}";
     public final String value;
 

@@ -63,7 +63,7 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
 * `INDEX` refers to the index number shown in the displayed contact list. It **must be a positive integer** 1, 2, 3, ...
 
-* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `categories`, `exit`, and `clear`, are ignored.<br>
+* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `categories`, `interactions`, `exit`, and `clear`, are ignored.<br>
   For example, `help 123` is interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
@@ -131,6 +131,7 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS rl/ROLE com/COMPANY [b/BOSS
 
 * Name, phone number, email address, address, role, and company are required.
 * Boss, follow-up date, and tags are optional.
+* A contact cannot be their own boss or create a circular management chain. Boss names are matched case-insensitively.
 * New contacts start in the `UNCATEGORIZED` category. Use [`category`](#categorizing-a-contact-category) to change it.
 
 <box type="tip" seamless>
@@ -221,6 +222,12 @@ Format: `interaction INDEX d/DATE ty/TYPE nt/NOTE`
 Examples:
 * `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 * `interaction 3 d/2026-11-02 ty/call nt/Follow-up on term sheet`
+
+### Listing all interactions: `interactions`
+
+Shows recorded interactions for all contacts, including those hidden by the current filter. Shows `No interactions recorded.` when empty.
+
+Format: `interactions`
 
 ### Finding contacts: `find`
 
@@ -375,6 +382,7 @@ Action     | Format, Examples
 **Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
 **Help**   | `help`
 **Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
+**Interactions** | `interactions`
 **List**   | `list`
 **Redo**   | `redo`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`

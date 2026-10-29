@@ -48,7 +48,7 @@ public class DeleteCommandParserTest {
         assertParseFailure(parser, "p/98765432 e/johnd@example.com", expectedMessage);
         assertParseFailure(parser, "com/Example Company p/98765432", expectedMessage);
         assertParseFailure(parser, "p/not-a-number", Phone.MESSAGE_NUMBERS_ONLY);
-        assertParseFailure(parser, "p/1234567", Phone.MESSAGE_CONSTRAINTS);
+        assertParseFailure(parser, "p/1234567", Phone.MESSAGE_LENGTH);
         assertParseFailure(parser, "e/not-an-email", Email.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "fd/2026-02-30", FollowUpDate.MESSAGE_CONSTRAINTS);
         assertParseFailure(parser, "fd/2026-10-20 fd/2026-10-21",

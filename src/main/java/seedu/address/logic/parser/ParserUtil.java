@@ -83,10 +83,10 @@ public class ParserUtil {
     public static Phone parsePhone(String phone) throws ParseException {
         requireNonNull(phone);
         String trimmedPhone = phone.trim();
-        if (!trimmedPhone.matches("\\d+")) {
-            throw new ParseException(Phone.MESSAGE_NUMBERS_ONLY);
-        }
         if (!Phone.isValidPhone(trimmedPhone)) {
+            if (trimmedPhone.matches("[0-9]*")) {
+                throw new ParseException(Phone.MESSAGE_LENGTH);
+            }
             throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
         }
         return new Phone(trimmedPhone);

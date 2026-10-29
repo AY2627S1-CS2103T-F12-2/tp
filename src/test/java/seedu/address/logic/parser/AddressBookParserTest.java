@@ -23,6 +23,7 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.InteractionCommand;
+import seedu.address.logic.commands.InteractionsCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemarkCommand;
@@ -128,6 +129,11 @@ public class AddressBookParserTest {
                         + " nt/" + note);
 
         assertEquals(new InteractionCommand(INDEX_FIRST_PERSON, date, type, note), command);
+    }
+
+    @Test
+    public void parseCommand_interactions() throws Exception {
+        assertTrue(parser.parseCommand(InteractionsCommand.COMMAND_WORD) instanceof InteractionsCommand);
     }
 
     public void parseCommand_undo() throws Exception {
