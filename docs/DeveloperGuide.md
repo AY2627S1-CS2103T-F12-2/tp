@@ -73,6 +73,10 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, `ContactDashboardPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
 
+`MainWindow` uses a permanent two-pane layout. The left pane contains `PersonListPanel`, which displays all contacts as rounded contact cards. The right pane embeds `ContactDashboardPanel` as the Overview pane; the former standalone Dashboard page and Dashboard button are no longer used. The Overview pane displays the total contact count, follow-up count, category counts, and a **One week follow ups** list.
+
+`ContactDashboardPanel` refreshes its statistics and deadline list whenever the command result changes. Its deadline list includes contacts with an overdue follow-up date or a follow-up date from today through the next seven days. `DashboardPersonCard` highlights overdue dates in red and dates within the next seven days in yellow. The statistics are computed from the complete contact list, while the deadline list uses this date-based filter.
+
 The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java).
 
 The `UI` component,
