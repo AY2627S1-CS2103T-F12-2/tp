@@ -131,6 +131,7 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS rl/ROLE com/COMPANY [b/BOSS
 
 * Name, phone number, email address, address, role, and company are required.
 * Boss, follow-up date, and tags are optional.
+* A contact cannot be their own boss or create a circular management chain. Boss names are matched case-insensitively.
 * New contacts start in the `UNCATEGORIZED` category. Use [`category`](#categorizing-a-contact-category) to change it.
 
 <box type="tip" seamless>
