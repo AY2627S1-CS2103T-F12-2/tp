@@ -33,13 +33,14 @@ public class InteractionCommandParser implements Parser<InteractionCommand> {
                     InteractionCommand.MESSAGE_USAGE), e);
         }
 
-        String date = arguments.getValue(PREFIX_INTERACTION_DATE).orElse("");
-        String typeText = arguments.getValue(PREFIX_INTERACTION_TYPE).orElse("");
-        String note = arguments.getValue(PREFIX_INTERACTION_NOTE).orElse("");
-        if (date.isEmpty() || typeText.isEmpty()) {
+        if (arguments.getValue(PREFIX_INTERACTION_DATE).isEmpty()
+                || arguments.getValue(PREFIX_INTERACTION_TYPE).isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     InteractionCommand.MESSAGE_USAGE));
         }
+        String date = arguments.getValue(PREFIX_INTERACTION_DATE).get();
+        String typeText = arguments.getValue(PREFIX_INTERACTION_TYPE).get();
+        String note = arguments.getValue(PREFIX_INTERACTION_NOTE).orElse("");
 
         if (!Interaction.isValidDate(date)) {
             throw new ParseException(Interaction.MESSAGE_CONSTRAINTS);
@@ -48,6 +49,7 @@ public class InteractionCommandParser implements Parser<InteractionCommand> {
         if (!InteractionType.isValidInteractionType(typeText)) {
             throw new ParseException(InteractionType.MESSAGE_CONSTRAINTS);
         }
+        
         InteractionType type = InteractionType.valueOf(typeText.toUpperCase(Locale.ROOT));
         return new InteractionCommand(index, date, type, note);
     }

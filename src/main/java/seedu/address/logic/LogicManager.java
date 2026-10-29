@@ -47,6 +47,9 @@ public class LogicManager implements Logic {
         CommandResult commandResult;
         //Parse string into command type
         Command command = addressBookParser.parseCommand(commandText);
+        if (!(command instanceof seedu.address.logic.commands.DeleteCommand)) {
+            model.clearDeleteScope();
+        }
         //Execute command
         commandResult = command.execute(model);
 

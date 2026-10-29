@@ -22,8 +22,13 @@ public class CategoryCommandParserTest {
 
     @Test
     public void parse_invalidArg_throwsParseException() {
-        assertParseFailure(parser, "2 c/Yes",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, CategoryCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "2 c/Yes", Category.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_emptyCategory_throwsParseException() {
+        assertParseFailure(parser, "1 c/", Category.MESSAGE_EMPTY_CATEGORY);
+        assertParseFailure(parser, "1 c/   ", Category.MESSAGE_EMPTY_CATEGORY);
     }
 
     @Test
@@ -39,6 +44,7 @@ public class CategoryCommandParserTest {
         assertParseSuccess(parser, "1 c/UNCATEGORIZED", expectedCategoryCommand);
         // multiple whitespaces between keywords
         assertParseSuccess(parser, " \n 1 \n \t c/ UNCATEGORIZED  \t", expectedCategoryCommand);
+        assertParseSuccess(parser, "1 c/client", new CategoryCommand(INDEX_FIRST_PERSON, Category.CLIENT));
     }
 }
 

@@ -1,5 +1,6 @@
 package seedu.address.model;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -107,4 +108,23 @@ public interface Model {
      * Returns an unmodifiable view of the unfiltered person list.
      */
     ObservableList<Person> getUnfilteredPersonList();
+
+    /** Records the contacts shown by the active delete preview. */
+    default void setDeleteScope(List<Person> persons) {}
+
+    /** Returns whether a delete preview is active. */
+    default boolean hasDeleteScope() {
+        return false;
+    }
+
+    /** Returns the contacts in the active delete preview. */
+    default List<Person> getDeleteScope() {
+        return List.of();
+    }
+
+    /** Removes a deleted contact from the active delete preview. */
+    default void removeFromDeleteScope(Person person) {}
+
+    /** Clears the active delete preview. */
+    default void clearDeleteScope() {}
 }
