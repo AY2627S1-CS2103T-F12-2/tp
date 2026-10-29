@@ -17,12 +17,12 @@ import seedu.address.model.person.Category;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
-public class CategoryCaseVariantTest {
+public class CategoryDistinctNamesTest {
     private final Person first = new PersonBuilder().withName("Alice Tan").build();
-    private final Person second = new PersonBuilder(first).withName("alice tan").build();
+    private final Person second = new PersonBuilder(first).withName("Alice Lim").build();
 
     @Test
-    public void execute_caseVariantNames_updatesSelectedContactAndSupportsHistory() throws CommandException {
+    public void execute_distinctNames_updatesSelectedContactAndSupportsHistory() throws CommandException {
         Model model = createModel();
         new CategoryCommand(Index.fromOneBased(2), Category.CLIENT).execute(model);
         assertSelectedContactUpdated(model);
@@ -36,7 +36,7 @@ public class CategoryCaseVariantTest {
     }
 
     @Test
-    public void execute_filteredCaseVariant_updatesDisplayedContact() throws CommandException {
+    public void execute_filteredDistinctNames_updatesDisplayedContact() throws CommandException {
         Model model = createModel();
         model.updateFilteredPersonList(person -> person == second);
         new CategoryCommand(Index.fromOneBased(1), Category.CLIENT).execute(model);
@@ -53,7 +53,7 @@ public class CategoryCaseVariantTest {
         List<Person> people = model.getAddressBook().getPersonList();
         assertEquals(2, people.size());
         assertSame(first, people.get(0));
-        assertEquals("alice tan", people.get(1).getName().fullName);
+        assertEquals("Alice Lim", people.get(1).getName().fullName);
         assertEquals(Category.CLIENT, people.get(1).getCategory());
     }
 }

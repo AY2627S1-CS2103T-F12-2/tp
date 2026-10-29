@@ -47,6 +47,9 @@ public class LogicManager implements Logic {
         CommandResult commandResult;
         //Parse string into command type
         Command command = addressBookParser.parseCommand(commandText);
+        if (!(command instanceof seedu.address.logic.commands.DeleteCommand)) {
+            model.clearDeleteScope();
+        }
         //Execute command
         commandResult = command.execute(model);
 
@@ -65,6 +68,11 @@ public class LogicManager implements Logic {
     @Override
     public ObservableList<Person> getFilteredPersonList() {
         return model.getFilteredPersonList();
+    }
+
+    @Override
+    public ObservableList<Person> getUnfilteredPersonList() {
+        return model.getUnfilteredPersonList();
     }
 
     @Override

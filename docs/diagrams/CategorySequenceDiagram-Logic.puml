@@ -5,43 +5,42 @@ skinparam ArrowFontStyle plain
 box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
-participant "u:UndoCommand" as UndoCommand LOGIC_COLOR
+participant "c:CategoryCommand" as CategoryCommand LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
 participant ":Model" as Model MODEL_COLOR
 end box
 
-[-> LogicManager : execute("undo")
+[-> LogicManager : execute(commandText)
 activate LogicManager
 
-LogicManager -> AddressBookParser : parseCommand("undo")
+LogicManager -> AddressBookParser : parseCommand\n(commandText)
 activate AddressBookParser
 
-create UndoCommand
-AddressBookParser -> UndoCommand
-activate UndoCommand
+create CategoryCommand
+AddressBookParser -> CategoryCommand
+activate CategoryCommand
 
-UndoCommand --> AddressBookParser
-deactivate UndoCommand
+CategoryCommand --> AddressBookParser
+deactivate CategoryCommand
 
-AddressBookParser --> LogicManager : u
+AddressBookParser --> LogicManager : c
 deactivate AddressBookParser
 
-LogicManager -> UndoCommand : execute()
-activate UndoCommand
+LogicManager -> CategoryCommand : execute(model)
+activate CategoryCommand
 
-UndoCommand -> Model : undoAddressBook()
+CategoryCommand -> Model : setPerson(personToCategorize,\neditedPerson)
 activate Model
-
-Model --> UndoCommand
+Model --> CategoryCommand
 deactivate Model
 
-UndoCommand --> LogicManager : result
-deactivate UndoCommand
-UndoCommand -[hidden]-> LogicManager : result
-destroy UndoCommand
+CategoryCommand --> LogicManager : result
+deactivate CategoryCommand
+CategoryCommand -[hidden]-> LogicManager : result
+destroy CategoryCommand
 
-[<--LogicManager
+[<--LogicManager : result
 deactivate LogicManager
 @enduml

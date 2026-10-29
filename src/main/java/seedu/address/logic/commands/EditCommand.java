@@ -27,6 +27,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Boss;
+import seedu.address.model.person.BossChainValidator;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Company;
 import seedu.address.model.person.Email;
@@ -39,7 +40,7 @@ import seedu.address.model.person.Role;
 import seedu.address.model.tag.Tag;
 
 /**
- * Edits the details of an existing person in the address book.
+ * Edits the details of an existing contact in the address book.
  */
 public class EditCommand extends Command {
 
@@ -64,12 +65,11 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Contact: %1$s";
     public static final String MESSAGE_NOT_EDITED =
-            "At least one field to edit must be provided (e.g., p/, e/, rl/, com/, b/).";
+            "At least one field to edit must be provided (e.g. p/, e/, rl/, com/, b/).";
     public static final String MESSAGE_DUPLICATE_PERSON =
-            "Error: An existing contact already uses this phone number or email address. "
+            "Error: An existing contact already uses this name. "
                     + "Duplicate entries are not allowed.";
-    public static final String MESSAGE_BOSS_CYCLE =
-            "Error: A contact cannot be their own boss or form a cyclical management chain.";
+    public static final String MESSAGE_BOSS_CYCLE = BossChainValidator.MESSAGE_BOSS_CYCLE;
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -102,7 +102,7 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        if (createsBossCycle(model.getAddressBook().getPersonList(), personToEdit, editedPerson)) {
+        if (BossChainValidator.createsCycle(model.getAddressBook().getPersonList(), personToEdit, editedPerson)) {
             throw new CommandException(MESSAGE_BOSS_CYCLE);
         }
 
@@ -129,46 +129,14 @@ public class EditCommand extends Command {
         Role updatedRole = editPersonDescriptor.getRole().orElse(personToEdit.getRole());
         Company updatedCompany = editPersonDescriptor.getCompany().orElse(personToEdit.getCompany());
         Boss updatedBoss = editPersonDescriptor.getBoss().orElse(personToEdit.getBoss());
-        FollowUpDate updatedFollowUpDate = editPersonDescriptor.getFollowUpDate()
-                .orElse(personToEdit.getFollowUpDate());
+        FollowUpDate updatedFollowUpDate = editPersonDescriptor.isFollowUpDateEdited()
+                ? editPersonDescriptor.getFollowUpDate().orElse(null)
+                : personToEdit.getFollowUpDate();
         Category updatedCategory = editPersonDescriptor.getCategory().orElse(personToEdit.getCategory());
 
         return new Person(updatedName, updatedPhone, updatedEmail,
                 updatedAddress, updatedTags, updatedRemark, updatedCategory,
                 updatedRole, updatedCompany, updatedBoss, updatedFollowUpDate, personToEdit.getInteractions());
-    }
-
-    /**
-     * Checks whether the edited person's boss chain contains a cycle.
-     *
-     * @param people all people in the address book
-     * @param original person being edited, which should be excluded when finding bosses
-     * @param edited updated person whose boss chain is checked
-     * @return true if the updated boss chain contains a cycle
-     */
-    private static boolean createsBossCycle(List<Person> people, Person original, Person edited) {
-        String editedName = edited.getName().fullName;
-        String bossName = edited.getBoss().fullName;
-        Set<String> visited = new HashSet<>();
-        visited.add(editedName.toLowerCase(java.util.Locale.ROOT));
-
-        while (!bossName.isEmpty()) {
-            String normalizedBossName = bossName.toLowerCase(java.util.Locale.ROOT);
-            if (!visited.add(normalizedBossName)) {
-                return true;
-            }
-            String bossToFind = bossName;
-            Person boss = people.stream()
-                    .filter(person -> person != original)
-                    .filter(person -> person.getName().fullName.equalsIgnoreCase(bossToFind))
-                    .findFirst()
-                    .orElse(null);
-            if (boss == null) {
-                return false;
-            }
-            bossName = boss.getBoss().fullName;
-        }
-        return false;
     }
 
     @Override
@@ -209,6 +177,7 @@ public class EditCommand extends Command {
         private Company company;
         private Boss boss;
         private FollowUpDate followUpDate;
+        private boolean followUpDateEdited;
         private Category category;
 
         public EditPersonDescriptor() {}
@@ -228,6 +197,7 @@ public class EditCommand extends Command {
             setCompany(toCopy.company);
             setBoss(toCopy.boss);
             setFollowUpDate(toCopy.followUpDate);
+            followUpDateEdited = toCopy.followUpDateEdited;
             setCategory(toCopy.category);
         }
 
@@ -236,7 +206,7 @@ public class EditCommand extends Command {
          */
         public boolean isAnyFieldEdited() {
             return CollectionUtil.isAnyNonNull(name, phone, email, address, tags,
-                    remark, role, company, boss, followUpDate, category);
+                    remark, role, company, boss, category) || followUpDateEdited;
         }
 
         public void setName(Name name) {
@@ -305,6 +275,18 @@ public class EditCommand extends Command {
 
         public void setFollowUpDate(FollowUpDate followUpDate) {
             this.followUpDate = followUpDate;
+            this.followUpDateEdited = followUpDate != null;
+        }
+
+        /** Marks the follow-up date for removal. */
+        public void clearFollowUpDate() {
+            this.followUpDate = null;
+            this.followUpDateEdited = true;
+        }
+
+        /** Returns whether the follow-up date was explicitly set or cleared. */
+        public boolean isFollowUpDateEdited() {
+            return followUpDateEdited;
         }
 
         public Optional<FollowUpDate> getFollowUpDate() {
@@ -358,6 +340,7 @@ public class EditCommand extends Command {
                     && Objects.equals(company, otherEditPersonDescriptor.company)
                     && Objects.equals(boss, otherEditPersonDescriptor.boss)
                     && Objects.equals(followUpDate, otherEditPersonDescriptor.followUpDate)
+                    && followUpDateEdited == otherEditPersonDescriptor.followUpDateEdited
                     && Objects.equals(category, otherEditPersonDescriptor.category);
         }
 
@@ -376,6 +359,8 @@ public class EditCommand extends Command {
                     .add("boss", boss);
             if (followUpDate != null) {
                 builder.add("followUpDate", followUpDate);
+            } else if (followUpDateEdited) {
+                builder.add("followUpDate", "cleared");
             }
             return builder.toString();
         }

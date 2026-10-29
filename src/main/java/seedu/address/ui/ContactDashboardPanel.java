@@ -1,64 +1,70 @@
 package seedu.address.ui;
 
 import java.time.LocalDate;
-import java.util.logging.Logger;
+import java.util.EnumMap;
+import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import seedu.address.commons.core.LogsCenter;
+import javafx.scene.layout.VBox;
+import seedu.address.model.person.Category;
 import seedu.address.model.person.Person;
 
 /**
- * Dashboard panel that shows the total number of contacts and a separate list of people.
+ * Dashboard panel that shows contacts with overdue or upcoming follow-up dates.
  */
 public class ContactDashboardPanel extends UiPart<Region> {
     private static final String FXML = "ContactDashboardPanel.fxml";
-    private final Logger logger = LogsCenter.getLogger(ContactDashboardPanel.class);
 
     @FXML
-    private Button backButton;
+    private Label totalContactsValue;
 
     @FXML
-    private Label totalContactsLabel;
+    private Label followUpCountValue;
+
+    @FXML
+    private VBox categoryStatsBox;
 
     @FXML
     private ListView<Person> peopleListView;
 
-    private final ObservableList<Person> dueSoonPeople;
+    private final ObservableList<Person> dashboardPeople;
 
     /**
-     * Creates a dashboard panel for the due-soon contacts.
+     * Creates a dashboard panel for contacts that need follow-up attention.
      *
-     * @param personList the full list of people to filter.
-     * @param backAction action to run when returning to the main CLI view.
+     * @param personList the complete list of contacts to summarize.
      */
-    public ContactDashboardPanel(ObservableList<Person> personList, Runnable backAction) {
+    public ContactDashboardPanel(ObservableList<Person> personList) {
         super(FXML);
-        dueSoonPeople = FXCollections.observableArrayList();
-        peopleListView.setItems(dueSoonPeople);
+        dashboardPeople = FXCollections.observableArrayList();
+        peopleListView.setItems(dashboardPeople);
         peopleListView.setCellFactory(listView -> new PersonListViewCell());
         refresh(personList);
+    }
 
-        if (backAction != null) {
-            backButton.setOnAction(event -> backAction.run());
-        }
+    /** Compatibility constructor for callers that previously supplied a dashboard back action. */
+    @Deprecated
+    public ContactDashboardPanel(ObservableList<Person> personList, Runnable ignoredBackAction) {
+        this(personList);
     }
 
     /**
-     * Filters people whose follow-up date is within the last seven days or the next seven days.
+     * Returns contacts with overdue follow-up dates or follow-up dates within the next seven days.
      *
-     * @param personList the current list of people.
-     * @return a filtered observable list containing only relevant contacts.
+     * @param personList the complete list of contacts.
+     * @return contacts requiring follow-up attention.
      */
-    public static ObservableList<Person> filterDueSoonPeople(ObservableList<Person> personList) {
+    public static ObservableList<Person> filterFollowUpPeople(ObservableList<Person> personList) {
         ObservableList<Person> filtered = FXCollections.observableArrayList();
         LocalDate today = LocalDate.now();
-        LocalDate oneWeekAgo = today.minusDays(7);
         LocalDate oneWeekLater = today.plusDays(7);
 
         for (Person person : personList) {
@@ -66,7 +72,7 @@ public class ContactDashboardPanel extends UiPart<Region> {
                 continue;
             }
             LocalDate dueDate = person.getFollowUpDate().value;
-            if (!dueDate.isBefore(oneWeekAgo) && !dueDate.isAfter(oneWeekLater)) {
+            if (dueDate.isBefore(today) || !dueDate.isAfter(oneWeekLater)) {
                 filtered.add(person);
             }
         }
@@ -74,23 +80,73 @@ public class ContactDashboardPanel extends UiPart<Region> {
     }
 
     /**
-     * Refreshes the dashboard with contacts whose follow-up dates are within the past or next seven days.
+     * Compatibility alias for callers using the old helper name.
      *
-     * @param personList the current list of people to filter.
+     * @param personList the complete list of contacts.
+     * @return contacts requiring follow-up attention.
      */
-    public void refresh(ObservableList<Person> personList) {
-        dueSoonPeople.clear();
-        dueSoonPeople.addAll(filterDueSoonPeople(personList));
-        totalContactsLabel.setText("Total contacts: " + dueSoonPeople.size());
+    @Deprecated
+    public static ObservableList<Person> filterDueSoonPeople(ObservableList<Person> personList) {
+        return filterFollowUpPeople(personList);
     }
 
     /**
-     * Returns the filtered list of due-soon contacts.
+     * Refreshes the dashboard with contacts requiring follow-up attention.
      *
-     * @return the filtered list of due-soon contacts.
+     * @param personList the complete list of contacts.
      */
+    public void refresh(ObservableList<Person> personList) {
+        dashboardPeople.setAll(filterFollowUpPeople(personList));
+        totalContactsValue.setText(String.valueOf(personList.size()));
+        followUpCountValue.setText(String.valueOf(dashboardPeople.size()));
+        updateCategoryStats(personList);
+    }
+
+    /** Updates the category count rows shown in the overview. */
+    private void updateCategoryStats(ObservableList<Person> personList) {
+        Map<Category, Integer> categoryCounts = new EnumMap<>(Category.class);
+        for (Category category : Category.values()) {
+            categoryCounts.put(category, 0);
+        }
+        for (Person person : personList) {
+            Category category = person.getCategory();
+            categoryCounts.put(category, categoryCounts.get(category) + 1);
+        }
+
+        categoryStatsBox.getChildren().clear();
+        for (Category category : Category.values()) {
+            HBox row = new HBox(8);
+            row.setAlignment(Pos.CENTER_LEFT);
+            row.getStyleClass().add("overview-category-row");
+
+            Label categoryName = new Label(category.name());
+            categoryName.getStyleClass().add("overview-category-name");
+            HBox.setHgrow(categoryName, Priority.ALWAYS);
+
+            Label categoryCount = new Label(String.valueOf(categoryCounts.get(category)));
+            categoryCount.getStyleClass().add("overview-category-count");
+            row.getChildren().addAll(categoryName, categoryCount);
+            categoryStatsBox.getChildren().add(row);
+        }
+    }
+
+    /**
+     * Returns contacts displayed on the dashboard.
+     *
+     * @return contacts requiring follow-up attention.
+     */
+    public ObservableList<Person> getDashboardPeople() {
+        return dashboardPeople;
+    }
+
+    /**
+     * Legacy alias for callers that used the old dashboard list accessor.
+     *
+     * @return contacts requiring follow-up attention.
+     */
+    @Deprecated
     public ObservableList<Person> getDueSoonPeople() {
-        return dueSoonPeople;
+        return dashboardPeople;
     }
 
     class PersonListViewCell extends javafx.scene.control.ListCell<Person> {
@@ -102,7 +158,7 @@ public class ContactDashboardPanel extends UiPart<Region> {
                 setGraphic(null);
                 setText(null);
             } else {
-                setGraphic(new PersonCard(person, getIndex() + 1).getRoot());
+                setGraphic(new DashboardPersonCard(person, getIndex() + 1).getRoot());
             }
         }
     }

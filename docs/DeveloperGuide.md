@@ -121,6 +121,12 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name, e.g., `AddCommandParser`). The parser uses the other classes shown above to parse the user command and create an `XYZCommand` object (e.g., `AddCommand`). The `AddressBookParser` returns that object as a `Command` object.
 * All `XYZCommandParser` classes, such as `AddCommandParser` and `DeleteCommandParser`, implement the `Parser` interface so they can be treated similarly where appropriate, for example during testing.
 
+#### Edit command and follow-up dates
+
+`EditCommandParser` validates follow-up dates in the exact `YYYY-MM-DD` format before constructing a `FollowUpDate`, which also rejects invalid calendar dates. An empty `fd/` is treated as an explicit request to clear the existing follow-up date; omitting `fd/` preserves the current date. `EditPersonDescriptor` tracks this explicit clear operation separately from an omitted field.
+
+Contact identity is name-based through `Person#isSamePerson(Person)`, so the edit duplicate check and its error message refer to duplicate names. The edit success message formats the complete updated contact record, including tags, category, remark, follow-up date, and interaction history.
+
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
@@ -164,12 +170,11 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
+### Undo/redo feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
-
+The undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
 * `VersionedAddressBook#commit()` -- Saves the current address book state in its history.
 * `VersionedAddressBook#undo()` -- Restores the previous address book state from its history.
 * `VersionedAddressBook#redo()` -- Restores a previously undone address book state from its history.
@@ -307,18 +312,21 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …   | I want to …                                          | So that I can…                                                   |
-|----------|----------|------------------------------------------------------|------------------------------------------------------------------|
-| `* * *`  | new user | view a user guide                                    | understand how to use ContactFind                                |
-| `* *`    | new user | learn about the main functions                       | navigate through the features                                    |
-| `* *`    | new user | start using the app without much setup               | begin managing my contacts quickly                               |
-| `* * *`  | user     | add a new contact                                    | keep track of people I meet                                      |
-| `* * *`  | user     | record essential information such as email and phone number | identify and reach people in my contacts easily           |
-| `* * *`  | user     | update a contact's information                       | keep my contacts manageable and up to date                       |
-| `* * *`  | user     | set a follow-up date for a contact                   | avoid missing follow-ups with clients                            |
-| `* * *`  | user     | find a contact by name, company or role              | quickly identify relevant contacts                               |
-| `* *`    | user     | categorise contacts                                  | keep my contacts organised                                       |
-| `* *`    | user     | assign one contact to multiple categories            | represent contacts with different areas of expertise             |
+| Priority | As a …           | I want to …                                                 | So that I can…                                       |
+|----------|------------------|-------------------------------------------------------------|------------------------------------------------------|
+| `* * *`  | new user         | view a user guide                                           | understand how to use ContactFind                    |
+| `* *`    | new user         | learn about the main functions                              | navigate through the features                        |
+| `* *`    | new user         | start using the app without much setup                      | begin managing my contacts quickly                   |
+| `* * *`  | user             | add a new contact                                           | keep track of people I meet                          |
+| `* * *`  | user             | record essential information such as email and phone number | identify and reach people in my contacts easily      |
+| `* * *`  | user             | update a contact's information                              | keep my contacts manageable and up to date           |
+| `* * *`  | user             | set a follow-up date for a contact                          | avoid missing follow-ups with clients                |
+| `* * *`  | user             | find a contact by name, company or role                     | quickly identify relevant contacts                   |
+| `* *`    | user             | categorise contacts                                         | keep my contacts organised                           |
+| `* *`    | user             | assign one contact to multiple tags                         | represent contacts with different areas of expertise |
+| `* * *`  | user             | delete contact with name, email, phone, or index            | keep my contacts updated                             |
+| `* *`    | experienced user | bulk delete contacts with same company or role              | quickly keep my contacts relevant                    |
+
 
 *{More to be added}*
 
@@ -367,9 +375,9 @@ Use case ends.
 
     Use case resumes at step 3.
 
-* 3a. A contact with the same phone number and/or email already exists in the contact list.
+* 3a. A contact with the same name already exists in the contact list.
 
-    * 3a.1. AddressBook informs the user that the contact already exists
+    * 3a1. ContactFind informs the user that the contact already exists.
 
     Use case ends.
 
@@ -377,53 +385,137 @@ Use case ends.
 
 **MSS**
 
-1.  User requests to list persons
-2.  ContactFind shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  ContactFind deletes the person
+1. User requests to delete a listed contact.
+2. ContactFind deletes the contact and shows a confirmation.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. The given index is invalid.
 
-  Use case ends.
+    * 1a1. ContactFind shows an error message.
 
-* 3a. The given index is invalid.
+      Use case ends.
 
-    * 3a1. ContactFind shows an error message.
+* 1b. User requests to delete a contact by exact name, phone number, or email address.
 
-      Use case resumes at step 2.
+    * 1b1. ContactFind finds and deletes the matching contact, then shows a confirmation.
 
-**Use case: Assign tags to a contact**
+      Use case ends.
+
+* 1c. No contact matches specified keywords.
+
+    * 1c1. ContactFind shows an error message.
+
+      Use case ends.
+
+* 1d. User requests to delete contacts by exact role or company.
+
+    * 1d1. ContactFind displays matching contacts as a bulk-delete preview without deleting them.
+    * 1d2. User requests `delete all`.
+    * 1d3. ContactFind deletes every contact in the preview and shows a confirmation.
+
+      Use case ends.
+
+* 1e. User requests to delete contacts by exact role or company, then deletes one contact in the preview by index, name, phone number, or email address.
+
+    * 1e1. ContactFind deletes that contact and keeps the remaining preview displayed.
+
+      Use case ends.
+
+* 1f. User requests to delete contacts by follow-up date.
+
+    * 1f1. ContactFind deletes contacts in the current displayed list whose follow-up date exactly matches the given date and shows a confirmation.
+
+      Use case ends.
+
+* 1g. The command syntax is invalid, including an unsupported prefix or multiple delete criteria.
+
+    * 1g1. ContactFind shows an error message with the required format.
+
+      Use case ends.
+
+**Use case: Categorize a contact**
 
 MSS
 
-1. User requests to list contacts.
-2. ContactFind shows a list of contacts.
-3. User requests to assign one or more tags (e.g. priority, or specialization) to a specific contact in the list.
-4. ContactFind updates the contact with the specified tag(s).
+1. User requests to assign a category (e.g. INVESTOR, CLIENT) to a contact.
+2. ContactFind updates the contact with the specified category.
 
-   Use case ends.
+    Use case ends.
 
 Extensions
 
-* 2a. The contacts list is empty.
+* 1a. The given index is invalid.
 
-   Use case ends.
-
-* 3a. The given index is invalid.
-
-   * 3a1. ContactFind shows an error message.
+   * 1a1. ContactFind shows an error message.
 
       Use case resumes at step 2.
 
-* 3b. The specified tag format or syntax is invalid.
+* 1b. The specified category format or syntax is invalid.
 
-   * 3b1. ContactFind shows an error message.
+   * 1b1. ContactFind shows an error message.
 
       Use case resumes at step 2.
+
+**Use case: List categories**
+
+MSS
+
+1. User requests to view category counts.
+2. ContactFind shows all categories and the number of contacts in each category.
+
+    Use case ends.
+
+Extensions
+
+* 2a. The contact list is empty.
+
+   * 2a1. ContactFind shows all categories with zero counts.
+
+      Use case ends.
+
+**Use case: Log an interaction**
+
+MSS
+
+1. User requests to log an interaction with a contact.
+2. ContactFind adds the interaction to the contact's history.
+3. ContactFind saves the updated contact-list state so the interaction can be undone or redone.
+
+    Use case ends.
+
+Extensions
+
+* 1a. The given index is invalid.
+
+   * 1a1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+* 1b. The specified interaction details or command syntax are invalid.
+
+   * 1b1. ContactFind shows an error message.
+
+      Use case resumes at step 2.
+
+**Use case: List interactions**
+
+MSS
+
+1. User requests to view recorded interactions. 
+2. ContactFind shows recorded interactions across all contacts.
+
+    Use case ends.
+
+Extensions
+
+* 2a. No interactions have been recorded.
+
+   * 2a1. ContactFind shows a message indicating that no interactions are recorded.
+
+      Use case ends.
 
 **Use case: View usage instructions**
 
@@ -510,6 +602,131 @@ Extensions
 
       Use case resumes at step 2.
 
+**Use case: List contacts**
+
+**MSS**
+
+1. User requests to list contacts.
+2. ContactFind displays all contacts.
+
+    Use case ends.
+
+**Use case: Find contacts**
+
+**MSS**
+
+1. User requests to find contacts using a supported field and one or more keywords.
+2. ContactFind displays contacts whose selected field matches at least one keyword.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The search command has invalid syntax, an unsupported field, or an invalid follow-up date.
+
+    * 1a1. ContactFind shows an error message with the required format.
+
+      Use case ends.
+
+* 2a. No contacts match the search.
+
+    * 2a1. ContactFind displays an empty contact list.
+
+      Use case ends.
+
+**Use case: Add or remove a remark**
+
+**MSS**
+
+1. User requests to set a remark for a listed contact.
+2. ContactFind replaces the contact's remark and confirms the update.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The given index is invalid.
+
+    * 1a1. ContactFind shows an error message.
+
+      Use case ends.
+
+* 1b. User omits the remark, or provides an empty remark.
+
+    * 1b1. ContactFind removes the contact's existing remark and confirms the update.
+
+      Use case ends.
+
+**Use case: Sort contacts by follow-up date**
+
+**MSS**
+
+1. User requests to sort contacts by follow-up date.
+2. ContactFind orders the displayed contacts by follow-up date in the requested direction, placing contacts without a follow-up date last.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The sort field or direction is invalid.
+
+    * 1a1. ContactFind shows an error message with the required format.
+
+      Use case ends.
+
+**Use case: Clear all contacts**
+
+**MSS**
+
+1. User requests to clear all contacts.
+2. ContactFind removes all contacts and displays an empty contact list.
+
+    Use case ends.
+
+**Use case: Save an undo checkpoint**
+
+**MSS**
+
+1. User requests to save a checkpoint using.
+2. ContactFind saves the current contact-list state.
+
+    Use case ends.
+
+**Use case: Undo a contact-list change**
+
+**MSS**
+
+1. User requests to undo the most recent saved change.
+2. ContactFind restores the preceding contact-list state, including any logged interaction, and displays it.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. There is no saved change to undo.
+
+    * 1a1. ContactFind shows an error message.
+
+      Use case ends.
+
+**Use case: Redo an undone contact-list change**
+
+**MSS**
+
+1. User requests to redo the most recently undone change.
+2. ContactFind restores the redone contact-list state, including any logged interaction, and displays it.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. There is no undone change to redo.
+
+    * 1a1. ContactFind shows an error message.
+
+      Use case ends.
+
+
 
 ### Non-Functional Requirements
 
@@ -576,24 +793,67 @@ testers are expected to do more *exploratory* testing.
    1. Relaunch the app by double-clicking the JAR file.<br>
        Expected: The most recent window size and location are retained.
 
-1. _{ more test cases … }_
+### Adding contacts
 
-### Deleting a person
+1. Prerequisites: Ensure that no existing contact is named Farid Noor.
 
-1. Deleting a person while all persons are being shown
+2. Test case: `add n/Farid Noor p/90000006 e/farid.noor@example.com a/6 Fern Lane rl/Advisor com/Aurora Partners b/Farid Noor`<br>
+   Expected: The command is rejected because a contact cannot be their own boss; no contact is added.
 
-   1. Prerequisites: List all persons using the `list` command, with multiple persons in the list.
+### Editing contacts
 
-   1. Test case: `delete 1`<br>
-      Expected: The first contact is deleted from the list. The status message shows the deleted contact's details.
+1. Prerequisites: Run the preparation commands in [Deleting contacts](#deleting-contacts), then enter `list`.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. The status message shows error details.
+2. Test case: `edit 1 b/Blair Lim`<br>
+   Expected: Alex's boss is set to Blair Lim.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+3. Test case: `edit 2 b/Alex Tan`<br>
+   Expected: The command is rejected because the update would create a circular management chain; Blair's boss remains unchanged.
 
-1. _{ more test cases … }_
+### Deleting contacts
+
+1. Prepare predictable contacts. Enter each command separately:
+
+   ```text
+   clear
+   add n/Alex Tan p/90000001 e/alex.tan@example.com a/1 Alpha Road rl/Analyst com/Orion Bank fd/2026-10-20
+   add n/Blair Lim p/90000002 e/blair.lim@example.com a/2 Beta Road rl/Analyst com/Orion Bank fd/2026-10-20
+   add n/Casey Ng p/90000003 e/casey.ng@example.com a/3 Cedar Road rl/Associate com/Zenith Group fd/2026-10-21
+   add n/Drew Koh p/90000004 e/drew.koh@example.com a/4 Delta Road rl/Analyst com/Zenith Group fd/2026-10-22
+   add n/Evan Goh p/90000005 e/evan.goh@example.com a/5 Elm Road rl/Director com/Nova Capital fd/2026-10-25
+   ```
+
+   Expected: Five contacts are displayed. The data deliberately provides two
+   matching-company contacts, an additional `Analyst`, and distinct follow-up dates.
+
+2. Test case: `delete com/Orion Bank`, then `delete p/90000003`.<br>
+   Expected: The second command is rejected because Casey is outside the active preview. Alex and Blair remain displayed and unchanged.
+
+3. Test case: after restoring the prepared contacts, enter `find rl/Analyst`, then `delete fd/2026-10-20`.<br>
+   Expected: Alex and Blair are deleted. Drew remains, proving that date-based deletion applies only to contacts in the current filtered list.
+
+4. Test case: restore the prepared contacts, enter `delete com/Orion Bank`, then `delete all`.<br>
+   Expected: Exactly two contacts are deleted, the preview is cleared, and the status message reports the deleted count.
+
+### Recording interactions
+
+1. Prerequisites: Restore the prepared contacts above, then enter `find n/Blair`.
+
+2. Test case: `interaction 1 d/2026-12-01 ty/EMAIL`<br>
+   Expected: A success message confirms an EMAIL interaction with Blair on `2026-12-01`.
+
+3. Test case: enter `find n/Casey`, then `interactions`.<br>
+   Expected: The interaction list still includes Blair's email interaction even though Blair is hidden by the current filter.
+
+### Categorizing contacts
+
+1. Prerequisites: Restore the prepared contacts above and enter `list`.
+
+2. Test case: `category 3 c/CONSULTANT`<br>
+   Expected: Casey's category changes to `CONSULTANT`, and the status message confirms the change.
+
+3. Test case: repeat `category 3 c/CONSULTANT`.<br>
+   Expected: The status message reports that Casey is already in that category; no duplicate category is created.
 
 ### Saving data
 
