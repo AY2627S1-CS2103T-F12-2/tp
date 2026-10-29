@@ -53,7 +53,7 @@
         "implementation": "Implementation",
         "undo-redo-feature": "Undo/redo feature",
         "category-categories-feature": "Category/Categories feature",
-        "proposed-data-archiving": "[Proposed] Data archiving",
+        "export-feature": "Export feature",
         "documentation-logging-testing-dev-ops": "Documentation, logging, testing, dev-ops",
         "appendix-requirements": "Appendix: Requirements",
         "product-scope": "Product scope",
@@ -67,6 +67,7 @@
         "deleting-contacts": "Deleting contacts",
         "recording-interactions": "Recording interactions",
         "categorizing-contacts": "Categorizing contacts",
+        "exporting-contacts": "Exporting contacts",
         "saving-data": "Saving data"
       },
       "headingKeywords": {}
