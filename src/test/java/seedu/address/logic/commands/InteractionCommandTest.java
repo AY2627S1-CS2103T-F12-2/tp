@@ -1,10 +1,14 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
+
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +24,23 @@ import seedu.address.model.person.Person;
 /** Tests that interactions are added to the selected person. */
 public class InteractionCommandTest {
     @Test
+    public void execute_afterUndo_replacesRedoBranchAndRecordsInteraction() throws Exception {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        model.commitAddressBook();
+        model.undoAddressBook();
+        Interaction interaction = new Interaction("2026-10-20", InteractionType.MEETING, "Discussed proposal");
+
+        new InteractionCommand(INDEX_FIRST_PERSON, "2026-10-20", InteractionType.MEETING,
+                "Discussed proposal").execute(model);
+
+        assertFalse(model.canRedoAddressBook());
+        model.undoAddressBook();
+        assertTrue(model.getFilteredPersonList().get(0).getInteractions().isEmpty());
+        model.redoAddressBook();
+        assertEquals(List.of(interaction), model.getFilteredPersonList().get(0).getInteractions());
+    }
+
+    @Test
     public void execute_validIndex_addsInteraction() throws Exception {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Person original = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -33,6 +54,23 @@ public class InteractionCommandTest {
         Person updated = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         assertEquals(original.getInteractions().size() + 1, updated.getInteractions().size());
         assertEquals("Discussed proposal", updated.getInteractions().getLast().getNote());
+    }
+
+    @Test
+    public void execute_validIndex_interactionCanBeUndoneAndRedone() throws Exception {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Person original = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-20", InteractionType.MEETING, "Discussed proposal");
+
+        command.execute(model);
+        new UndoCommand().execute(model);
+        assertEquals(original, model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()));
+
+        new RedoCommand().execute(model);
+        Person redone = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        assertEquals(original.getInteractions().size() + 1, redone.getInteractions().size());
+        assertEquals("Discussed proposal", redone.getInteractions().getLast().getNote());
     }
 
 

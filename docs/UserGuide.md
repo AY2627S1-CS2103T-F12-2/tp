@@ -98,12 +98,12 @@ ContactFind checks every value you enter. If a value does not meet its constrain
 
 Field | Constraint                                                                                                                     | Valid example
 ------|--------------------------------------------------------------------------------------------------------------------------------|--------------
-Name | Letters only, with at least a first and last name separated by a space. When using `edit`, the name must be exactly two words. | `John Doe`
+Name | Letters only, with at least a first and last name separated by a space. | `John Doe`
 Phone number | Digits only, exactly 8 digits long.                                                                                            | `98765432`
 Email address | Must be in the form `local-part@domain`.                                                                                       | `johnd@example.com`
 Address | Any value, but must not be blank.                                                                                              | `John street, block 123, #01-01`
-Role | Letters and digits, with words separated by single spaces.                                                                     | `Vice President`
-Company | Letters and digits, with words separated by single spaces, and at least 3 characters long.                                     | `Example Bank`
+Role | Letters and digits only; surrounding and repeated spaces are normalized.                                                       | `Vice President`
+Company | Letters and digits only, at least 3 characters long; surrounding and repeated spaces are normalized.                           | `Example Bank`
 Boss | Same as Name, or empty.                                                                                                        | `Alex Smith`
 Follow-up date | A valid calendar date in exactly `yyyy-MM-dd` format, with a four-digit year.                                      | `2026-10-20`
 Tag | Letters and digits only, with no spaces.                                                                                       | `priority`
@@ -237,24 +237,30 @@ Format: `interactions`
 
 ### Finding contacts: `find`
 
-Finds contacts whose name, role, company or follow-up date contains any of the given keywords.
+Finds contacts by their name, phone number, email, role, company, boss, tag, category, or follow-up date.
 
-Format: `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD [MORE_KEYWORDS]...`, `find rl/KEYWORD [MORE_KEYWORDS]...`, `find com/KEYWORD [MORE_KEYWORDS]...`, or `find fd/YYYY-MM-DD`
+Format: `find PREFIX/VALUE [PREFIX/VALUE]...`
 
-* Without a prefix, or with `n/`, the search looks at names. With `rl/`, it looks at roles. With `com/`, it looks at companies. With `fd/`, it looks for an exact follow-up date.
-* The search is case-insensitive; for example, `hans` matches `Hans`.
-* Partial words match; for example, `Han` matches `Hans`.
-* Keyword order does not matter.
-* Contacts matching at least one keyword are returned (an `OR` search); for example, `find Hans Bo` returns `Hans Gruber` and `Bo Yang`.
-* Only one field can be searched at a time. If you enter more than one prefix, the field that takes effect is according to the priority `fd/`->`n/`->`rl/`->`com/`.
+* Every search value must be preceded by a prefix. `n/` searches names, `p/` phone numbers, `e/` emails, `rl/` roles, `com/` companies, `b/` boss names, `t/` tags, `c/` categories, and `fd/` follow-up dates.
+* Each prefix must have a non-empty value. A value may contain spaces; for example, `find n/Amy Rivera` searches for `Amy Rivera` in a contact's name.
+* Searches are case-insensitive. Except for categories and follow-up dates, a value matches when it appears anywhere in the selected field; for example, `find n/Han` matches `Hans`.
+* `c/` and `fd/` must match exactly. `c/` accepts: `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, and `OTHER`.
+* Repeated instances of the same prefix are combined with OR. For example, `find n/Hans Gruber n/Bo Yang` returns contacts whose names contain either `Hans Gruber` or `Bo Yang`.
+* Different prefixes are combined with AND. For example, `find n/Hans com/Example` finds contacts whose name contains `Hans` and whose company contains `Example`.
 
 Examples:
-* `find John` returns `John Doe` and `Johnny Tan`.
-* `find alex david` returns `Alex Yeoh` and `David Li`.<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find n/John` returns `John Doe` and `Johnny Tan`.
+* `find p/9123` returns every contact whose phone number contains `9123`.
+* `find e/example` returns every contact whose email contains `example`.
 * `find rl/analyst` returns every contact whose role contains `analyst`.
 * `find com/example` returns every contact whose company contains `example`.
+* `find b/Alex` returns every contact whose boss name contains `Alex`.
+* `find t/friend t/important` returns every contact with a tag containing `friend` or `important`.
+* `find n/alex yeoh n/david li` returns `Alex Yeoh` and `David Li`.<br>
+![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find c/client c/investor` returns every contact in either the `CLIENT` or `INVESTOR` category.
 * `find fd/2026-10-20` returns every contact with a follow-up date of `2026-10-20`.
+* `find rl/analyst rl/engineer com/ABC Labs` returns every contact whose role contains `analyst` or `engineer` and whose company contains `ABC Labs`.
 
 ### Deleting a contact: `delete`
 
@@ -283,7 +289,7 @@ Use a role or company to preview the matching contacts before deleting them.
 Format: `delete rl/ROLE` or `delete com/COMPANY`
 
 * While a bulk-delete preview is active, `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, and `delete e/EMAIL` can delete one of the contacts in that preview instead. Enter `list` to leave the preview without deleting all of its contacts.
-* Use `delete all` to delete all contacts in the corresponding ROLE or COMPANY preview.
+* Use `delete all` to delete every contact currently displayed by the active ROLE or COMPANY preview.
 
 `delete fd/YYYY-MM-DD` is also a bulk-delete command: it immediately deletes every contact displayed in the current list whose follow-up date exactly matches the date.
 
@@ -320,15 +326,15 @@ Format: `commit`
 
 ### Undoing a change: `undo`
 
-Restores the contact-list state before the most recent saved change. Each successful contact-changing command
-automatically saves a state (except for sort.)
+Restores the contact-list state before the most recent saved change. The `add`, `edit`, `delete`, `clear`,
+`remark`, `category`, `interaction`, `sort`, and `commit` commands create undo checkpoints.
 
 Format: `undo`
 
 ### Redoing a change: `redo`
 
-Reapplies the contact-list state most recently undone. Redo is unavailable after a new contact-changing command is
-run.
+Reapplies the contact-list state most recently undone. Redo is unavailable after a command that creates an undo
+checkpoint is run.
 
 Format: `redo`
 
@@ -359,7 +365,7 @@ Format: `exit`
 
 ### Saving the data
 
-ContactFind automatically saves data after every command. You do not need to save manually.
+ContactFind automatically saves data after every successfully executed command. You do not need to save manually.
 
 ### Editing the data file
 
@@ -368,7 +374,7 @@ ContactFind data is saved automatically as a JSON file `[JAR file location]/data
 <box type="warning" seamless>
 
 **Caution:**
-If your changes make the data file invalid, ContactFind starts with an empty contact list at the next run. The invalid file remains on disk until you run a command (ContactFind saves after every command). Still, we recommend backing up the file before editing it.<br>
+If your changes make the data file invalid, ContactFind starts with an empty contact list at the next run. The invalid file remains on disk until a command completes successfully (ContactFind then saves the current data). Still, we recommend backing up the file before editing it.<br>
 Furthermore, certain edits can cause ContactFind to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
@@ -407,9 +413,9 @@ Action     | Format, Examples
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`
 **Export**   | `export`, `export fn/FILENAME`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]...`, `find n/KEYWORD...`, `find rl/KEYWORD...`, `find com/KEYWORD...`, `find fd/YYYY-MM-DD`<br> e.g., `find James Jake`, `find fd/2026-10-20`. <br> Only searches based on one field at a time.
+**Find**   | `find PREFIX/VALUE [PREFIX/VALUE]...`<br> Prefixes: `n/`, `p/`, `e/`, `rl/`, `com/`, `b/`, `t/`, `c/`, `fd/`.<br> e.g., `find n/James Jake`, `find c/CLIENT c/INVESTOR`, `find fd/2026-10-20`.<br> Repeated prefixes are combined with OR; different prefixes are combined with AND.
 **Help**   | `help`
-**Interaction** | `interaction INDEX d/DATE ty/TYPE nt/NOTE`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
+**Interaction** | `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 **Interactions** | `interactions`
 **List**   | `list`
 **Redo**   | `redo`

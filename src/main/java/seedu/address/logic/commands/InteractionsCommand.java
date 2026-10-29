@@ -5,8 +5,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
 
 import seedu.address.model.Model;
-import seedu.address.model.person.Interaction;
-import seedu.address.model.person.Person;
 
 /** Lists all recorded interactions. */
 public class InteractionsCommand extends Command {
@@ -21,8 +19,8 @@ public class InteractionsCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
         String formattedInteractions = model.getUnfilteredPersonList().stream()
-                .flatMap((Person person) -> person.getInteractions().stream())
-                .map(Interaction::toString)
+                .flatMap(person -> person.getInteractions().stream()
+                        .map(interaction -> "Interaction with: " + person.getName() + ", " + interaction))
                 .collect(Collectors.joining("\n"));
 
         if (formattedInteractions.isEmpty()) {

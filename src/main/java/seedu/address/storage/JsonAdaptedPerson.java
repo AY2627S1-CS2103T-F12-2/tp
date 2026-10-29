@@ -3,6 +3,7 @@ package seedu.address.storage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -210,7 +211,7 @@ class JsonAdaptedPerson {
             throw new IllegalValueException(Category.MESSAGE_CONSTRAINTS);
         }
 
-        final Category modelCategory = Category.valueOf(category.toUpperCase());
+        final Category modelCategory = Category.valueOf(category.toUpperCase(Locale.ROOT));
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
         final List<Interaction> modelInteractions = new ArrayList<>();

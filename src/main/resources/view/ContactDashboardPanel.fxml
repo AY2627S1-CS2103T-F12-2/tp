@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" styleClass="dashboard-pane">
+<VBox spacing="14" styleClass="overview-pane" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1">
   <padding>
-    <Insets top="10" right="10" bottom="10" left="10" />
+    <Insets top="18" right="16" bottom="16" left="16" />
   </padding>
 
-  <top>
-    <Button fx:id="backButton" text="← Back to CLI" styleClass="dashboard-back-button" />
-  </top>
+  <VBox spacing="2">
+    <Label text="Overview" styleClass="overview-title" />
+    <Label text="Your relationship pipeline at a glance" styleClass="overview-subtitle" />
+  </VBox>
 
-  <center>
-    <VBox spacing="12" alignment="TOP_LEFT">
-      <Label fx:id="totalContactsLabel" text="Total contacts: 0" styleClass="dashboard-total-label" />
-      <ListView fx:id="peopleListView" VBox.vgrow="ALWAYS" prefHeight="240" />
-    </VBox>
-  </center>
-</BorderPane>
+  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS" styleClass="overview-scroll-pane">
+    <content>
+      <VBox spacing="14" styleClass="overview-content">
+        <VBox spacing="8">
+          <Label text="Snapshot" styleClass="overview-section-title" />
+          <VBox spacing="8">
+            <VBox styleClass="overview-stat-card">
+              <Label text="Total contacts" styleClass="overview-stat-label" />
+              <Label fx:id="totalContactsValue" text="0" styleClass="overview-stat-number" />
+            </VBox>
+            <VBox styleClass="overview-stat-card">
+              <Label text="Follow-ups needing attention" styleClass="overview-stat-label" wrapText="true" />
+              <Label fx:id="followUpCountValue" text="0" styleClass="overview-stat-number" />
+            </VBox>
+          </VBox>
+        </VBox>
+
+        <VBox spacing="8">
+          <Label text="Contacts by category" styleClass="overview-section-title" />
+          <VBox fx:id="categoryStatsBox" spacing="5" />
+        </VBox>
+
+        <VBox spacing="8" VBox.vgrow="ALWAYS">
+          <Label text="Upcoming deadlines" styleClass="overview-section-title" />
+          <Label text="Overdue and due within the next 7 days" styleClass="overview-subtitle" wrapText="true" />
+          <ListView fx:id="peopleListView" styleClass="overview-deadline-list" prefHeight="260"
+                    VBox.vgrow="ALWAYS" />
+        </VBox>
+      </VBox>
+    </content>
+  </ScrollPane>
+</VBox>
