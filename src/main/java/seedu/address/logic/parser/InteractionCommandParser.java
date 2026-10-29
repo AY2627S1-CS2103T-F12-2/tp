@@ -15,7 +15,7 @@ import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
 
 /** Parses arguments for an {@code InteractionCommand}. */
-public class InteractionParser implements Parser<InteractionCommand> {
+public class InteractionCommandParser implements Parser<InteractionCommand> {
 
     @Override
     public InteractionCommand parse(String args) throws ParseException {

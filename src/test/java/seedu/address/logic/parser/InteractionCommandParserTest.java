@@ -11,8 +11,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.InteractionType;
 
 /** Tests parsing of interaction commands. */
-public class InteractionParserTest {
-    private final InteractionParser parser = new InteractionParser();
+public class InteractionCommandParserTest {
+    private final InteractionCommandParser parser = new InteractionCommandParser();
 
     @Test
     public void parse_validInput_createsCommand() throws ParseException {

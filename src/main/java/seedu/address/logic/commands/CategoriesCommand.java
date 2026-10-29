@@ -4,10 +4,10 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javafx.collections.ObservableList;
 import seedu.address.model.Model;
 import seedu.address.model.person.Category;
 import seedu.address.model.person.Person;
@@ -36,7 +36,7 @@ public class CategoriesCommand extends Command {
     /**
      * Creates a map that records the number of contacts assigned to each category.
      */
-    private Map<Category, Integer> countPersonsPerCategory(ObservableList<Person> persons) {
+    private Map<Category, Integer> countPersonsPerCategory(List<Person> persons) {
         Map<Category, Integer> categoryCounts = new EnumMap<>(Category.class);
 
         Arrays.stream(Category.values())
