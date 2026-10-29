@@ -326,9 +326,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | user             | assign one contact to multiple tags                         | represent contacts with different areas of expertise |
 | `* * *`  | user             | delete contact with name, email, phone, or index            | keep my contacts updated                             |
 | `* *`    | experienced user | bulk delete contacts with same company or role              | quickly keep my contacts relevant                    |
+| `* *`    | user             | export my contacts to a CSV file                            | import my contacts to another application easily     |
 
-
-*{More to be added}*
 
 ### Use cases
 (For all use cases below, the **System** is `ContactFind` and the **Actor** is the `user`, unless specified otherwise)
@@ -622,6 +621,26 @@ Extensions
     * 3b1. ContactFind shows an error message.
 
       Use case resumes at step 2.
+
+**Use case: Export a contact**
+
+**MSS**
+
+1. User calls the function to export their currently displayed contacts
+
+**Extensions**
+
+* 1a. The user does not specify the destination file name
+
+  Export function resolves and writes to default file path "export.csv" in the data folder
+
+* 1b. The user specifies the destination file name as FILENAME or FILENAME.csv
+
+  Export function resolves and writes to default file path "FILENAME.csv" in the data folder
+
+* 1c. The user does not specify the destination file name
+
+  Export function resolves and writes a csv file containing the header row and no other rows.
 
 
 ### Non-Functional Requirements
