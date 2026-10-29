@@ -375,9 +375,9 @@ Use case ends.
 
     Use case resumes at step 3.
 
-* 3a. A contact with the same phone number and/or email already exists in the contact list.
+* 3a. A contact with the same name already exists in the contact list.
 
-    * 3a.1. AddressBook informs the user that the contact already exists
+    * 3a1. ContactFind informs the user that the contact already exists.
 
     Use case ends.
 
@@ -385,80 +385,58 @@ Use case ends.
 
 **MSS**
 
-1.  User requests to list contacts
-2.  ContactFind shows the contact list
-3.  User requests to delete a listed contact
-4.  ContactFind deletes the contact and shows a confirmation
+1. User requests to delete a listed contact.
+2. ContactFind deletes the contact and shows a confirmation.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. The given index is invalid.
 
-  Use case ends.
-
-* 3a. The user identifies an invalid listed contact.
-
-    * 3a1. ContactFind shows an error message.
-
-      Use case resumes at step 2.
-
-* 3b. The user requests to delete a contact by the exact name, phone number, or email address of an existing contact.
-
-    * 3b1. ContactFind finds the contact and deletes it.
+    * 1a1. ContactFind shows an error message.
 
       Use case ends.
 
-* 3c. The user requests to delete a contact by an exact name, phone number, or email address that does not belong to a contact.
+* 1b. User requests to delete a contact by exact name, phone number, or email address.
 
-    * 3c1. ContactFind shows an error message.
-
-      Use case resumes at step 2.
-
-* 3d. The user requests to delete contacts with an exact role or company that matches one or more contacts.
-
-    * 3d1. ContactFind shows only the matching contacts without deleting them.
-    * 3d2. User requests to delete all contacts in the preview.
-    * 3d3. ContactFind deletes every contact in the preview.
+    * 1b1. ContactFind finds and deletes the matching contact, then shows a confirmation.
 
       Use case ends.
 
-* 3e. The user requests to delete contacts with an exact role or company that matches one or more contacts.
+* 1c. No contact matches specified keywords.
 
-    * 3e1. ContactFind shows only the matching contacts without deleting them.
-    * 3e2. The user requests to delete a contact with an exact name, phone number, email address, or index.
-    * 3e3. ContactFind deletes the requested contact.
+    * 1c1. ContactFind shows an error message.
 
       Use case ends.
 
-* 3f. The user requests to delete contacts with an exact role or company.
+* 1d. User requests to delete contacts by exact role or company.
 
-    * 3f1. ContactFind shows only the matching contacts without deleting them.
-    * 3f2. User requests to delete contact that is not displayed.
-    * 3f3. ContactFind shows an error message.
-
-      Use case ends.
-
-* 3h. The user requests to delete contacts with an exact role or company that matches no contacts.
-
-    * 3h1. ContactFind shows no matching contacts and an error message.
+    * 1d1. ContactFind displays matching contacts as a bulk-delete preview without deleting them.
+    * 1d2. User requests `delete all`.
+    * 1d3. ContactFind deletes every contact in the preview and shows a confirmation.
 
       Use case ends.
 
-* 3i. The user requests to delete contacts with an exact follow-up date.
+* 1e. User requests to delete contacts by exact role or company, then deletes one contact in the preview by index, name, phone number, or email address.
 
-    * 3i1. ContactFind deletes every contact with that follow-up date in the displayed list.
+    * 1e1. ContactFind deletes that contact and keeps the remaining preview displayed.
 
       Use case ends.
 
-* 3j. The user requests to delete contacts using a follow-up date that no displayed contact has.
+* 1f. User requests to delete contacts by follow-up date.
 
-    * 3j1. ContactFind shows an error message.
+    * 1f1. ContactFind deletes contacts in the current displayed list whose follow-up date exactly matches the given date and shows a confirmation.
 
-      Use case resumes at step 2.
+      Use case ends.
 
-**Use case: Assign tags to a contact**
+* 1g. The command syntax is invalid, including an unsupported prefix or multiple delete criteria.
+
+    * 1g1. ContactFind shows an error message with the required format.
+
+      Use case ends.
+
+**Use case: Categorize a contact**
 
 MSS
 
@@ -485,7 +463,7 @@ Extensions
 
 MSS
 
-1. User requests to view category counts using `categories`.
+1. User requests to view category counts.
 2. ContactFind shows all categories and the number of contacts in each category.
 
     Use case ends.
@@ -502,8 +480,9 @@ Extensions
 
 MSS
 
-1. User requests to log an interaction with a contact using `interaction`.
+1. User requests to log an interaction with a contact.
 2. ContactFind adds the interaction to the contact's history.
+3. ContactFind saves the updated contact-list state so the interaction can be undone or redone.
 
     Use case ends.
 
@@ -525,7 +504,7 @@ Extensions
 
 MSS
 
-1. User requests to view recorded interactions using `interactions`.
+1. User requests to view recorded interactions. 
 2. ContactFind shows recorded interactions across all contacts.
 
     Use case ends.
@@ -623,6 +602,131 @@ Extensions
 
       Use case resumes at step 2.
 
+**Use case: List contacts**
+
+**MSS**
+
+1. User requests to list contacts.
+2. ContactFind displays all contacts.
+
+    Use case ends.
+
+**Use case: Find contacts**
+
+**MSS**
+
+1. User requests to find contacts using a supported field and one or more keywords.
+2. ContactFind displays contacts whose selected field matches at least one keyword.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The search command has invalid syntax, an unsupported field, or an invalid follow-up date.
+
+    * 1a1. ContactFind shows an error message with the required format.
+
+      Use case ends.
+
+* 2a. No contacts match the search.
+
+    * 2a1. ContactFind displays an empty contact list.
+
+      Use case ends.
+
+**Use case: Add or remove a remark**
+
+**MSS**
+
+1. User requests to set a remark for a listed contact.
+2. ContactFind replaces the contact's remark and confirms the update.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The given index is invalid.
+
+    * 1a1. ContactFind shows an error message.
+
+      Use case ends.
+
+* 1b. User omits the remark, or provides an empty remark.
+
+    * 1b1. ContactFind removes the contact's existing remark and confirms the update.
+
+      Use case ends.
+
+**Use case: Sort contacts by follow-up date**
+
+**MSS**
+
+1. User requests to sort contacts by follow-up date.
+2. ContactFind orders the displayed contacts by follow-up date in the requested direction, placing contacts without a follow-up date last.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The sort field or direction is invalid.
+
+    * 1a1. ContactFind shows an error message with the required format.
+
+      Use case ends.
+
+**Use case: Clear all contacts**
+
+**MSS**
+
+1. User requests to clear all contacts.
+2. ContactFind removes all contacts and displays an empty contact list.
+
+    Use case ends.
+
+**Use case: Save an undo checkpoint**
+
+**MSS**
+
+1. User requests to save a checkpoint using.
+2. ContactFind saves the current contact-list state.
+
+    Use case ends.
+
+**Use case: Undo a contact-list change**
+
+**MSS**
+
+1. User requests to undo the most recent saved change.
+2. ContactFind restores the preceding contact-list state, including any logged interaction, and displays it.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. There is no saved change to undo.
+
+    * 1a1. ContactFind shows an error message.
+
+      Use case ends.
+
+**Use case: Redo an undone contact-list change**
+
+**MSS**
+
+1. User requests to redo the most recently undone change.
+2. ContactFind restores the redone contact-list state, including any logged interaction, and displays it.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. There is no undone change to redo.
+
+    * 1a1. ContactFind shows an error message.
+
+      Use case ends.
+
+
 
 ### Non-Functional Requirements
 
@@ -689,7 +793,22 @@ testers are expected to do more *exploratory* testing.
    1. Relaunch the app by double-clicking the JAR file.<br>
        Expected: The most recent window size and location are retained.
 
-1. _{ more test cases … }_
+### Adding contacts
+
+1. Prerequisites: Ensure that no existing contact is named Farid Noor.
+
+2. Test case: `add n/Farid Noor p/90000006 e/farid.noor@example.com a/6 Fern Lane rl/Advisor com/Aurora Partners b/Farid Noor`<br>
+   Expected: The command is rejected because a contact cannot be their own boss; no contact is added.
+
+### Editing contacts
+
+1. Prerequisites: Run the preparation commands in [Deleting contacts](#deleting-contacts), then enter `list`.
+
+2. Test case: `edit 1 b/Blair Lim`<br>
+   Expected: Alex's boss is set to Blair Lim.
+
+3. Test case: `edit 2 b/Alex Tan`<br>
+   Expected: The command is rejected because the update would create a circular management chain; Blair's boss remains unchanged.
 
 ### Deleting contacts
 
@@ -707,52 +826,34 @@ testers are expected to do more *exploratory* testing.
    Expected: Five contacts are displayed. The data deliberately provides two
    matching-company contacts, an additional `Analyst`, and distinct follow-up dates.
 
-1. Previewing a company before bulk deletion
+2. Test case: `delete com/Orion Bank`, then `delete p/90000003`.<br>
+   Expected: The second command is rejected because Casey is outside the active preview. Alex and Blair remain displayed and unchanged.
 
-   1. Test case: `delete com/Orion Bank`<br>
-      Expected: Only Alex and Blair are displayed; neither is deleted.
+3. Test case: after restoring the prepared contacts, enter `find rl/Analyst`, then `delete fd/2026-10-20`.<br>
+   Expected: Alex and Blair are deleted. Drew remains, proving that date-based deletion applies only to contacts in the current filtered list.
 
-   2. Test case: after the company preview, enter `delete p/90000003`.<br>
-      Expected: The command is rejected because Casey is outside the active preview; the two displayed contacts remain unchanged.
+4. Test case: restore the prepared contacts, enter `delete com/Orion Bank`, then `delete all`.<br>
+   Expected: Exactly two contacts are deleted, the preview is cleared, and the status message reports the deleted count.
 
-   3. Test case: enter `delete com/Orion Bank`, then `delete 1`. 
-      Expected: Alex is deleted first. Blair remains in the active preview.
-   
-   4. Test case: enter `undo`, enter `delete com/Orion`.
-      Expected: The command is rejected because Orion keyword is incomplete. 
+### Recording interactions
 
-2. Deleting by an exact identifier
+1. Prerequisites: Restore the prepared contacts above, then enter `find n/Blair`.
 
-   1. Prerequisites: Restore the prepared contacts above.
+2. Test case: `interaction 1 d/2026-12-01 ty/EMAIL`<br>
+   Expected: A success message confirms an EMAIL interaction with Blair on `2026-12-01`.
 
-   2. Test case: `delete n/Casey Ng`.<br>
-      Expected: Casey is deleted immediately and identified in the status message.
+3. Test case: enter `find n/Casey`, then `interactions`.<br>
+   Expected: The interaction list still includes Blair's email interaction even though Blair is hidden by the current filter.
 
-   3. Test case: after `list`, enter `delete p/90000004`.<br>
-      Expected: Drew is deleted and identified in the status message.
+### Categorizing contacts
 
-3. Deleting displayed contacts with a follow-up date
+1. Prerequisites: Restore the prepared contacts above and enter `list`.
 
-   1. Prerequisites: Restore the prepared contacts above and enter `list`.
+2. Test case: `category 3 c/CONSULTANT`<br>
+   Expected: Casey's category changes to `CONSULTANT`, and the status message confirms the change.
 
-   2. Test case: `delete fd/2026-10-25`<br>
-      Expected: Evan is deleted immediately. Drew remains, demonstrating that only contacts with the exact follow-up date are removed.
-
-   3. Other incorrect commands to try: `delete com/Orion` and `delete fd/2026-10-99`.<br>
-      Expected: No contact is deleted. The status message shows an error.
-
-4. Deleting a contact while all contacts are being shown
-
-   1. Prerequisites: List all persons using the `list` command, with multiple persons in the list.
-
-   2. Test case: `delete 1`<br>
-      Expected: The first contact is deleted from the list. The status message shows the deleted contact’s details.
-
-   3. Test case: `delete 0`<br>
-      Expected: No person is deleted. The status message shows an error.
-
-   4. Other incorrect commands to try: `delete`, `delete x`, and an index larger than the list size.<br>
-      Expected: No person is deleted. The status message shows an error.
+3. Test case: repeat `category 3 c/CONSULTANT`.<br>
+   Expected: The status message reports that Casey is already in that category; no duplicate category is created.
 
 ### Saving data
 

@@ -13,6 +13,7 @@ public class SortCommandParser implements Parser<SortCommand> {
     public SortCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_FOLLOW_UP_DATE);
         if (!argMultimap.getPreamble().isEmpty()
+                || argMultimap.getAllValues(PREFIX_FOLLOW_UP_DATE).isEmpty()
                 || argMultimap.getAllValues(PREFIX_FOLLOW_UP_DATE).size() > 1) {
             throw invalidFormat();
         }
