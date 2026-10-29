@@ -340,8 +340,9 @@ Format: `export`, `export fn/FILENAME`
 
 All keyword parameters must be exact; partial keywords are not supported.
 
-* `export` exports all contacts to "export.csv" located in the data folder.
-* `export fn/FILENAME` exports all contacts to "FILENAME.CSV" in the data folder.
+* `export` exports currently displayed contacts to "export.csv" located in the data folder.
+* `export fn/FILENAME` exports currently displayed to "FILENAME.CSV" in the data folder.
+* Currently displayed contacts: all contacts, or the remaining contacts after find is executed.
 * FILENAME can only contain alphanumeric characters, dash and underscore.
 * Trailing ".csv" characters in the input file name will be automatically truncated.
 
