@@ -24,6 +24,13 @@ public class ExportCommandParser implements Parser<ExportCommand> {
         }
 
         String fileName = argMultimap.getValue(PREFIX_FILE_NAME).orElse(DEFAULT_FILE_NAME).trim();
+
+        //trim out trailing .csv
+        if (fileName.toLowerCase().endsWith(".csv")) {
+            fileName = fileName.substring(0, fileName.length() - ".csv".length());
+        }
+
+        //validate filename with regex
         if (!fileName.matches(FILE_NAME_VALIDATION_REGEX)) {
             throw new ParseException(MESSAGE_INVALID_FILE_NAME);
         }
