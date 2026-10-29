@@ -20,10 +20,7 @@ import org.junit.jupiter.api.Test;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -57,7 +54,7 @@ public class ContactDashboardPanelTest {
     }
 
     @Test
-    public void refresh_filtersContactsDueWithinOneWeek() {
+    public void refresh_filtersContactsRequiringFollowUp() {
         ObservableList<Person> people = FXCollections.observableArrayList();
 
         people.add(createPerson("Alice Tan", LocalDate.now().plusDays(2)));
@@ -67,18 +64,18 @@ public class ContactDashboardPanelTest {
         people.add(createPerson("Eve Wong", null));
         people.add(createPerson("Frank Goh", LocalDate.now().minusDays(8)));
 
-        ObservableList<Person> filtered = ContactDashboardPanel.filterDueSoonPeople(people);
+        ObservableList<Person> filtered = ContactDashboardPanel.filterFollowUpPeople(people);
 
-        assert filtered.size() == 3;
+        assert filtered.size() == 4;
         assert filtered.stream()
                 .filter(person -> person.getFollowUpDate() != null
-                        && !person.getFollowUpDate().value.isBefore(LocalDate.now().minusDays(7))
-                        && !person.getFollowUpDate().value.isAfter(LocalDate.now().plusDays(7)))
-                .count() == 3;
+                        && (person.getFollowUpDate().value.isBefore(LocalDate.now())
+                        || !person.getFollowUpDate().value.isAfter(LocalDate.now().plusDays(7))))
+                .count() == 4;
     }
 
     @Test
-    public void refresh_updatesTotalContactsLabel() throws Exception {
+    public void refresh_showsContactsRequiringFollowUp() throws Exception {
         ObservableList<Person> people = FXCollections.observableArrayList();
         people.add(createPerson("Alice Tan", LocalDate.now().plusDays(2)));
         people.add(createPerson("Bob Lee", LocalDate.now().plusDays(10)));
@@ -88,10 +85,23 @@ public class ContactDashboardPanelTest {
 
         runOnFxThread(() -> {
             ContactDashboardPanel panel = new ContactDashboardPanel(people, () -> {});
-            Label totalContactsLabel = getField(panel, "totalContactsLabel", Label.class);
 
-            assert totalContactsLabel.getText().equals("Total contacts: 3");
-            assert panel.getDueSoonPeople().size() == 3;
+            assert panel.getDashboardPeople().size() == 3;
+        });
+    }
+
+    @Test
+    public void dashboardCard_highlightsOverdueFollowUpDate() throws Exception {
+        runOnFxThread(() -> {
+            DashboardPersonCard overdueCard = new DashboardPersonCard(
+                    createPerson("Alice Tan", LocalDate.now().minusDays(1)), 1);
+            DashboardPersonCard upcomingCard = new DashboardPersonCard(
+                    createPerson("Bob Lee", LocalDate.now().plusDays(1)), 2);
+
+            assert overdueCard.hasOverdueStyle();
+            assert !upcomingCard.hasOverdueStyle();
+            assert upcomingCard.hasUpcomingStyle();
+            assert overdueCard.getRoot().getId().equals("dashboardCardPane");
         });
     }
 
@@ -114,24 +124,8 @@ public class ContactDashboardPanelTest {
             mainWindow.show();
             assert mainWindow.getPrimaryStage().isShowing();
 
-            invoke(mainWindow, "handleDashboard");
-
             assert isVisible(mainWindow, "dashboardPlaceholder");
-            assert !isVisible(mainWindow, "personListPanelPlaceholder");
-            assert !isManaged(mainWindow, "commandBoxPlaceholder");
-
-            ContactDashboardPanel dashboard = getField(mainWindow, "contactDashboardPanel",
-                    ContactDashboardPanel.class);
-            Button backButton = getField(dashboard, "backButton", Button.class);
-            backButton.getOnAction().handle(new ActionEvent(backButton, null));
-
-            assert !isVisible(mainWindow, "dashboardPlaceholder");
             assert isManaged(mainWindow, "personListPanelPlaceholder");
-
-            invoke(mainWindow, "handleToggleDashboard");
-            assert isVisible(mainWindow, "dashboardPlaceholder");
-            invoke(mainWindow, "handleToggleDashboard");
-            assert !isVisible(mainWindow, "dashboardPlaceholder");
 
             ResultDisplay resultDisplay = getField(mainWindow, "resultDisplay", ResultDisplay.class);
             TextArea resultTextArea = getField(resultDisplay, "resultDisplay", TextArea.class);
@@ -299,6 +293,11 @@ public class ContactDashboardPanelTest {
 
         @Override
         public ObservableList<Person> getFilteredPersonList() {
+            return people;
+        }
+
+        @Override
+        public ObservableList<Person> getUnfilteredPersonList() {
             return people;
         }
 

@@ -3,17 +3,17 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Scene?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <fx:root type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-         title="Address App" minWidth="450" minHeight="600" onCloseRequest="#handleExit">
+         title="Address App" minWidth="900" minHeight="600" onCloseRequest="#handleExit">
   <icons>
     <Image url="@/images/address_book_32.png" />
   </icons>
@@ -25,6 +25,10 @@
       </stylesheets>
 
       <VBox>
+        <StackPane styleClass="app-header">
+          <Label text="ContactFind" styleClass="app-header-title" StackPane.alignment="CENTER" />
+        </StackPane>
+
         <MenuBar fx:id="menuBar" VBox.vgrow="NEVER">
           <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
@@ -34,11 +38,21 @@
           </Menu>
         </MenuBar>
 
-        <StackPane VBox.vgrow="NEVER" styleClass="pane-with-border">
-          <Button fx:id="dashboardButton" text="☰ Dashboard" onAction="#handleDashboard" StackPane.alignment="TOP_LEFT" />
-        </StackPane>
+        <HBox spacing="14" VBox.vgrow="ALWAYS" styleClass="main-content">
+          <VBox fx:id="personList" styleClass="pane-with-border" minWidth="420" prefWidth="620"
+                HBox.hgrow="ALWAYS">
+            <padding>
+              <Insets top="10" right="10" bottom="10" left="10" />
+            </padding>
+            <Label text="Contacts" styleClass="contacts-pane-title" />
+            <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS" />
+          </VBox>
 
-        <StackPane fx:id="dashboardPlaceholder" visible="false" managed="false" VBox.vgrow="ALWAYS" styleClass="pane-with-border" />
+          <StackPane fx:id="dashboardPlaceholder" minWidth="330" prefWidth="380" maxWidth="430"
+                     styleClass="overview-container" />
+        </HBox>
+
+        <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
 
         <StackPane VBox.vgrow="NEVER" fx:id="commandBoxPlaceholder" styleClass="pane-with-border">
           <padding>
@@ -52,15 +66,6 @@
             <Insets top="5" right="10" bottom="5" left="10" />
           </padding>
         </StackPane>
-
-        <VBox fx:id="personList" styleClass="pane-with-border" minWidth="340" prefWidth="340" VBox.vgrow="ALWAYS">
-          <padding>
-            <Insets top="10" right="10" bottom="10" left="10" />
-          </padding>
-          <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS"/>
-        </VBox>
-
-        <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
       </VBox>
     </Scene>
   </scene>

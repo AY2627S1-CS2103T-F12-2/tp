@@ -23,6 +23,9 @@ public interface Logic {
     /** Returns an unmodifiable view of the filtered list of persons */
     ObservableList<Person> getFilteredPersonList();
 
+    /** Returns an unmodifiable view of all persons, ignoring the active filter. */
+    ObservableList<Person> getUnfilteredPersonList();
+
     /**
      * Returns the user prefs' GUI settings.
      */
