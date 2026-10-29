@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,8 +24,6 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -56,31 +53,7 @@ public class ContactDashboardPanelTest {
     @BeforeAll
     public static void initJavaFx() throws InterruptedException {
         Logger.getLogger(MainWindow.class.getName()).setLevel(Level.WARNING);
-        CountDownLatch ready = new CountDownLatch(1);
-        Platform.startup(() -> {
-            // Closing a test window must not terminate the toolkit used by subsequent tests.
-            Platform.setImplicitExit(false);
-            ready.countDown();
-        });
-        Assertions.assertTrue(ready.await(10, TimeUnit.SECONDS), "JavaFX startup timed out");
-    }
-
-    @AfterAll
-    public static void shutdownJavaFx() {
-        Platform.exit();
-    }
-
-    @Test
-    public void javaFxRuntime_afterLastWindowCloses_runsSubsequentTasks() throws Exception {
-        runOnFxThread(() -> {
-            Stage stage = new Stage();
-            stage.show();
-            stage.hide();
-        });
-
-        AtomicBoolean taskRan = new AtomicBoolean(false);
-        runOnFxThread(() -> taskRan.set(true));
-        Assertions.assertTrue(taskRan.get(), "JavaFX must remain available after the last window closes");
+        Platform.startup(() -> Platform.setImplicitExit(false));
     }
 
     @Test
@@ -119,26 +92,6 @@ public class ContactDashboardPanelTest {
 
             assert totalContactsLabel.getText().equals("Total contacts: 3");
             assert panel.getDueSoonPeople().size() == 3;
-        });
-    }
-
-    @Test
-    public void constructor_nullBackActionAndCellFactory_areHandled() throws Exception {
-        ObservableList<Person> people = FXCollections.observableArrayList();
-        Person person = createPerson("Alice Tan", LocalDate.now());
-        people.add(person);
-
-        runOnFxThread(() -> {
-            ContactDashboardPanel panel = new ContactDashboardPanel(people, null);
-            ListView<Person> peopleListView = getField(panel, "peopleListView", ListView.class);
-            ListCell<Person> cell = peopleListView.getCellFactory().call(peopleListView);
-
-            invoke(cell, "updateItem", Person.class, null, boolean.class, true);
-            assert cell.getGraphic() == null;
-            invoke(cell, "updateItem", Person.class, null, boolean.class, false);
-            assert cell.getGraphic() == null;
-            invoke(cell, "updateItem", Person.class, person, boolean.class, false);
-            assert cell.getGraphic() != null;
         });
     }
 

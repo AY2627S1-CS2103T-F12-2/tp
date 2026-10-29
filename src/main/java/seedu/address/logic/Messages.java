@@ -62,16 +62,15 @@ public class Messages {
 
     /** Formats the fields shown in the edit command's success message. */
     public static String formatEditedPerson(Person person) {
-        String result = person.getName()
-                + "; Phone: " + person.getPhone()
-                + "; Email: " + person.getEmail()
-                + "; Role: " + person.getRole()
-                + "; Company: " + person.getCompany()
-                + "; Boss: " + person.getBoss();
-        if (person.getFollowUpDate() != null) {
-            result += "; Follow-up date: " + person.getFollowUpDate();
+        StringBuilder result = new StringBuilder(format(person));
+        if (person.getFollowUpDate() == null) {
+            result.append("; Follow-up date: not set");
         }
-        return result;
+        result.append("; Remark: ")
+                .append(person.getRemark())
+                .append("; Interactions: ")
+                .append(person.getInteractions());
+        return result.toString();
     }
 
 }

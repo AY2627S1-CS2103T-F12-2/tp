@@ -3,6 +3,7 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -21,6 +22,8 @@ public class ModelManager implements Model {
     private final VersionedAddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private List<Person> deleteScope = List.of();
+    private boolean hasDeleteScope;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -162,6 +165,33 @@ public class ModelManager implements Model {
     @Override
     public ObservableList<Person> getUnfilteredPersonList() {
         return addressBook.getPersonList();
+    }
+
+    @Override
+    public void setDeleteScope(List<Person> persons) {
+        deleteScope = List.copyOf(persons);
+        hasDeleteScope = true;
+    }
+
+    @Override
+    public boolean hasDeleteScope() {
+        return hasDeleteScope;
+    }
+
+    @Override
+    public List<Person> getDeleteScope() {
+        return deleteScope;
+    }
+
+    @Override
+    public void removeFromDeleteScope(Person person) {
+        deleteScope = deleteScope.stream().filter(candidate -> !candidate.equals(person)).toList();
+    }
+
+    @Override
+    public void clearDeleteScope() {
+        deleteScope = List.of();
+        hasDeleteScope = false;
     }
 
 
