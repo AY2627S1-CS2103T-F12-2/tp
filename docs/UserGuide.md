@@ -43,6 +43,18 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
 --------------------------------------------------------------------------------------------------------------------
 
+## Main window overview
+
+ContactFind opens in a two-pane layout:
+
+* The left pane displays all contacts as rounded cards. Each card highlights the contact's name and shows their company, category, tags, and other details.
+* The right **Overview** pane displays the total number of contacts, the number of follow-ups needing attention, and the number of contacts in each category.
+* The **One week follow ups** section lists contacts whose follow-up date is overdue or falls within the next seven days. Overdue dates are highlighted in red, while dates due within the next seven days are highlighted in yellow.
+
+The follow-up list is integrated into the Overview pane; there is no separate Dashboard page or Dashboard button. You can continue to manage contacts using the command box at the bottom of the window.
+
+--------------------------------------------------------------------------------------------------------------------
+
 ## Features
 
 <box type="info" seamless>
