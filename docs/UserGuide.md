@@ -319,8 +319,7 @@ Format: `commit`
 ### Undoing a change: `undo`
 
 Restores the contact-list state before the most recent saved change. The `add`, `edit`, `delete`, `clear`,
-`remark`, `category`, `sort`, and `commit` commands create undo checkpoints. Logged interactions are saved but do
-not currently create an undo checkpoint.
+`remark`, `category`, `interaction`, `sort`, and `commit` commands create undo checkpoints.
 
 Format: `undo`
 

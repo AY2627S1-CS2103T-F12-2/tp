@@ -35,6 +35,23 @@ public class InteractionCommandTest {
         assertEquals("Discussed proposal", updated.getInteractions().getLast().getNote());
     }
 
+    @Test
+    public void execute_validIndex_interactionCanBeUndoneAndRedone() throws Exception {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Person original = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        InteractionCommand command = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-20", InteractionType.MEETING, "Discussed proposal");
+
+        command.execute(model);
+        new UndoCommand().execute(model);
+        assertEquals(original, model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()));
+
+        new RedoCommand().execute(model);
+        Person redone = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        assertEquals(original.getInteractions().size() + 1, redone.getInteractions().size());
+        assertEquals("Discussed proposal", redone.getInteractions().getLast().getNote());
+    }
+
 
     @Test
     public void execute_invalidDate_throwsCommandException() {

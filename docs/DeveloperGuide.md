@@ -482,6 +482,7 @@ MSS
 
 1. User requests to log an interaction with a contact.
 2. ContactFind adds the interaction to the contact's history.
+3. ContactFind saves the updated contact-list state so the interaction can be undone or redone.
 
     Use case ends.
 
@@ -696,7 +697,7 @@ Extensions
 **MSS**
 
 1. User requests to undo the most recent saved change.
-2. ContactFind restores the preceding contact-list state and displays it.
+2. ContactFind restores the preceding contact-list state, including any logged interaction, and displays it.
 
     Use case ends.
 
@@ -713,7 +714,7 @@ Extensions
 **MSS**
 
 1. User requests to redo the most recently undone change.
-2. ContactFind restores the redone contact-list state and displays it.
+2. ContactFind restores the redone contact-list state, including any logged interaction, and displays it.
 
     Use case ends.
 

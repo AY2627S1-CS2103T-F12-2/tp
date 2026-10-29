@@ -61,6 +61,7 @@ public class InteractionCommand extends Command {
                 original.getAddress(), original.getTags(), original.getRemark(), original.getCategory(),
                 original.getRole(), original.getCompany(), original.getBoss(), original.getFollowUpDate(), history);
         model.setPerson(original, updated);
+        model.commitAddressBook(COMMAND_WORD);
         return new CommandResult(String.format(MESSAGE_SUCCESS, type, original.getName(), date));
     }
 
