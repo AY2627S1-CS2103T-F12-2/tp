@@ -120,7 +120,10 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     /** Returns validated values for a search prefix. */
     private List<String> getSearchValues(ArgumentMultimap arguments, Prefix prefix) throws ParseException {
-        List<String> values = arguments.getAllValues(prefix);
+        List<String> values = arguments.getAllValues(prefix).stream()
+                .map(String::trim)
+                .map(value -> value.replaceAll("\\s+", " "))
+                .toList();
         for (String value : values) {
             if (value.isBlank()) {
                 throw new ParseException(FindCommand.MESSAGE_EMPTY_SEARCH_KEYWORD);

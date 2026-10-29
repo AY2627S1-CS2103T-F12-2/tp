@@ -129,6 +129,19 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_multiWordCompanyAndRole_filtersMatchingContact() throws Exception {
+        AddressBook addressBook = new AddressBook();
+        addressBook.addPerson(AMY);
+        Model model = new ModelManager(addressBook, new UserPrefs());
+
+        parser.parse("   com/  Amy   Capital  ").execute(model);
+        assertEquals(List.of(AMY), model.getFilteredPersonList());
+
+        parser.parse("rl/Investment Banker").execute(model);
+        assertEquals(List.of(AMY), model.getFilteredPersonList());
+    }
+
+    @Test
     public void parse_emptySearchKeyword_throwsParseException() {
         assertParseFailure(parser, "n/", FindCommand.MESSAGE_EMPTY_SEARCH_KEYWORD);
         assertParseFailure(parser, "p/", FindCommand.MESSAGE_EMPTY_SEARCH_KEYWORD);
