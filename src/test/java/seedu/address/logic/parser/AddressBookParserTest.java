@@ -167,4 +167,11 @@ public class AddressBookParserTest {
     public void parseCommand_unknownCommand_throwsParseException() {
         assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand("unknownCommand"));
     }
+
+    @Test
+    public void parseCommand_interactionsWithIndex() throws Exception {
+        InteractionsCommand command = (InteractionsCommand) parser.parseCommand(
+                InteractionsCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new InteractionsCommand(INDEX_FIRST_PERSON), command);
+    }
 }
