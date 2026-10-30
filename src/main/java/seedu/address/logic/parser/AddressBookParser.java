@@ -76,7 +76,7 @@ public class AddressBookParser {
             case HelpCommand.COMMAND_WORD -> new HelpCommand();
             case RemarkCommand.COMMAND_WORD -> new RemarkCommandParser().parse(arguments);
             case InteractionCommand.COMMAND_WORD -> new InteractionCommandParser().parse(arguments);
-            case InteractionsCommand.COMMAND_WORD -> new InteractionsCommand();
+            case InteractionsCommand.COMMAND_WORD -> new InteractionsCommandParser().parse(arguments);
             case UndoCommand.COMMAND_WORD -> new UndoCommand();
             case RedoCommand.COMMAND_WORD -> new RedoCommand();
             case SortCommand.COMMAND_WORD -> new SortCommandParser().parse(arguments);
