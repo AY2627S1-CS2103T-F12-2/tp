@@ -245,7 +245,13 @@ Examples:
 
 Shows recorded interactions for all contacts, including those hidden by the current filter. Shows `No interactions recorded.` when empty.
 
+
 Format: `interactions`
+        `interactions 1`
+
+* Adding an index after interactions displays all interactions of specified person. 
+* Interactions without index displays all interactions from all contacts. 
+* Interactions are recorded in chronological order.
 
 ### Finding contacts: `find`
 
@@ -269,7 +275,6 @@ Examples:
 * `find b/Alex` returns every contact whose boss name contains `Alex`.
 * `find t/friend t/important` returns every contact with a tag containing `friend` or `important`.
 * `find n/alex yeoh n/david li` returns `Alex Yeoh` and `David Li`.<br>
-![result for 'find alex david'](images/findAlexDavidResult.png)
 * `find c/client c/investor` returns every contact in either the `CLIENT` or `INVESTOR` category.
 * `find fd/2026-10-20` returns every contact with a follow-up date of `2026-10-20`.
 * `find rl/analyst rl/engineer com/ABC Labs` returns every contact whose role contains `analyst` or `engineer` and whose company contains `ABC Labs`.
