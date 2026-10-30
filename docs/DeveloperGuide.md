@@ -494,14 +494,14 @@ Use case ends.
 
 **Use case: Categorize a contact**
 
-MSS
+**MSS**
 
 1. User requests to assign a category (e.g. INVESTOR, CLIENT) to a contact.
 2. ContactFind updates the contact with the specified category.
 
     Use case ends.
 
-Extensions
+**Extensions**
 
 * 1a. The given index is invalid.
 
@@ -517,14 +517,14 @@ Extensions
 
 **Use case: List categories**
 
-MSS
+**MSS**
 
 1. User requests to view category counts.
 2. ContactFind shows all categories and the number of contacts in each category.
 
     Use case ends.
 
-Extensions
+**Extensions**
 
 * 2a. The contact list is empty.
 
@@ -534,7 +534,7 @@ Extensions
 
 **Use case: Log an interaction**
 
-MSS
+**MSS**
 
 1. User requests to log an interaction with a contact.
 2. ContactFind adds the interaction to the contact's history.
@@ -542,7 +542,7 @@ MSS
 
     Use case ends.
 
-Extensions
+**Extensions**
 
 * 1a. The given index is invalid.
 
@@ -556,22 +556,42 @@ Extensions
 
       Use case resumes at step 2.
 
+
+
 **Use case: List interactions**
 
-MSS
+**MSS**
 
-1. User requests to view recorded interactions. 
+1. User requests to view recorded interactions.
 2. ContactFind shows recorded interactions across all contacts.
 
-    Use case ends.
+   Use case ends.
 
-Extensions
+**Extensions**
 
-* 2a. No interactions have been recorded.
+* 1a. User provides the index of a contact in the displayed list.
 
-   * 2a1. ContactFind shows a message indicating that no interactions are recorded.
+    * 1a1. ContactFind shows the recorded interactions with that contact.
 
-      Use case ends.
+  Use case ends.
+
+* 1b. User provides the index of a contact with no recorded interactions.
+
+    * 1b1. ContactFind shows a message indicating that no interactions are recorded with that contact.
+
+  Use case ends.
+
+* 1c. The given index is invalid.
+
+    * 1c1. ContactFind shows an error message.
+
+  Use case ends.
+
+* 2a. No interactions have been recorded for any contact.
+
+    * 2a1. ContactFind shows a message indicating that no interactions are recorded.
+
+  Use case ends.
 
 **Use case: View usage instructions**
 
@@ -920,6 +940,16 @@ testers are expected to do more *exploratory* testing.
 
 3. Test case: enter `find n/Casey`, then `interactions`.<br>
    Expected: The interaction list still includes Blair's email interaction even though Blair is hidden by the current filter.
+
+4. Test case: enter `find n/Blair`, then `interactions 1`.<br>
+   Expected: Only Blair's EMAIL interaction on `2026-12-01` is shown. The index refers to the displayed list, so `1` is Blair.
+
+5. Test case: enter `list`, then `interactions 1`.<br>
+   Expected: The status message reports that no interactions are recorded with Alex Tan.
+
+6. Test case: `interactions 0`, then `interactions 6`.<br>
+   Expected: `interactions 0` is rejected with an invalid command format error and the usage message.
+    `interactions 6` is rejected with an invalid person index error because there is no displayed contact with index 6.
 
 ### Categorizing contacts
 
