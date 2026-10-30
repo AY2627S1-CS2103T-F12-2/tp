@@ -11,7 +11,7 @@ import java.util.Locale;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Invalid name! Names may contain alphabetic characters only.";
+            "Invalid name! Names must contain at least two words and may contain alphabetic characters only.";
 
     /*
      * A valid name consists of at least a first name and last name, separated by spaces.
