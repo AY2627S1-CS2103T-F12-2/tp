@@ -15,6 +15,8 @@ Class UserPrefs
 
 Class UniquePersonList
 Class Person
+Class Interaction
+Enum InteractionType
 Class Address
 Class Email
 Class Name
@@ -57,7 +59,7 @@ Person *--> "0..1" Boss
 Person *--> "1" Remark
 Person *--> "1" Category
 Person *--> "0..1" FollowUpDate : follow-up date
-
+Person *--> "0..*" Interaction : history
 Interaction --> "1" InteractionType
 
 FollowUpDatePredicate ..> FollowUpDate

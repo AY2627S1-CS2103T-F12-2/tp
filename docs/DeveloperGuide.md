@@ -277,6 +277,16 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 <puml src="diagrams/CategoriesSequenceDiagram-Model.puml" width="250" />
 
+### Interaction history feature
+
+`InteractionCommandParser` parses both logging and deletion under the `interaction` command word. It implements `Parser<Command>`, returning `InteractionCommand` for logging or `DeleteInteractionCommand` for `del/`. Duplicate prefixes and mixing deletion with logging fields are rejected. Notes are optional; prefixes can appear in any order.
+
+Each `Person` owns an immutable list of `Interaction` records containing a date, type, and note. Both commands select a contact from the displayed list, copy its interactions, and replace the contact using `Person#withInteractions` and `Model#setPerson`. Both call `Model#commitAddressBook` for undo/redo; `LogicManager` then saves the address book.
+
+Logging sorts the contact's history by date, latest first. `JsonAdaptedPerson#toModelType` applies the same ordering when loading saved histories. Equal-date records retain their relative order, and duplicate interactions are preserved. `JsonAdaptedInteraction` handles conversion of individual records.
+
+`InteractionsCommand` lists all contacts' histories from the unfiltered list, or one contact's history using the displayed index. Entries are grouped by contact and numbered from 1 in stored order, matching deletion indexes. These numbers are positions and may change after additions or deletions. Names come from the owning contact, so renaming a contact also updates the displayed interaction heading.
+
 ### Export feature
 
 #### Implementation
@@ -537,8 +547,8 @@ Use case ends.
 **MSS**
 
 1. User requests to log an interaction with a contact.
-2. ContactFind adds the interaction to the contact's history.
-3. ContactFind saves the updated contact-list state so the interaction can be undone or redone.
+2. ContactFind adds the interaction to the contact's history and orders the entries latest first.
+3. ContactFind records the change for undo/redo and saves the updated contacts.
 
     Use case ends.
 
@@ -548,22 +558,44 @@ Use case ends.
 
    * 1a1. ContactFind shows an error message.
 
-      Use case resumes at step 2.
+      Use case resumes at step 1.
 
 * 1b. The specified interaction details or command syntax are invalid.
 
    * 1b1. ContactFind shows an error message.
 
-      Use case resumes at step 2.
+      Use case resumes at step 1.
 
+**Use case: Delete an interaction**
 
+**MSS**
+
+1. User requests to delete a numbered interaction from a contact's history.
+2. ContactFind removes that interaction and renumbers the remaining entries.
+3. ContactFind records the change for undo/redo and saves the updated contacts.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. The contact or interaction index is invalid.
+
+   * 1a1. ContactFind shows an error message.
+
+      Use case resumes at step 1.
+
+* 1b. The command syntax is invalid, including mixing deletion and logging fields.
+
+   * 1b1. ContactFind shows an error message.
+
+      Use case resumes at step 1.
 
 **Use case: List interactions**
 
 **MSS**
 
 1. User requests to view recorded interactions.
-2. ContactFind shows recorded interactions across all contacts.
+2. ContactFind shows recorded interactions across all contacts, including hidden contacts, grouped by contact and latest first. Numbering starts at 1 for each contact.
 
    Use case ends.
 
@@ -571,7 +603,7 @@ Use case ends.
 
 * 1a. User provides the index of a contact in the displayed list.
 
-    * 1a1. ContactFind shows the recorded interactions with that contact.
+    * 1a1. ContactFind shows only that contact's interactions, latest first and numbered from 1.
 
   Use case ends.
 
@@ -950,6 +982,18 @@ testers are expected to do more *exploratory* testing.
 6. Test case: `interactions 0`, then `interactions 6`.<br>
    Expected: `interactions 0` is rejected with an invalid command format error and the usage message.
     `interactions 6` is rejected with an invalid person index error because there is no displayed contact with index 6.
+
+7. Test case: enter `find n/Blair`, `interaction 1 d/2026-10-20 ty/CALL nt/Earlier`, `interaction 1 d/2026-12-15 ty/MEETING nt/Latest`, then `interactions 1`.<br>
+   Expected: Entries are numbered 1 to 3: MEETING on `2026-12-15`, EMAIL on `2026-12-01`, then CALL on `2026-10-20`.
+
+8. Test case: `interaction 1 del/0`, `interaction 1 del/4`, then `interaction 1 del/2 ty/CALL`.<br>
+   Expected: Each command is rejected; the three interactions remain unchanged. The last command reports that deletion cannot be combined with logging fields.
+
+9. Test case: `interaction 1 del/2`, then `interactions 1`.<br>
+   Expected: Only the EMAIL entry is removed. MEETING and CALL remain, renumbered 1 and 2. Enter `undo`, `find n/Blair`, and `interactions 1`: all three entries return. Enter `redo`, `find n/Blair`, and `interactions 1`: only MEETING and CALL remain. Reapply the filter because undo/redo displays all contacts.
+
+10. Test case: close the app, back up `data/addressbook.json`, and rearrange Blair's two interaction objects into oldest-first order without changing their fields. Restart, enter `find n/Blair`, then `interactions 1`.<br>
+    Expected: MEETING is still entry 1 and CALL entry 2. Other contact details are unchanged. After `interaction 1 del/1` and another restart, only CALL remains.
 
 ### Categorizing contacts
 
