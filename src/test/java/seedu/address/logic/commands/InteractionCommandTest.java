@@ -24,6 +24,18 @@ import seedu.address.model.person.Person;
 /** Tests that interactions are added to the selected person. */
 public class InteractionCommandTest {
     @Test
+    public void execute_outOfOrderDates_sortsHistoryLatestFirst() throws Exception {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        for (String date : List.of("2026-10-30", "2026-10-10", "2026-10-20")) {
+            new InteractionCommand(INDEX_FIRST_PERSON, date, InteractionType.MEETING, "").execute(model);
+        }
+
+        assertEquals(List.of("2026-10-30", "2026-10-20", "2026-10-10"),
+                model.getFilteredPersonList().get(0).getInteractions().stream()
+                        .map(interaction -> interaction.getDate().toString()).toList());
+    }
+
+    @Test
     public void execute_afterUndo_replacesRedoBranchAndRecordsInteraction() throws Exception {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         model.commitAddressBook();

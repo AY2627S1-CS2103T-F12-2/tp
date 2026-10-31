@@ -134,6 +134,14 @@ public class Person {
     }
 
     /**
+     * Returns a copy of this person with the given interactions and all other details preserved.
+     */
+    public Person withInteractions(List<Interaction> interactions) {
+        return new Person(name, phone, email, address, tags, remark, category, role, company, boss,
+                followUpDate, interactions);
+    }
+
+    /**
      * Returns true if both persons have the same name, ignoring case.
      * This defines a weaker notion of equality between two persons.
      */
