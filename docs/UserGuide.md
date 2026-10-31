@@ -101,6 +101,7 @@ Prefix | Field            | Used by
 `d/` | Interaction date | `interaction`
 `ty/` | Interaction type | `interaction`
 `nt/` | Interaction note | `interaction`
+`del/` | Interaction index to delete | `interaction`
 `fn/` | File name        | `export`
 
 
@@ -247,15 +248,15 @@ Examples:
 
 Shows recorded interactions for all contacts, including those hidden by the current filter. Shows `No interactions recorded.` when empty.
 
+Interactions are grouped by contact and listed latest first. Numbering starts at 1 for each contact and matches the interaction index used for deletion. Adding or deleting entries can change their numbers; list them again before deleting.
+
 Format: `interactions`
 
 ### Listing interactions with a specific person: `interactions INDEX`
 
-Shows recorded interactions with the person recorded at that specific index (based on the indexing of the current
-filter result if applicable.) Shows `No interactions recorded.` when empty.
-Index references the index currently show on screen (accounting for filter from `find`)
-i.e. if there is only one person displayed after `find`, then the only index available for
-interactions is 1.
+Shows the specified contact's interactions latest first, numbered from 1. Shows `No interactions recorded with NAME.` when that contact has no interactions.
+`INDEX` refers to the currently displayed contact list, including any filter from `find`. If only one contact is displayed, the only valid index is 1.
+Adding or deleting entries can change interaction numbers; list them again before deleting.
 
 Format: `interactions INDEX`
 
@@ -439,7 +440,7 @@ Action     | Format, Examples
 **Export**   | `export`, `export fn/FILENAME`
 **Find**   | `find PREFIX/VALUE [PREFIX/VALUE]...`<br> Prefixes: `n/`, `p/`, `e/`, `rl/`, `com/`, `b/`, `t/`, `c/`, `fd/`.<br> e.g., `find n/James Jake`, `find c/CLIENT c/INVESTOR`, `find fd/2026-10-20`.<br> Repeated prefixes are combined with OR; different prefixes are combined with AND.
 **Help**   | `help`
-**Interaction** | `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
+**Interaction** | Log: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`<br> Delete: `interaction INDEX del/INTERACTION_INDEX`<br> e.g., `interaction 1 del/2`
 **Interactions** | `interactions`, `interactions INDEX`
 **List**   | `list`
 **Redo**   | `redo`
