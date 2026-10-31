@@ -127,6 +127,7 @@
         "listing-all-categories-categories": "Listing all categories: categories",
         "logging-an-interaction-interaction": "Logging an interaction: interaction",
         "listing-all-interactions-interactions": "Listing all interactions: interactions",
+        "listing-interactions-with-a-specific-person-interactions-index": "Listing interactions with a specific person: interactions INDEX",
         "finding-contacts-find": "Finding contacts: find",
         "deleting-a-contact-delete": "Deleting a contact: delete",
         "sorting-contacts-sort": "Sorting contacts: sort",
