@@ -36,4 +36,11 @@ public class RemarkCommandParserTest {
         assertParseFailure(parser, "", expectedMessage);
         assertParseFailure(parser, nonEmptyRemark, expectedMessage);
     }
+
+    @Test
+    public void parse_invalidNumericIndex_throwsIndexError() {
+        assertParseFailure(parser, "0 r/" + nonEmptyRemark, ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "-1 r/" + nonEmptyRemark, ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "2147483648 r/" + nonEmptyRemark, ParserUtil.MESSAGE_INVALID_INDEX);
+    }
 }

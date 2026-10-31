@@ -54,4 +54,11 @@ public class DeleteCommandParserTest {
         assertParseFailure(parser, "fd/2026-10-20 fd/2026-10-21",
                 Messages.getErrorMessageForDuplicatePrefixes(CliSyntax.PREFIX_FOLLOW_UP_DATE));
     }
+
+    @Test
+    public void parse_invalidNumericIndex_throwsIndexError() {
+        assertParseFailure(parser, "0", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "-1", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "2147483648", ParserUtil.MESSAGE_INVALID_INDEX);
+    }
 }

@@ -29,6 +29,9 @@ public class InteractionCommandParser implements Parser<InteractionCommand> {
         try {
             index = ParserUtil.parseIndex(arguments.getPreamble());
         } catch (ParseException e) {
+            if (arguments.getPreamble().matches("-?\\d+")) {
+                throw e;
+            }
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     InteractionCommand.MESSAGE_USAGE), e);
         }
