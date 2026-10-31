@@ -37,6 +37,13 @@ public class CategoryCommandParserTest {
     }
 
     @Test
+    public void parse_invalidNumericIndex_throwsIndexError() {
+        assertParseFailure(parser, "0 c/CLIENT", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "-1 c/CLIENT", ParserUtil.MESSAGE_INVALID_INDEX);
+        assertParseFailure(parser, "2147483648 c/CLIENT", ParserUtil.MESSAGE_INVALID_INDEX);
+    }
+
+    @Test
     public void parse_validArgs_returnsCategoryCommand() {
         CategoryCommand expectedCategoryCommand =
                 new CategoryCommand(INDEX_FIRST_PERSON, Category.UNCATEGORIZED);

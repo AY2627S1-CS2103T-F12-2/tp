@@ -245,7 +245,6 @@ Examples:
 
 Shows recorded interactions for all contacts, including those hidden by the current filter. Shows `No interactions recorded.` when empty.
 
-
 Format: `interactions`
         `interactions 1`
 
@@ -256,12 +255,14 @@ Format: `interactions`
 ### Listing interactions with a specific person: `interactions INDEX`
 
 Shows recorded interactions with the person recorded at that specific index (based on the indexing of the current
-filter result if applicable.) Shows `No interactions recorded.` when empty.
-Index references the index currently show on screen (accounting for filter from `find`)
-i.e. if there is only one person displayed after `find`, then the only index available for
-interactions is 1.
+filter result if applicable.) 
 
 Format: `interactions INDEX`
+
+* Shows `No interactions recorded.` when empty.
+* Index references the index currently show on screen (accounting for filter from `find`)
+i.e. if there is only one person displayed after `find`, then the only index available for
+interactions is 1.
 
 ### Finding contacts: `find`
 
