@@ -345,16 +345,10 @@ Clears all contacts from ContactFind.
 
 Format: `clear`
 
-### Saving an undo checkpoint: `commit`
-
-Saves the current contact list as a checkpoint that undo can return to.
-
-Format: `commit`
-
 ### Undoing a change: `undo`
 
 Restores the contact-list state before the most recent saved change. The `add`, `edit`, `delete`, `clear`,
-`remark`, `category`, `interaction`, `sort`, and `commit` commands create undo checkpoints.
+`remark`, `category`, `interaction`, and `sort` commands create undo checkpoints.
 
 Format: `undo`
 
@@ -367,14 +361,16 @@ Format: `redo`
 
 ### Exporting contacts: `export`
 
-Exports all contacts from ContactFind to a CSV file.
+Exports the currently displayed contacts to a CSV file.
 
 Format: `export`, `export fn/FILENAME`
 
 All keyword parameters must be exact; partial keywords are not supported.
 
-* `export` exports currently displayed contacts to "export.csv" located in the data folder.
-* `export fn/FILENAME` exports currently displayed to "FILENAME.CSV" in the data folder.
+* Exported file is saved in the `data` subfolder of the folder where ContactFind is run. For example, when running the
+  JAR from its containing folder, `export fn/favorites` creates `data/favorites.csv` alongside the JAR's folder.
+* `export` exports currently displayed contacts to `export.csv`.
+* `export fn/FILENAME` exports currently displayed contacts to `FILENAME.csv`.
 * Currently displayed contacts: all contacts, or the remaining contacts after find is executed.
 * FILENAME can only contain alphanumeric characters, dash and underscore.
 * Trailing ".csv" characters in the input file name will be automatically truncated.
@@ -435,7 +431,6 @@ Action     | Format, Examples
 **Categories** | `categories`
 **Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
 **Clear**  | `clear`
-**Commit** | `commit`
 **Delete** | `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, or `delete e/EMAIL` delete one contact; `delete rl/ROLE` or `delete com/COMPANY` preview an exact-match scope; `delete all` deletes that active scope; `delete fd/YYYY-MM-DD` deletes every displayed contact with that date.<br> e.g., `delete com/Example Bank`, then `delete all`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`

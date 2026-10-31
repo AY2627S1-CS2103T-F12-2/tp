@@ -412,7 +412,7 @@ Use case ends.
 
     * 3a1. ContactFind informs the user that the contact already exists.
 
-    Use case ends.
+    Use case resumes at step 1.
 
 **Use case: Delete a contact**
 
@@ -429,7 +429,7 @@ Use case ends.
 
     * 1a1. ContactFind shows an error message.
 
-      Use case ends.
+      Use case resumes at step 1.
 
 * 1b. User requests to delete a contact by exact name, phone number, or email address.
 
@@ -439,14 +439,14 @@ Use case ends.
 
 * 1c. No contact matches specified keywords.
 
-    * 1c1. ContactFind shows an error message.
+    * 1c1. ContactFind informs user there is no matching contact.
 
       Use case ends.
 
 * 1d. User requests to delete contacts by exact role or company.
 
-    * 1d1. ContactFind displays matching contacts as a bulk-delete preview without deleting them.
-    * 1d2. User requests `delete all`.
+    * 1d1. ContactFind displays matching contacts without deleting them.
+    * 1d2. User requests to delete all contacts with specified role or company.
     * 1d3. ContactFind deletes every contact in the preview and shows a confirmation.
 
       Use case ends.
@@ -463,11 +463,11 @@ Use case ends.
 
       Use case ends.
 
-* 1g. The command syntax is invalid, including an unsupported prefix or multiple delete criteria.
+* 1g. The command syntax is invalid.
 
     * 1g1. ContactFind shows an error message with the required format.
 
-      Use case ends.
+      Use case resumes at step 1.
 
 **Use case: Find contacts**
 
@@ -490,7 +490,7 @@ Use case ends.
 
     * 1b1. ContactFind shows an error message.
 
-      Use case ends.
+      Use case resumes at step 1.
 
 **Use case: Categorize a contact**
 
@@ -520,7 +520,7 @@ Use case ends.
 **MSS**
 
 1. User requests to view category counts.
-2. ContactFind shows all categories and the number of contacts in each category.
+2. ContactFind shows all categories and corresponding counts.
 
     Use case ends.
 
@@ -585,7 +585,7 @@ Use case ends.
 
     * 1c1. ContactFind shows an error message.
 
-  Use case ends.
+      Use case resumes at step 1.
 
 * 2a. No interactions have been recorded for any contact.
 
@@ -629,7 +629,7 @@ Use case ends.
 4.  User requests to clear all sample contacts
 5.  ContactFind deletes all contacts and shows an empty contact list
 
-    User can now start adding their own contacts. Use case ends.
+    Use case ends.
 
 **Extensions**
 
@@ -698,11 +698,11 @@ Use case ends.
 
 **Extensions**
 
-* 1a. The search command has invalid syntax, an unsupported field, or an invalid follow-up date.
+* 1a. The command has invalid syntax, an unsupported field, or an invalid follow-up date.
 
     * 1a1. ContactFind shows an error message with the required format.
 
-      Use case ends.
+      Use case resumes at step 1.
 
 * 2a. No contacts match the search.
 
@@ -725,7 +725,7 @@ Use case ends.
 
     * 1a1. ContactFind shows an error message.
 
-      Use case ends.
+      Use case resumes at step 1.
 
 * 1b. User omits the remark, or provides an empty remark.
 
@@ -748,7 +748,7 @@ Use case ends.
 
     * 1a1. ContactFind shows an error message with the required format.
 
-      Use case ends.
+      Use case resumes at step 1.
 
 **Use case: Clear all contacts**
 
@@ -759,21 +759,12 @@ Use case ends.
 
     Use case ends.
 
-**Use case: Save an undo checkpoint**
-
-**MSS**
-
-1. User requests to save a checkpoint using.
-2. ContactFind saves the current contact-list state.
-
-    Use case ends.
-
 **Use case: Undo a contact-list change**
 
 **MSS**
 
 1. User requests to undo the most recent saved change.
-2. ContactFind restores the preceding contact-list state, including any logged interaction, and displays it.
+2. ContactFind restores the preceding contact-list state and displays it.
 
     Use case ends.
 
@@ -783,14 +774,14 @@ Use case ends.
 
     * 1a1. ContactFind shows an error message.
 
-      Use case ends.
+      Use case resumes at step 1.
 
 **Use case: Redo an undone contact-list change**
 
 **MSS**
 
 1. User requests to redo the most recently undone change.
-2. ContactFind restores the redone contact-list state, including any logged interaction, and displays it.
+2. ContactFind restores the redone contact-list state and displays it.
 
     Use case ends.
 
@@ -800,28 +791,37 @@ Use case ends.
 
     * 1a1. ContactFind shows an error message.
 
-      Use case ends.
+      Use case resumes at step 1.
 
 
-**Use case: Export a contact**
+**Use case: Export contacts**
 
 **MSS**
 
-1. User calls the function to export their currently displayed contacts
+1. User requests to export the currently displayed contacts.
+2. ContactFind exports all contacts.
+
+    Use case ends.
 
 **Extensions**
 
-* 1a. The user does not specify the destination file name
+* 1a. File name is invalid.
 
-  Export function resolves and writes to default file path "export.csv" in the data folder
+    * 1a1. ContactFind displays error message.
 
-* 1b. The user specifies the destination file name as FILENAME or FILENAME.csv
+      Use case resumes at step 1.
 
-  Export function resolves and writes to default file path "FILENAME.csv" in the data folder
+* 1b. The user specifies a destination file name.
 
-* 1c. The user does not specify the destination file name
+    * 1b1. ContactFind exports contact with specified file name.
 
-  Export function resolves and writes a csv file containing the header row and no other rows.
+      Use case resumes at step 2.
+
+* 2a. No contacts are currently displayed.
+
+    * 2a1. ContactFind exports an empty contact list.
+
+      Use case ends.
 
 
 ### Non-Functional Requirements
@@ -840,8 +840,7 @@ Use case ends.
 12. Write operations to the data file should be atomic, if the application crashes during a write operation, the data file should not be corrupted.
 13. The application should have zero external dependencies, and should not require any installation of additional software or libraries.
 
-*{More to be added}*
-
+### Glossary
 * **API (Application Programming Interface)**: A set of specifications, rules, and methods that components use to communicate and interact with each other without exposing internal implementation details.
 * **Architecture**: The high-level structure of the application, defining its major components (`UI`, `Logic`, `Model`, `Storage`) and the rules governing interactions between them.
 * **CLI (Command Line Interface)**: A text-based user interface where users execute operations by typing textual commands instead of interacting via mouse clicks.
