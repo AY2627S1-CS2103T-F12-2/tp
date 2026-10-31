@@ -53,6 +53,7 @@
         "implementation": "Implementation",
         "undo-redo-feature": "Undo/redo feature",
         "category-categories-feature": "Category/Categories feature",
+        "interaction-history-feature": "Interaction history feature",
         "export-feature": "Export feature",
         "documentation-logging-testing-dev-ops": "Documentation, logging, testing, dev-ops",
         "appendix-requirements": "Appendix: Requirements",
