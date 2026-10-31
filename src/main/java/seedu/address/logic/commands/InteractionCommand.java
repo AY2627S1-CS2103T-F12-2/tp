@@ -2,10 +2,12 @@ package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_DELETE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_NOTE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_TYPE;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +27,9 @@ public class InteractionCommand extends Command {
             + ": Logs an interaction with the person at INDEX.\n"
             + "Parameters: INDEX " + PREFIX_INTERACTION_DATE + "yyyy-MM-dd "
             + PREFIX_INTERACTION_TYPE + "TYPE [" + PREFIX_INTERACTION_NOTE + "NOTE]\n"
-            + "Example: interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal";
+            + "Example: interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal\n"
+            + "To delete: interaction INDEX " + PREFIX_INTERACTION_DELETE + "INTERACTION_INDEX\n"
+            + "Example: interaction 1 del/2";
     public static final String MESSAGE_SUCCESS = "Logged %1$s interaction with %2$s on %3$s.";
 
     private final Index index;
@@ -45,21 +49,22 @@ public class InteractionCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         Objects.requireNonNull(model);
+
         List<Person> shownPersons = model.getFilteredPersonList();
         if (index.getZeroBased() >= shownPersons.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        Person original = shownPersons.get(index.getZeroBased());
         if (!Interaction.isValidDate(date)) {
             throw new CommandException(Interaction.MESSAGE_INVALID_DATE);
         }
-        Interaction interaction = new Interaction(date, type, note);
-        List<Interaction> history = new ArrayList<>(original.getInteractions());
-        history.add(interaction);
-        Person updated = new Person(original.getName(), original.getPhone(), original.getEmail(),
-                original.getAddress(), original.getTags(), original.getRemark(), original.getCategory(),
-                original.getRole(), original.getCompany(), original.getBoss(), original.getFollowUpDate(), history);
+
+        Person original = shownPersons.get(index.getZeroBased());
+        List<Interaction> interactions = new ArrayList<>(original.getInteractions());
+        interactions.add(new Interaction(date, type, note));
+        interactions.sort(Comparator.comparing(Interaction::getDate).reversed());
+
+        Person updated = original.withInteractions(interactions);
         model.setPerson(original, updated);
         model.commitAddressBook(COMMAND_WORD);
         return new CommandResult(String.format(MESSAGE_SUCCESS, type, original.getName(), date));
