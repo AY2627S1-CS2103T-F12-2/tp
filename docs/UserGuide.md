@@ -75,7 +75,7 @@ The follow-up list is integrated into the Overview pane; there is no separate Da
 
 * `INDEX` refers to the index number shown in the displayed contact list. It **must be a positive integer** 1, 2, 3, ...
 
-* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `categories`, `interactions`, `exit`, and `clear`, are ignored.<br>
+* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `categories`, `exit`, and `clear`, are ignored.<br>
   For example, `help 123` is interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
@@ -252,6 +252,16 @@ Format: `interactions`
 * Adding an index after interactions displays all interactions of specified person. 
 * Interactions without index displays all interactions from all contacts. 
 * Interactions are recorded in chronological order.
+
+### Listing interactions with a specific person: `interactions INDEX`
+
+Shows recorded interactions with the person recorded at that specific index (based on the indexing of the current
+filter result if applicable.) Shows `No interactions recorded.` when empty.
+Index references the index currently show on screen (accounting for filter from `find`)
+i.e. if there is only one person displayed after `find`, then the only index available for
+interactions is 1.
+
+Format: `interactions INDEX`
 
 ### Finding contacts: `find`
 
@@ -433,7 +443,7 @@ Action     | Format, Examples
 **Find**   | `find PREFIX/VALUE [PREFIX/VALUE]...`<br> Prefixes: `n/`, `p/`, `e/`, `rl/`, `com/`, `b/`, `t/`, `c/`, `fd/`.<br> e.g., `find n/James Jake`, `find c/CLIENT c/INVESTOR`, `find fd/2026-10-20`.<br> Repeated prefixes are combined with OR; different prefixes are combined with AND.
 **Help**   | `help`
 **Interaction** | `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
-**Interactions** | `interactions`
+**Interactions** | `interactions`, `interactions INDEX`
 **List**   | `list`
 **Redo**   | `redo`
 **Remark** | `remark INDEX [r/REMARK]`<br> e.g., `remark 1 r/Prefers email over calls`
