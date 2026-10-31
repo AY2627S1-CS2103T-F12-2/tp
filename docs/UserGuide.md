@@ -234,8 +234,10 @@ Format: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`
 * `d/` and `ty/` are required. Each prefix can appear only once.
 * `DATE` must be a valid calendar date in `yyyy-MM-dd` format.
 * `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
-* `NOTE` is optional and can be empty.
+* `NOTE` is optional and can be empty. Logging prefixes may appear in any order. Recognised prefixes (`d/`, `ty/`, `nt/`, `del/`) after whitespace are interpreted as prefixes, even within notes.
 * Each interaction is added to the contact's history; existing interactions are kept.
+* Adding sorts the contact's interactions by date, latest first.
+* To delete an entry, use `interaction INDEX del/INTERACTION_INDEX` without logging prefixes. Run `interactions INDEX` first to check the current numbered entries. Deletion supports undo and redo.
 
 Examples:
 * `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
