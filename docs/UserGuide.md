@@ -251,6 +251,11 @@ Shows recorded interactions for all contacts, including those hidden by the curr
 Interactions are grouped by contact and listed latest first. Numbering starts at 1 for each contact and matches the interaction index used for deletion. Adding or deleting entries can change their numbers; list them again before deleting.
 
 Format: `interactions`
+        `interactions 1`
+
+* Adding an index after interactions displays all interactions of specified person. 
+* Interactions without index displays all interactions from all contacts. 
+* Interactions are recorded in chronological order.
 
 ### Listing interactions with a specific person: `interactions INDEX`
 
@@ -259,6 +264,11 @@ Shows the specified contact's interactions latest first, numbered from 1. Shows 
 Adding or deleting entries can change interaction numbers; list them again before deleting.
 
 Format: `interactions INDEX`
+
+* Shows `No interactions recorded.` when empty.
+* Index references the index currently show on screen (accounting for filter from `find`)
+i.e. if there is only one person displayed after `find`, then the only index available for
+interactions is 1.
 
 ### Finding contacts: `find`
 
@@ -282,7 +292,6 @@ Examples:
 * `find b/Alex` returns every contact whose boss name contains `Alex`.
 * `find t/friend t/important` returns every contact with a tag containing `friend` or `important`.
 * `find n/alex yeoh n/david li` returns `Alex Yeoh` and `David Li`.<br>
-![result for 'find alex david'](images/findAlexDavidResult.png)
 * `find c/client c/investor` returns every contact in either the `CLIENT` or `INVESTOR` category.
 * `find fd/2026-10-20` returns every contact with a follow-up date of `2026-10-20`.
 * `find rl/analyst rl/engineer com/ABC Labs` returns every contact whose role contains `analyst` or `engineer` and whose company contains `ABC Labs`.
@@ -343,16 +352,10 @@ Clears all contacts from ContactFind.
 
 Format: `clear`
 
-### Saving an undo checkpoint: `commit`
-
-Saves the current contact list as a checkpoint that undo can return to.
-
-Format: `commit`
-
 ### Undoing a change: `undo`
 
 Restores the contact-list state before the most recent saved change. The `add`, `edit`, `delete`, `clear`,
-`remark`, `category`, `interaction`, `sort`, and `commit` commands create undo checkpoints.
+`remark`, `category`, `interaction`, and `sort` commands create undo checkpoints.
 
 Format: `undo`
 
@@ -365,14 +368,16 @@ Format: `redo`
 
 ### Exporting contacts: `export`
 
-Exports all contacts from ContactFind to a CSV file.
+Exports the currently displayed contacts to a CSV file.
 
 Format: `export`, `export fn/FILENAME`
 
 All keyword parameters must be exact; partial keywords are not supported.
 
-* `export` exports currently displayed contacts to "export.csv" located in the data folder.
-* `export fn/FILENAME` exports currently displayed to "FILENAME.CSV" in the data folder.
+* Exported file is saved in the `data` subfolder of the folder where ContactFind is run. For example, when running the
+  JAR from its containing folder, `export fn/favorites` creates `data/favorites.csv` alongside the JAR's folder.
+* `export` exports currently displayed contacts to `export.csv`.
+* `export fn/FILENAME` exports currently displayed contacts to `FILENAME.csv`.
 * Currently displayed contacts: all contacts, or the remaining contacts after find is executed.
 * FILENAME can only contain alphanumeric characters, dash and underscore.
 * Trailing ".csv" characters in the input file name will be automatically truncated.
@@ -433,7 +438,6 @@ Action     | Format, Examples
 **Categories** | `categories`
 **Category** | `category INDEX c/CATEGORY`<br> e.g., `category 1 c/INVESTOR`
 **Clear**  | `clear`
-**Commit** | `commit`
 **Delete** | `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, or `delete e/EMAIL` delete one contact; `delete rl/ROLE` or `delete com/COMPANY` preview an exact-match scope; `delete all` deletes that active scope; `delete fd/YYYY-MM-DD` deletes every displayed contact with that date.<br> e.g., `delete com/Example Bank`, then `delete all`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [rl/ROLE] [com/COMPANY] [b/BOSS] [fd/FOLLOW_UP_DATE] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Exit**   | `exit`

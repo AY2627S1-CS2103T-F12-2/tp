@@ -30,6 +30,9 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
+            if (argMultimap.getPreamble().matches("-?\\d+")) {
+                throw pe;
+            }
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     RemarkCommand.MESSAGE_USAGE), pe);
         }
