@@ -117,6 +117,11 @@ How the `Logic` component works:
    Note that although this is shown as a single step in the diagram above for simplicity, the code can require several interactions between the command object and the `Model` to complete the operation.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned from `Logic`.
 
+After parsing, `LogicManager` cancels an active bulk-delete preview before executing any command other than a
+`DeleteCommand`. This treats another command as a change in user intention, even when it preserves the displayed
+filter or later fails during execution. After successful execution, `LogicManager` attempts to save the address book
+for every command, including read-only commands, so each command is an opportunity to persist the in-memory state.
+
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
 <puml src="diagrams/ParserClasses.puml" width="600"/>
@@ -184,6 +189,10 @@ The undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `Ad
 * `VersionedAddressBook#redo()` -- Restores a previously undone address book state from its history.
 
 These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+
+The history retains at most 50 states, including the current state. Undo and redo restore address-book data but not
+the previous filter; both reset the displayed list to all contacts. Users should therefore re-check displayed indexes
+before issuing another index-based command.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
@@ -283,7 +292,11 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 Each `Person` owns an immutable list of `Interaction` records containing a date, type, and note. Both commands select a contact from the displayed list, copy its interactions, and replace the contact using `Person#withInteractions` and `Model#setPerson`. Both call `Model#commitAddressBook` for undo/redo; `LogicManager` then saves the address book.
 
-Logging sorts the contact's history by date, latest first. `JsonAdaptedPerson#toModelType` applies the same ordering when loading saved histories. Equal-date records retain their relative order, and duplicate interactions are preserved. `JsonAdaptedInteraction` handles conversion of individual records.
+Logging accepts both past and future dates, allowing interactions to represent completed or planned events. It sorts
+the contact's history by date, latest first. `JsonAdaptedPerson#toModelType` applies the same ordering when loading
+saved histories. Equal-date records retain their relative order because interaction times are not stored. Duplicate
+interactions are preserved because separate events can have identical details. `JsonAdaptedInteraction` handles
+conversion of individual records.
 
 `InteractionsCommand` lists all contacts' histories from the unfiltered list, or one contact's history using the displayed index. Entries are grouped by contact and numbered from 1 in stored order, matching deletion indexes. These numbers are positions and may change after additions or deletions. Names come from the owning contact, so renaming a contact also updates the displayed interaction heading.
 

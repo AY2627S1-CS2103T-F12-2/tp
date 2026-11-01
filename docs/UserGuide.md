@@ -242,10 +242,13 @@ Format: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`
 * Logs an interaction with the contact at the specified `INDEX`.
 * `d/` and `ty/` are required when logging. Every interaction prefix (`d/`, `ty/`, `nt/`, `del/`) can appear only once.
 * `DATE` must be a valid calendar date in `yyyy-MM-dd` format.
+* Future dates are accepted, allowing planned interactions to be recorded.
 * `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
 * `NOTE` is optional and can be empty. Logging prefixes may appear in any order. Recognised prefixes (`d/`, `ty/`, `nt/`, `del/`) after whitespace are interpreted as prefixes, even within notes.
 * Each interaction is added to the contact's history; existing interactions are kept.
-* Adding sorts the contact's interactions by date, latest first.
+* Identical interactions are allowed because separate interactions can have the same details.
+* Adding sorts the contact's interactions by date, latest first. Interactions on the same date retain their existing
+  order because interaction times are not recorded.
 * To delete an entry, use `interaction INDEX del/INTERACTION_INDEX` without logging prefixes.
   `INTERACTION_INDEX` must be a positive integer. Run `interactions INDEX` first to check the current numbered
   entries. Deletion supports undo and redo.
@@ -323,6 +326,9 @@ Format: `delete rl/ROLE` or `delete com/COMPANY`
 
 * While a bulk-delete preview is active, `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, and `delete e/EMAIL` can delete one of the contacts in that preview instead. Enter `list` to leave the preview without deleting all of its contacts.
 * Use `delete all` to delete every contact currently displayed by the active ROLE or COMPANY preview.
+* Entering any successfully parsed command other than `delete` cancels the active preview, even if the displayed list
+  does not change or that command later fails. This treats another command as a change in user intention. Run the
+  preview command again before using `delete all`.
 
 `delete fd/YYYY-MM-DD` is also a bulk-delete command: it immediately deletes every contact displayed in the current list whose follow-up date exactly matches the date.
 
@@ -358,6 +364,9 @@ Restores the contact-list state before the most recent saved change. The `add`, 
 
 ContactFind retains up to 50 states, including the current state, allowing at most 49 consecutive undo steps. When
 this limit is exceeded, the oldest state is discarded.
+
+Undo and redo display the complete contact list. Re-check the displayed list before running another index-based
+command because a contact's displayed index may have changed.
 
 Format: `undo`
 
@@ -398,7 +407,9 @@ Format: `exit`
 
 ### Saving the data
 
-ContactFind automatically saves data after every successfully executed command. You do not need to save manually.
+ContactFind attempts to save data after every successfully executed command, including read-only commands such as
+`help`, `categories`, and `interactions`. This uses every command as an opportunity to persist the current in-memory
+data. If the data file cannot be written, the command reports a storage error. You do not need to save manually.
 
 ### Editing the data file
 
