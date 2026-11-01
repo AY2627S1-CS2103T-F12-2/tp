@@ -47,7 +47,9 @@ ContactFind is a **desktop contact manager for investment bankers**. It helps yo
 
 ContactFind opens in a two-pane layout:
 
-* The left pane displays all contacts as rounded cards. Each card highlights the contact's name and shows their company, category, tags, and other details.
+* The left pane displays the contacts in the current list as rounded cards. After a command such as `find`, only
+  contacts matching the active filter are displayed. Each card highlights the contact's name and shows their company,
+  category, tags, and other details.
 * The right **Overview** pane displays the total number of contacts, the number of follow-ups needing attention, and the number of contacts in each category.
 * The **One week follow ups** section lists contacts whose follow-up date is overdue or falls within the next seven days. Overdue dates are highlighted in red, while dates due within the next seven days are highlighted in yellow.
 
@@ -70,8 +72,9 @@ The follow-up list is integrated into the Overview pane; there is no separate Da
 * Items followed by `...` can appear zero or more times.<br>
   For example, `[t/TAG]... ` may be omitted, or written as `t/friend` or `t/friend t/family`.
 
-* Parameters can be in any order.<br>
+* Prefixed parameters can be in any order.<br>
   For example, if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  A positional `INDEX` must remain immediately after the command word and before any prefixed parameters.
 
 * `INDEX` refers to the index number shown in the displayed contact list. It **must be a positive integer** 1, 2, 3, ...
 
@@ -122,6 +125,11 @@ Follow-up date | A valid calendar date in exactly `yyyy-MM-dd` format, with a fo
 Tag | Letters and digits only, with no spaces.                                                                                       | `priority`
 Remark | Any value.                                                                                                                     | `Prefers email over calls`
 Category | One of `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, `OTHER` (case-insensitive).                | `INVESTOR`
+Interaction date | A valid calendar date in exactly `yyyy-MM-dd` format, with a four-digit year. | `2026-10-20`
+Interaction type | One of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive). | `MEETING`
+Interaction note | Optional text; recognized interaction prefixes after whitespace are parsed as prefixes. | `Discussed proposal`
+Interaction index | A positive integer corresponding to a numbered interaction. | `2`
+Export filename | Letters, digits, hyphens, and underscores only; a trailing `.csv` suffix is optional. | `important_contacts.csv`
 
 <box type="info" seamless>
 
@@ -232,43 +240,34 @@ Records an interaction (such as a meeting or call) with an existing contact.
 Format: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`
 
 * Logs an interaction with the contact at the specified `INDEX`.
-* `d/` and `ty/` are required. Each prefix can appear only once.
+* `d/` and `ty/` are required when logging. Every interaction prefix (`d/`, `ty/`, `nt/`, `del/`) can appear only once.
 * `DATE` must be a valid calendar date in `yyyy-MM-dd` format.
 * `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
 * `NOTE` is optional and can be empty. Logging prefixes may appear in any order. Recognised prefixes (`d/`, `ty/`, `nt/`, `del/`) after whitespace are interpreted as prefixes, even within notes.
 * Each interaction is added to the contact's history; existing interactions are kept.
 * Adding sorts the contact's interactions by date, latest first.
-* To delete an entry, use `interaction INDEX del/INTERACTION_INDEX` without logging prefixes. Run `interactions INDEX` first to check the current numbered entries. Deletion supports undo and redo.
+* To delete an entry, use `interaction INDEX del/INTERACTION_INDEX` without logging prefixes.
+  `INTERACTION_INDEX` must be a positive integer. Run `interactions INDEX` first to check the current numbered
+  entries. Deletion supports undo and redo.
 
 Examples:
 * `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
 * `interaction 3 d/2026-11-02 ty/call nt/Follow-up on term sheet`
 
-### Listing all interactions: `interactions`
+### Listing interactions: `interactions`
 
-Shows recorded interactions for all contacts, including those hidden by the current filter. Shows `No interactions recorded.` when empty.
+Within each contact, recorded interactions are ordered by date from latest to earliest.
 
-Interactions are grouped by contact and listed latest first. Numbering starts at 1 for each contact and matches the interaction index used for deletion. Adding or deleting entries can change their numbers; list them again before deleting.
+Formats:
+* `interactions` lists interactions for all contacts, including contacts hidden by the current filter. Entries are
+  grouped by contact and numbered from 1 within each contact. It shows `No interactions recorded.` when there are no
+  recorded interactions.
+* `interactions INDEX` lists only the specified contact's interactions. `INDEX` refers to the currently displayed
+  contact list, including any active `find` filter. It shows `No interactions recorded with NAME.` when that contact
+  has no interactions.
 
-Format: `interactions`
-        `interactions 1`
-
-* Adding an index after interactions displays all interactions of specified person. 
-* Interactions without index displays all interactions from all contacts. 
-* Interactions are recorded in chronological order.
-
-### Listing interactions with a specific person: `interactions INDEX`
-
-Shows the specified contact's interactions latest first, numbered from 1. Shows `No interactions recorded with NAME.` when that contact has no interactions.
-`INDEX` refers to the currently displayed contact list, including any filter from `find`. If only one contact is displayed, the only valid index is 1.
-Adding or deleting entries can change interaction numbers; list them again before deleting.
-
-Format: `interactions INDEX`
-
-* Shows `No interactions recorded.` when empty.
-* Index references the index currently show on screen (accounting for filter from `find`)
-i.e. if there is only one person displayed after `find`, then the only index available for
-interactions is 1.
+Interaction numbers correspond to `INTERACTION_INDEX` in `interaction INDEX del/INTERACTION_INDEX`. Adding or
+deleting interactions can change these numbers, so list them again before deleting.
 
 ### Finding contacts: `find`
 
@@ -357,6 +356,9 @@ Format: `clear`
 Restores the contact-list state before the most recent saved change. The `add`, `edit`, `delete`, `clear`,
 `remark`, `category`, `interaction`, and `sort` commands create undo checkpoints.
 
+ContactFind retains up to 50 states, including the current state, allowing at most 49 consecutive undo steps. When
+this limit is exceeded, the oldest state is discarded.
+
 Format: `undo`
 
 ### Redoing a change: `redo`
@@ -379,6 +381,7 @@ All keyword parameters must be exact; partial keywords are not supported.
 * `export` exports currently displayed contacts to `export.csv`.
 * `export fn/FILENAME` exports currently displayed contacts to `FILENAME.csv`.
 * Currently displayed contacts: all contacts, or the remaining contacts after find is executed.
+* Interaction histories are not included in the exported CSV file.
 * FILENAME can only contain alphanumeric characters, dash and underscore.
 * Trailing ".csv" characters in the input file name will be automatically truncated.
 
