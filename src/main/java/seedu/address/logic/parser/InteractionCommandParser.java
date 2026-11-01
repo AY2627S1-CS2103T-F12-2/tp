@@ -48,8 +48,13 @@ public class InteractionCommandParser implements Parser<Command> {
                     || arguments.getValue(PREFIX_INTERACTION_NOTE).isPresent()) {
                 throw new ParseException(MESSAGE_MIXED_OPERATIONS);
             }
-            return new DeleteInteractionCommand(index,
-                    ParserUtil.parseIndex(arguments.getValue(PREFIX_INTERACTION_DELETE).get()));
+            try {
+                return new DeleteInteractionCommand(index,
+                        ParserUtil.parseIndex(arguments.getValue(PREFIX_INTERACTION_DELETE).get()));
+            } catch (ParseException e) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        InteractionCommand.MESSAGE_USAGE), e);
+            }
         }
 
         if (arguments.getValue(PREFIX_INTERACTION_DATE).isEmpty()
