@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 public class IndexTest {
@@ -56,6 +59,15 @@ public class IndexTest {
 
         // different value -> returns false
         assertFalse(fifthPersonIndex.equals(Index.fromOneBased(1)));
+    }
+
+    @Test
+    public void hashCode_equalIndexes_workInHashSet() {
+        Set<Index> indexes = new HashSet<>();
+        indexes.add(Index.fromOneBased(5));
+        indexes.add(Index.fromZeroBased(4));
+        assertEquals(1, indexes.size());
+        assertTrue(indexes.contains(Index.fromOneBased(5)));
     }
 
     @Test

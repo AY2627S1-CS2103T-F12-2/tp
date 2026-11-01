@@ -37,6 +37,8 @@ public class CategoryCommand extends Command {
     private final Category targetCategory;
 
     /**
+     * Creates a command to assign a category to the indexed person.
+     *
      * @param targetIndex of the person in the filtered person list to place into category
      * @param targetCategory the category that the person should be placed into
      */
@@ -50,13 +52,13 @@ public class CategoryCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
+        List<Person> shownPersons = model.getFilteredPersonList();
 
-        if (targetIndex.getZeroBased() >= lastShownList.size()) {
+        if (targetIndex.getZeroBased() >= shownPersons.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        Person personToCategorize = lastShownList.get(targetIndex.getZeroBased());
+        Person personToCategorize = shownPersons.get(targetIndex.getZeroBased());
 
         if (personToCategorize.getCategory() == targetCategory) {
             return new CommandResult(String.format(MESSAGE_ALREADY_IN_CATEGORY,

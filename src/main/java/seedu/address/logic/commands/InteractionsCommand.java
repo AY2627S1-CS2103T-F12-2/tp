@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -54,25 +55,26 @@ public class InteractionsCommand extends Command {
             return listAllInteractions(model);
         }
 
-        List<Person> lastShownList = model.getFilteredPersonList();
-        if (index.getZeroBased() >= lastShownList.size()) {
+        List<Person> shownPersons = model.getFilteredPersonList();
+        if (index.getZeroBased() >= shownPersons.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        Person target = lastShownList.get(index.getZeroBased());
+        Person target = shownPersons.get(index.getZeroBased());
         if (target.getInteractions().isEmpty()) {
             return new CommandResult(String.format(MESSAGE_PERSON_NO_INTERACTIONS, target.getName()));
         }
-        String formattedInteractions = target.getInteractions().stream()
-                .map(Object::toString)
+        String formattedInteractions = IntStream.range(0, target.getInteractions().size())
+                .mapToObj(i -> (i + 1) + ". " + target.getInteractions().get(i))
                 .collect(Collectors.joining("\n"));
         return new CommandResult(String.format(MESSAGE_PERSON_SUCCESS, target.getName(), formattedInteractions));
     }
 
     private CommandResult listAllInteractions(Model model) {
         String formattedInteractions = model.getUnfilteredPersonList().stream()
-                .flatMap(person -> person.getInteractions().stream()
-                        .map(interaction -> "Interaction with: " + person.getName() + ", " + interaction))
+                .flatMap(person -> IntStream.range(0, person.getInteractions().size())
+                        .mapToObj(i -> (i + 1) + ". Interaction with: " + person.getName()
+                                + ", " + person.getInteractions().get(i)))
                 .collect(Collectors.joining("\n"));
 
         if (formattedInteractions.isEmpty()) {

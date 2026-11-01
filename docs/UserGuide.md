@@ -101,6 +101,7 @@ Prefix | Field            | Used by
 `d/` | Interaction date | `interaction`
 `ty/` | Interaction type | `interaction`
 `nt/` | Interaction note | `interaction`
+`del/` | Interaction index to delete | `interaction`
 `fn/` | File name        | `export`
 
 
@@ -234,8 +235,10 @@ Format: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`
 * `d/` and `ty/` are required. Each prefix can appear only once.
 * `DATE` must be a valid calendar date in `yyyy-MM-dd` format.
 * `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
-* `NOTE` is optional and can be empty.
+* `NOTE` is optional and can be empty. Logging prefixes may appear in any order. Recognised prefixes (`d/`, `ty/`, `nt/`, `del/`) after whitespace are interpreted as prefixes, even within notes.
 * Each interaction is added to the contact's history; existing interactions are kept.
+* Adding sorts the contact's interactions by date, latest first.
+* To delete an entry, use `interaction INDEX del/INTERACTION_INDEX` without logging prefixes. Run `interactions INDEX` first to check the current numbered entries. Deletion supports undo and redo.
 
 Examples:
 * `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
@@ -244,6 +247,8 @@ Examples:
 ### Listing all interactions: `interactions`
 
 Shows recorded interactions for all contacts, including those hidden by the current filter. Shows `No interactions recorded.` when empty.
+
+Interactions are grouped by contact and listed latest first. Numbering starts at 1 for each contact and matches the interaction index used for deletion. Adding or deleting entries can change their numbers; list them again before deleting.
 
 Format: `interactions`
         `interactions 1`
@@ -254,8 +259,9 @@ Format: `interactions`
 
 ### Listing interactions with a specific person: `interactions INDEX`
 
-Shows recorded interactions with the person recorded at that specific index (based on the indexing of the current
-filter result if applicable.) 
+Shows the specified contact's interactions latest first, numbered from 1. Shows `No interactions recorded with NAME.` when that contact has no interactions.
+`INDEX` refers to the currently displayed contact list, including any filter from `find`. If only one contact is displayed, the only valid index is 1.
+Adding or deleting entries can change interaction numbers; list them again before deleting.
 
 Format: `interactions INDEX`
 
@@ -438,7 +444,7 @@ Action     | Format, Examples
 **Export**   | `export`, `export fn/FILENAME`
 **Find**   | `find PREFIX/VALUE [PREFIX/VALUE]...`<br> Prefixes: `n/`, `p/`, `e/`, `rl/`, `com/`, `b/`, `t/`, `c/`, `fd/`.<br> e.g., `find n/James Jake`, `find c/CLIENT c/INVESTOR`, `find fd/2026-10-20`.<br> Repeated prefixes are combined with OR; different prefixes are combined with AND.
 **Help**   | `help`
-**Interaction** | `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`
+**Interaction** | Log: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`<br> e.g., `interaction 1 d/2026-10-20 ty/MEETING nt/Discussed proposal`<br> Delete: `interaction INDEX del/INTERACTION_INDEX`<br> e.g., `interaction 1 del/2`
 **Interactions** | `interactions`, `interactions INDEX`
 **List**   | `list`
 **Redo**   | `redo`

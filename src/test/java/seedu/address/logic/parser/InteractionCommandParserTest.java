@@ -1,7 +1,11 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.getErrorMessageForDuplicatePrefixes;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_DELETE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_NOTE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INTERACTION_TYPE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -11,6 +15,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
+import seedu.address.logic.commands.DeleteInteractionCommand;
 import seedu.address.logic.commands.InteractionCommand;
 import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
@@ -20,7 +25,24 @@ public class InteractionCommandParserTest {
     private final InteractionCommandParser parser = new InteractionCommandParser();
 
     @Test
-    public void parse_validInput_createsCommand() {
+    public void parse_deleteInteraction_createsCommand() throws ParseException {
+        assertEquals(new DeleteInteractionCommand(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON), parser.parse("1 del/1"));
+    }
+
+    @Test
+    public void parse_invalidDeletion_throwsParseException() {
+        for (String input : new String[] {"1 del/", "1 del/0", "1 del/-1", "1 del/abc", "0 del/1"}) {
+            assertThrows(ParseException.class, () -> parser.parse(input));
+        }
+        assertParseFailure(parser, "1 del/1 del/2",
+                getErrorMessageForDuplicatePrefixes(PREFIX_INTERACTION_DELETE));
+        for (String field : new String[] {"d/2026-10-20", "ty/MEETING", "nt/"}) {
+            assertParseFailure(parser, "1 del/1 " + field, InteractionCommandParser.MESSAGE_MIXED_OPERATIONS);
+        }
+    }
+
+    @Test
+    public void parse_validInput_createsCommand() throws ParseException {
         InteractionCommand expected = new InteractionCommand(INDEX_FIRST_PERSON,
                 "2026-10-20", InteractionType.MEETING, "Discussed proposal");
         assertParseSuccess(parser, "1 d/2026-10-20 ty/meeting nt/Discussed proposal", expected);
@@ -44,6 +66,26 @@ public class InteractionCommandParserTest {
                 "2026-10-20", InteractionType.MEETING, "");
         assertParseSuccess(parser, "1 d/2026-10-20 ty/MEETING", expected);
         assertParseSuccess(parser, "1 d/2026-10-20 ty/MEETING nt/   ", expected);
+    }
+
+    @Test
+    public void parse_prefixesWithinNote_areInterpretedAsPrefixes() {
+        assertParseFailure(parser, "1 d/2026-10-20 ty/MEETING nt/Discuss d/tomorrow",
+                getErrorMessageForDuplicatePrefixes(PREFIX_INTERACTION_DATE));
+        assertParseFailure(parser, "1 d/2026-10-20 ty/MEETING nt/Discuss ty/CALL",
+                getErrorMessageForDuplicatePrefixes(PREFIX_INTERACTION_TYPE));
+        assertParseFailure(parser, "1 d/2026-10-20 ty/MEETING nt/Discuss nt/details",
+                getErrorMessageForDuplicatePrefixes(PREFIX_INTERACTION_NOTE));
+        assertParseFailure(parser, "1 d/2026-10-20 ty/MEETING nt/Discuss del/1",
+                InteractionCommandParser.MESSAGE_MIXED_OPERATIONS);
+    }
+
+    @Test
+    public void parse_noteBeforeRequiredFields_createsCommand() throws ParseException {
+        InteractionCommand expected = new InteractionCommand(INDEX_FIRST_PERSON,
+                "2026-10-20", InteractionType.MEETING, "Discuss policy");
+        assertEquals(expected, parser.parse("1 nt/Discuss policy d/2026-10-20 ty/MEETING"));
+        assertEquals(expected, parser.parse("1 d/2026-10-20 nt/Discuss policy ty/MEETING"));
     }
 
     @Test

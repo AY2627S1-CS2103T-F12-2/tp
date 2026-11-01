@@ -12,7 +12,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Category;
 
 /**
- * Parses input arguments and creates a new CategoryCommand object
+ * Parses input arguments and creates a new CategoryCommand object.
  */
 public class CategoryCommandParser implements Parser<CategoryCommand> {
 

@@ -1,6 +1,7 @@
 package seedu.address.storage;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -221,6 +222,7 @@ class JsonAdaptedPerson {
             }
             modelInteractions.add(interaction.toModelType());
         }
+        modelInteractions.sort(Comparator.comparing(Interaction::getDate).reversed());
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelRemark,
                 modelCategory, modelRole, modelCompany, modelBoss, modelFollowUpDate, modelInteractions);
     }
