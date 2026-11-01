@@ -7,13 +7,13 @@ participant ":Model" as Model MODEL_COLOR
 participant ":AddressBook" as AddressBook MODEL_COLOR
 end box
 
-[-> Model : setPerson(index,\neditedPerson)
+[-> Model : getUnfilteredPersonList()
 activate Model
 
-Model -> AddressBook : setPerson(target,\neditedPerson)
+Model -> AddressBook : getPersonList()
 activate AddressBook
 
-AddressBook --> Model
+AddressBook --> Model : Unmodifiable persons list
 deactivate AddressBook
 
 [<-- Model
