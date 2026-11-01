@@ -221,7 +221,7 @@ Examples:
 
 ### Listing all categories: `categories`
 
-Shows all available categories and the number of contacts assigned to each category.
+Shows all available categories and their contact counts, including contacts hidden by the current filter.
 
 Format: `categories`
 
