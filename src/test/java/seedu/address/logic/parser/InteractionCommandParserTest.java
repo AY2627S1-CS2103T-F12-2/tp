@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.DeleteInteractionCommand;
 import seedu.address.logic.commands.InteractionCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Interaction;
 import seedu.address.model.person.InteractionType;
 

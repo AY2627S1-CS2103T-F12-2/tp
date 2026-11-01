@@ -517,13 +517,13 @@ Use case ends.
 
    * 1a1. ContactFind shows an error message.
 
-      Use case resumes at step 2.
+      Use case resumes at step 1.
 
 * 1b. The specified category format or syntax is invalid.
 
    * 1b1. ContactFind shows an error message.
 
-      Use case resumes at step 2.
+      Use case resumes at step 1.
 
 **Use case: List categories**
 
