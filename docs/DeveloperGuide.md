@@ -16,6 +16,10 @@
 * ContactFind is based on [AddressBook-Level3](https://github.com/se-edu/addressbook-level3) by the [SE-EDU initiative](https://se-education.org/). Its architecture, documentation structure, and parts of its implementation were adapted for this project.
 * The desktop interface uses [JavaFX](https://openjfx.io/), JSON persistence uses [Jackson](https://github.com/FasterXML/jackson), and the documentation site uses [MarkBind](https://markbind.org/) and [PlantUML](https://plantuml.com/).
 
+**Use of AI:**
+  * Codex and Claude were used to draft code, brainstorm code improvements, conduct preliminary code reviews, and develop test cases.
+  * Every AI-assisted change was checked by the team after each request before it was committed.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
