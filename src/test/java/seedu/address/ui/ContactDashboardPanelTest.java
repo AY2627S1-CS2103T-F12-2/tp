@@ -178,9 +178,15 @@ public class ContactDashboardPanelTest {
         StubLogic logic = new StubLogic(FXCollections.observableArrayList(), new GuiSettings());
 
         runOnFxThread(() -> {
+            UiManager defaultUiManager = new UiManager(logic, Path.of("build/test-addressbook.json"));
+            assert defaultUiManager != null;
+
             UiManager uiManager = new UiManager(logic, Path.of("build/test-addressbook.json"),
                     "recovery message");
             assert uiManager != null;
+            Stage uiStage = new Stage();
+            uiManager.start(uiStage);
+            uiStage.hide();
 
             MainWindow mainWindow = new MainWindow(new Stage(), logic, Path.of("build/test-addressbook.json"),
                     "recovery message");

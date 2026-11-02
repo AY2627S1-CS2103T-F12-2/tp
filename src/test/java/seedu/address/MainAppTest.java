@@ -1,6 +1,7 @@
 package seedu.address;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -64,6 +65,8 @@ public class MainAppTest {
 
     @Test
     public void initModelManager_replacementFails_reportsFailure() throws Exception {
+        Path addressBookPath = testFolder.resolve("addressbook.json");
+        Files.writeString(addressBookPath, "not valid json");
         Storage storage = new Storage() {
             @Override
             public Path getUserPrefsFilePath() {
@@ -82,7 +85,7 @@ public class MainAppTest {
 
             @Override
             public Path getAddressBookFilePath() {
-                return testFolder.resolve("addressbook.json");
+                return addressBookPath;
             }
 
             @Override
@@ -103,6 +106,55 @@ public class MainAppTest {
         assertEquals("Error: The address book file was corrupted or contained invalid data. "
                 + "The app started with an empty address book, but could not create a new file.",
                 getRecoveryMessage(mainApp));
+        assertTrue(Files.exists(addressBookPath));
+        assertEquals("not valid json", Files.readString(addressBookPath));
+        assertFalse(Files.exists(testFolder.resolve("addressbook.json.corrupted")));
+    }
+
+    @Test
+    public void initModelManager_replacementAndRestoreFail_preservesBackup() throws Exception {
+        Path addressBookPath = testFolder.resolve("addressbook.json");
+        Files.writeString(addressBookPath, "not valid json");
+        Storage storage = new Storage() {
+            @Override
+            public Path getUserPrefsFilePath() {
+                return testFolder.resolve("preferences.json");
+            }
+
+            @Override
+            public Optional<UserPrefs> readUserPrefs() {
+                return Optional.empty();
+            }
+
+            @Override
+            public void saveUserPrefs(ReadOnlyUserPrefs userPrefs) {
+                // No preference storage is needed for this test.
+            }
+
+            @Override
+            public Path getAddressBookFilePath() {
+                return addressBookPath;
+            }
+
+            @Override
+            public Optional<ReadOnlyAddressBook> readAddressBook() {
+                throw new NullPointerException("invalid address book data");
+            }
+
+            @Override
+            public void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
+                Files.createDirectory(addressBookPath);
+                Files.writeString(addressBookPath.resolve("partial-write"), "partial data");
+                throw new IOException("address book is not writable");
+            }
+        };
+        MainApp mainApp = new MainApp();
+
+        Model model = invokeInitModelManager(mainApp, storage);
+
+        assertTrue(model.getUnfilteredPersonList().isEmpty());
+        assertTrue(Files.exists(testFolder.resolve("addressbook.json.corrupted")));
+        assertEquals("not valid json", Files.readString(testFolder.resolve("addressbook.json.corrupted")));
     }
 
     private Storage createStorage(Path addressBookPath) {
