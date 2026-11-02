@@ -3,13 +3,14 @@ hide circle
 skinparam classAttributeIconSize 0
 
 Class "{abstract}\nCommand" as Command {
-  +execute(Model): CommandResult
+  +execute(model: Model): CommandResult
 }
 Class RemarkCommand {
   +COMMAND_WORD: String
   +MESSAGE_USAGE: String
-  +MESSAGE_NOT_IMPLEMENTED_YET: String
-  +execute(Model): CommandResult
+  +MESSAGE_ADD_REMARK_SUCCESS: String
+  +MESSAGE_DELETE_REMARK_SUCCESS: String
+  +execute(model: Model): CommandResult
 }
 Class CommandException
 
