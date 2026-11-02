@@ -353,7 +353,7 @@ Examples:
 * `sort fd/` sorts all contacts by their next follow-up date.
 * `sort fd/desc` sorts all contacts in reverse date order.
 
-### Clearing all entries: `clear`
+### Clearing all contacts: `clear`
 
 Clears all contacts from ContactFind.
 
