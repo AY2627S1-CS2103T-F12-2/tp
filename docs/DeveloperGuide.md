@@ -168,6 +168,7 @@ The `Model` component,
 The `Storage` component,
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
 * is implemented by `StorageManager`, which delegates the actual JSON file access to `JsonAddressBookStorage` and `JsonUserPrefsStorage` (one class per data file).
+* reports malformed JSON and invalid address-book values as data-loading failures. During startup, `MainApp` handles these failures, including null-pointer failures caused by invalid data, by preserving the invalid file, saving a new empty address book, and informing the user through the UI.
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
 ### Common classes
@@ -673,7 +674,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3b. The existing data file is corrupted or in an invalid format.
 
-    * 3b1. ContactFind starts with an empty contact list.
+    * 3b1. ContactFind preserves the invalid file as a `.corrupted` backup, creates a new empty address-book file, starts with an empty contact list, and displays a recovery error message.
 
       Use case ends.
 
@@ -1007,8 +1008,10 @@ Back up `data/addressbook.json` before these tests if it contains contacts you w
 
 2. Corrupted data file
 
-   1. Close ContactFind and replace `data/addressbook.json` with invalid JSON, such as `{invalid`. Relaunch the app.<br>
-      Expected: ContactFind starts with an empty contact list. The invalid file remains on disk until a command completes successfully and saves the current data.
+   1. Close ContactFind and back up `data/addressbook.json`.
+   2. Replace its contents with malformed JSON, such as `not valid json`, or valid JSON containing invalid contact data.
+   3. Launch ContactFind.
+   4. Expected: ContactFind displays a recovery error, preserves the invalid file as `addressbook.json.corrupted` (or a numbered variant), creates a new empty address book, and starts with an empty contact list.
 
 3. Persisting contact and interaction data
 

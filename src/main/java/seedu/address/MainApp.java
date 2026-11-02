@@ -1,8 +1,10 @@
 package seedu.address;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -43,6 +45,8 @@ public class MainApp extends Application {
     protected Storage storage;
     protected Model model;
 
+    private String addressBookRecoveryMessage;
+
     @Override
     public void init() throws Exception {
         logger.info("=============================[ Initializing AddressBook ]===========================");
@@ -57,13 +61,13 @@ public class MainApp extends Application {
 
         logic = new LogicManager(model, storage);
 
-        ui = new UiManager(logic, storage.getAddressBookFilePath());
+        ui = new UiManager(logic, storage.getAddressBookFilePath(), addressBookRecoveryMessage);
     }
 
     /**
      * Returns a {@code ModelManager} with the data from {@code storage}'s address book and {@code userPrefs}. <br>
      * The data from the sample address book will be used instead if {@code storage}'s address book is not found,
-     * or an empty address book will be used instead if errors occur when reading {@code storage}'s address book.
+     * or a new empty address book file will be created if loading fails.
      */
     private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
         logger.info("Using data file : " + storage.getAddressBookFilePath());
@@ -77,13 +81,80 @@ public class MainApp extends Application {
                         + " populated with a sample AddressBook.");
             }
             initialData = addressBookOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
-        } catch (DataLoadingException e) {
+        } catch (DataLoadingException | NullPointerException e) {
             logger.warning("Data file at " + storage.getAddressBookFilePath() + " could not be loaded."
                     + " Will be starting with an empty AddressBook.");
             initialData = new AddressBook();
+            addressBookRecoveryMessage = resetCorruptedAddressBook(storage);
         }
 
         return new ModelManager(initialData, userPrefs);
+    }
+
+    /**
+     * Replaces invalid address book data with a fresh empty address book.
+     *
+     * @return a message suitable for displaying to the user after startup
+     */
+    private String resetCorruptedAddressBook(Storage storage) {
+        Path filePath = storage.getAddressBookFilePath();
+        Path backupPath;
+
+        try {
+            backupPath = backupCorruptedAddressBook(filePath);
+        } catch (IOException e) {
+            logger.warning("Could not preserve corrupted data file: " + StringUtil.getDetails(e));
+            return "Error: The address book file was corrupted or contained invalid data. "
+                    + "The invalid file was preserved, but a new file could not be created.";
+        }
+
+        try {
+            storage.saveAddressBook(new AddressBook());
+            String message = "Error: The address book file was corrupted or contained invalid data. "
+                    + "A new empty address book has been created.";
+            if (backupPath != null) {
+                message += " The invalid file was preserved as " + backupPath + ".";
+            }
+            return message;
+        } catch (IOException e) {
+            logger.warning("Could not create a new address book file: " + StringUtil.getDetails(e));
+            restoreCorruptedAddressBook(filePath, backupPath);
+            return "Error: The address book file was corrupted or contained invalid data. "
+                    + "The app started with an empty address book, but could not create a new file.";
+        }
+    }
+
+    /**
+     * Moves the corrupted file to a unique backup path before it is replaced.
+     */
+    private Path backupCorruptedAddressBook(Path filePath) throws IOException {
+        if (!Files.exists(filePath)) {
+            return null;
+        }
+
+        Path backupPath = filePath.resolveSibling(filePath.getFileName() + ".corrupted");
+        int suffix = 1;
+        while (Files.exists(backupPath)) {
+            backupPath = filePath.resolveSibling(filePath.getFileName() + ".corrupted." + suffix);
+            suffix++;
+        }
+        Files.move(filePath, backupPath);
+        return backupPath;
+    }
+
+    /**
+     * Restores the corrupted file if creating its replacement fails.
+     */
+    private void restoreCorruptedAddressBook(Path filePath, Path backupPath) {
+        if (backupPath == null || !Files.exists(backupPath)) {
+            return;
+        }
+
+        try {
+            Files.move(backupPath, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            logger.warning("Could not restore corrupted data file: " + StringUtil.getDetails(e));
+        }
     }
 
     /**

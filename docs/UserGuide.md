@@ -91,16 +91,16 @@ Use a prefix immediately before its value. Not every prefix is accepted by every
 Prefix | Field            | Used by
 -------|------------------|--------
 `n/` | Name             | `add`, `edit`, `find`, `delete`
-`p/` | Phone number     | `add`, `edit`, `delete`
-`e/` | Email address    | `add`, `edit`, `delete`
+`p/` | Phone number     | `add`, `edit`, `find`, `delete`
+`e/` | Email address    | `add`, `edit`, `find`, `delete`
 `a/` | Address          | `add`, `edit`
 `rl/` | Role             | `add`, `edit`, `find`, `delete` (preview)
 `com/` | Company          | `add`, `edit`, `find`, `delete` (preview)
-`b/` | Boss             | `add`, `edit`
+`b/` | Boss             | `add`, `edit`, `find`
 `fd/` | Follow-up date   | `add`, `edit`, `find`, `delete`, `sort`
-`t/` | Tag              | `add`, `edit`
+`t/` | Tag              | `add`, `edit`, `find`
 `r/` | Remark           | `remark`
-`c/` | Category         | `category`
+`c/` | Category         | `category`, `find`
 `d/` | Interaction date | `interaction`
 `ty/` | Interaction type | `interaction`
 `nt/` | Interaction note | `interaction`
@@ -222,6 +222,7 @@ Format: `category INDEX c/CATEGORY`
 * `CATEGORY` must be one of: `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, `OTHER`.
 * Category names are case-insensitive.
 * Each contact can have only one category. Categorizing a contact replaces that contact's current category.
+* Changing a category keeps the current `find` filter. The contact may disappear from the displayed list if it no longer matches. Use `list` to show all contacts.
 
 Examples:
 * `category 1 c/INVESTOR` categorizes the 1st contact in the displayed list as an investor.
@@ -284,6 +285,7 @@ Format: `find PREFIX/VALUE [PREFIX/VALUE]...`
 * `c/` and `fd/` must match exactly. `c/` accepts: `UNCATEGORIZED`, `CLIENT`, `INVESTOR`, `LAWYER`, `ACCOUNTANT`, `CONSULTANT`, and `OTHER`.
 * Repeated instances of the same prefix are combined with OR. For example, `find n/Hans Gruber n/Bo Yang` returns contacts whose names contain either `Hans Gruber` or `Bo Yang`.
 * Different prefixes are combined with AND. For example, `find n/Hans com/Example` finds contacts whose name contains `Hans` and whose company contains `Example`.
+* `list` removes the active filter. Successful `add`, `edit`, and `remark` commands also display the complete contact list again. `undo` and `redo` do the same. Check displayed indexes before using another index-based command.
 
 Examples:
 * `find n/John` returns `John Doe` and `Johnny Tan`.
@@ -304,7 +306,7 @@ Deletes the specified contact from ContactFind.
 
 Format: `delete INDEX`, `delete n/NAME`, `delete p/PHONE`, `delete e/EMAIL`, `delete rl/ROLE`, `delete com/COMPANY`, or `delete fd/YYYY-MM-DD`
 
-All keyword parameters must be exact; partial keywords are not supported.
+Contact details must match the entire field; partial values do not match. Name, role, and company matches ignore letter case. Phone numbers must match all digits exactly. Email matches are case-sensitive, so `delete e/NAME@example.com` does not match `name@example.com`.
 
 * `delete INDEX` deletes the contact at the specified index in the current list.
 * `delete p/PHONE` deletes the contact with the exact phone number.
@@ -313,7 +315,7 @@ All keyword parameters must be exact; partial keywords are not supported.
 
 Examples: 
 * `list` followed by `delete 2` deletes the 2nd contact in ContactFind.
-* `find Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
+* `find n/Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
 * `delete p/98765432` deletes the contact whose phone number is exactly `98765432`.
 * `delete e/johnd@example.com` deletes the contact whose email address is exactly `johnd@example.com`.
 * `delete n/John Doe` deletes the contact whose name is exactly `John Doe`.
@@ -359,13 +361,14 @@ Format: `clear`
 
 ### Undoing a change: `undo`
 
-Restores the contact-list state before the most recent saved change. The `add`, `edit`, `delete`, `clear`,
-`remark`, `category`, `interaction`, and `sort` commands create undo checkpoints.
+Restores the contact-list state before the most recent saved change. Successful `add`, `edit`, `clear`, `remark`, and `sort` commands create undo checkpoints, as do contact deletion and interaction logging or deletion. `category` creates a checkpoint when it changes a contact's category. A `delete rl/...` or `delete com/...` preview, assigning a contact its existing category, and failed commands do not create checkpoints. Some successful commands, such as `edit`, `remark`, `clear`, and `sort`, can create a checkpoint even when the resulting data is unchanged.
 
 ContactFind retains up to 50 states, including the current state, allowing at most 49 consecutive undo steps. When
 this limit is exceeded, the oldest state is discarded.
 
-Undo and redo display the complete contact list. Re-check the displayed list before running another index-based
+Undo and redo history lasts only for the current application session. Restarting ContactFind loads the saved contacts but starts a new history, so changes from before the restart cannot be undone or redone.
+
+Undo and redo clear any active `find` filter and display the complete contact list. Re-check the displayed list before running another index-based
 command because a contact's displayed index may have changed.
 
 Format: `undo`
@@ -383,16 +386,14 @@ Exports the currently displayed contacts to a CSV file.
 
 Format: `export`, `export fn/FILENAME`
 
-All keyword parameters must be exact; partial keywords are not supported.
-
 * Exported file is saved in the `data` subfolder of the folder where ContactFind is run. For example, when running the
-  JAR from its containing folder, `export fn/favorites` creates `data/favorites.csv` alongside the JAR's folder.
+  JAR from its containing folder, `export fn/favorites` creates `data/favorites.csv` inside that folder.
 * `export` exports currently displayed contacts to `export.csv`.
 * `export fn/FILENAME` exports currently displayed contacts to `FILENAME.csv`.
 * Currently displayed contacts: all contacts, or the remaining contacts after find is executed.
 * Interaction histories are not included in the exported CSV file.
 * FILENAME can only contain alphanumeric characters, dash and underscore.
-* Trailing ".csv" characters in the input file name will be automatically truncated.
+* One trailing `.csv` suffix is removed from the input file name, ignoring letter case, before `.csv` is added to the output file.
 
 Examples:
 * `export` (default)
@@ -413,12 +414,12 @@ data. If the data file cannot be written, the command reports a storage error. Y
 
 ### Editing the data file
 
-ContactFind data is saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+ContactFind data is saved automatically as a JSON file at `[folder where ContactFind is run]/data/addressbook.json`. With the launch steps above, this is the folder containing the JAR. Advanced users can update data directly by editing that file.
 
 <box type="warning" seamless>
 
 **Caution:**
-If your changes make the data file invalid, ContactFind starts with an empty contact list at the next run. The invalid file remains on disk until a command completes successfully (ContactFind then saves the current data). Still, we recommend backing up the file before editing it.<br>
+If your changes make the data file malformed or invalid, ContactFind displays a startup error, preserves the invalid file as `addressbook.json.corrupted` (or a numbered variant), creates a new empty address book, and starts with an empty contact list. We still recommend backing up the file before editing it.<br>
 Furthermore, certain edits can cause ContactFind to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
