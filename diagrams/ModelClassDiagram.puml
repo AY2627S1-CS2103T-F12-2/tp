@@ -28,7 +28,7 @@ Class Boss
 Class Remark
 Class Category
 Class FollowUpDate
-Class FollowUpDatePredicate
+Class FollowUpDatesPredicate
 
 Class I #FFFFFF
 }
@@ -55,15 +55,15 @@ Person *--> "1" Address
 Person *--> "*" Tag
 Person *--> "1" Role
 Person *--> "1" Company
-Person *--> "0..1" Boss
+Person *--> "1" Boss
 Person *--> "1" Remark
 Person *--> "1" Category
 Person *--> "0..1" FollowUpDate : follow-up date
 Person *--> "0..*" Interaction : history
 Interaction --> "1" InteractionType
 
-FollowUpDatePredicate ..> FollowUpDate
-FollowUpDatePredicate ..> Person
+FollowUpDatesPredicate ..> FollowUpDate
+FollowUpDatesPredicate ..> Person
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
