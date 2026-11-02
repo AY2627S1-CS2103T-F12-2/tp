@@ -314,7 +314,7 @@ Contact details must match the entire field; partial values do not match. Name, 
 * `delete e/EMAIL` deletes the contact with the exact email address.
 * `delete n/NAME` deletes the contact with the exact name.
 
-Examples: 
+Examples:
 * `list` followed by `delete 2` deletes the 2nd contact in ContactFind.
 * `find n/Betsy` followed by `delete 1` deletes the 1st contact in the results of the `find` command.
 * `delete p/98765432` deletes the contact whose phone number is exactly `98765432`.
@@ -355,7 +355,7 @@ Examples:
 * `sort fd/` sorts all contacts by their next follow-up date.
 * `sort fd/desc` sorts all contacts in reverse date order.
 
-### Clearing all entries: `clear`
+### Clearing all contacts: `clear`
 
 Clears all contacts from ContactFind.
 

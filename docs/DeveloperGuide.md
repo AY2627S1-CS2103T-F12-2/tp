@@ -450,7 +450,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1d. No contact matches specified keywords rl/ or com/.
 
-    * 1d1. ContactFind informs user there is no matching contact and 
+    * 1d1. ContactFind informs user there is no matching contact and
       displays an empty list.
 
       Use case ends.
@@ -1003,7 +1003,7 @@ testers are expected to do more *exploratory* testing.
 6. Test case: open `data/test.csv` in Excel (keep it open), then `export fn/test`<br>
    Expected (Windows): An error message says the export file could not be written; the app keeps running.
 
-   
+
 ### Saving data
 
 Back up `data/addressbook.json` before these tests if it contains contacts you want to keep. Run each test from a copy of the application in its own folder.
