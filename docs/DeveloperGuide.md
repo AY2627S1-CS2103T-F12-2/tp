@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# ContactFind Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -13,7 +13,8 @@
 
 ## **Acknowledgements**
 
-* _{List the sources of reused or adapted ideas, code, documentation, and third-party libraries here, with links to the originals.}_
+* ContactFind is based on [AddressBook-Level3](https://github.com/se-edu/addressbook-level3) by the [SE-EDU initiative](https://se-education.org/). Its architecture, documentation structure, and parts of its implementation were adapted for this project.
+* The desktop interface uses [JavaFX](https://openjfx.io/), JSON persistence uses [Jackson](https://github.com/FasterXML/jackson), and the documentation site uses [MarkBind](https://markbind.org/) and [PlantUML](https://plantuml.com/).
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ The following provides a quick overview of the main components and their interac
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2627S1-CS2103T-F12-2/tp/blob/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2627S1-CS2103T-F12-2/tp/blob/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -67,17 +68,17 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2627S1-CS2103T-F12-2/tp/blob/master/src/main/java/seedu/address/ui/Ui.java)
 
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
 The UI consists of a `MainWindow` and its parts, such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, `ContactDashboardPanel`, and `StatusBarFooter`. All of these, including `MainWindow`, inherit from the abstract `UiPart` class, which captures common behavior among classes that represent visible GUI parts.
 
-`MainWindow` uses a permanent two-pane layout. The left pane contains `PersonListPanel`, which displays all contacts as rounded contact cards. The right pane embeds `ContactDashboardPanel` as the Overview pane; the former standalone Dashboard page and Dashboard button are no longer used. The Overview pane displays the total contact count, follow-up count, category counts, and a **One week follow ups** list.
+`MainWindow` uses a permanent two-pane layout. The left pane contains `PersonListPanel`, which displays the current filtered list as rounded contact cards. The right pane embeds `ContactDashboardPanel` as the Overview pane; the former standalone Dashboard page and Dashboard button are no longer used. The Overview pane displays the total contact count, follow-up count, category counts, and a **One week follow ups** list.
 
 `ContactDashboardPanel` refreshes its statistics and deadline list whenever the command result changes. Its deadline list includes contacts with an overdue follow-up date or a follow-up date from today through the next seven days. `DashboardPersonCard` highlights overdue dates in red and dates within the next seven days in yellow. The statistics are computed from the complete contact list, while the deadline list uses this date-based filter.
 
-The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java).
+The `UI` component uses the JavaFX UI framework. The layouts of these UI parts are defined in matching `.fxml` files in `src/main/resources/view`. For example, [`MainWindow.fxml`](https://github.com/AY2627S1-CS2103T-F12-2/tp/blob/master/src/main/resources/view/MainWindow.fxml) specifies the layout of [`MainWindow`](https://github.com/AY2627S1-CS2103T-F12-2/tp/blob/master/src/main/java/seedu/address/ui/MainWindow.java).
 
 The `UI` component,
 
@@ -88,7 +89,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2627S1-CS2103T-F12-2/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -111,7 +112,7 @@ The following sequence diagram shows how the follow-up date filter is parsed and
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, the command is passed to an `AddressBookParser` object, which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
+1. When `Logic` is called upon to execute a command, the command is passed to an `AddressBookParser` object. For commands with arguments, it generally creates a matching parser (e.g., `DeleteCommandParser`) and uses it to parse the command. Commands without arguments, such as `list`, `clear`, `categories`, `undo`, and `redo`, are constructed directly.
 1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
 1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above for simplicity, the code can require several interactions between the command object and the `Model` to complete the operation.
@@ -127,7 +128,7 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 <puml src="diagrams/ParserClasses.puml" width="600"/>
 
 How the parsing works:
-* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name, e.g., `AddCommandParser`). The parser uses the other classes shown above to parse the user command and create an `XYZCommand` object (e.g., `AddCommand`). The `AddressBookParser` returns that object as a `Command` object.
+* For commands that require argument parsing, `AddressBookParser` creates a matching parser (e.g., `AddCommandParser`). That parser creates a `Command` object (e.g., `AddCommand`), which `AddressBookParser` returns. For simple commands such as `list`, `clear`, `categories`, `undo`, and `redo`, `AddressBookParser` constructs the command directly.
 * All `XYZCommandParser` classes, such as `AddCommandParser` and `DeleteCommandParser`, implement the `Parser` interface so they can be treated similarly where appropriate, for example during testing.
 
 #### Edit command and follow-up dates
@@ -137,7 +138,7 @@ How the parsing works:
 Contact identity is name-based through `Person#isSamePerson(Person)`, so the edit duplicate check and its error message refer to duplicate names. The edit success message formats the complete updated contact record, including tags, category, remark, follow-up date, and interaction history.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2627S1-CS2103T-F12-2/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
@@ -160,7 +161,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2627S1-CS2103T-F12-2/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -191,9 +192,7 @@ The undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `Ad
 
 These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
 
-The history retains at most 50 states, including the current state. Undo and redo restore address-book data but not
-the previous filter; both reset the displayed list to all contacts. Users should therefore re-check displayed indexes
-before issuing another index-based command.
+The history retains at most 50 states, including the current state. On each application launch, the history is initialized with only the address book loaded from disk; earlier undo and redo states do not survive a restart. Undo and redo restore address-book data but not the previous filter; both reset the displayed list to all contacts. Users should therefore re-check displayed indexes before issuing another index-based command.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
@@ -289,7 +288,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 ### Interaction history feature
 
-`InteractionCommandParser` parses both logging and deletion under the `interaction` command word. It implements `Parser<Command>`, returning `InteractionCommand` for logging or `DeleteInteractionCommand` for `del/`. Duplicate prefixes and mixing deletion with logging fields are rejected. Notes are optional; prefixes can appear in any order.
+`InteractionCommandParser` parses both logging and deletion under the `interaction` command word. It implements `Parser<Command>`, returning `InteractionCommand` for logging or `DeleteInteractionCommand` for `del/`. Duplicate prefixes and mixing deletion with logging fields are rejected. Notes are optional; prefixes can appear in any order. The tokenizer recognizes `d/`, `ty/`, `nt/`, and `del/` after whitespace even within `nt/NOTE`, so such text is parsed as another prefix rather than as literal note text.
 
 Each `Person` owns an immutable list of `Interaction` records containing a date, type, and note. Both commands select a contact from the displayed list, copy its interactions, and replace the contact using `Person#withInteractions` and `Model#setPerson`. Both call `Model#commitAddressBook` for undo/redo; `LogicManager` then saves the address book.
 
@@ -358,13 +357,13 @@ Interactions export are therefore a planned enhancement, which will write to ano
 * needs a centralised place to record details about each contact, such as their company, role, specialisation and where they met
 * needs to keep track of past interactions and upcoming follow-ups with contacts
 * handles sensitive contact information and prefers it to be stored locally rather than in the cloud
-* often needs to export contact and interaction logs for status reports or client presentations
+* often needs to export contact details for status reports or client presentations; exporting interaction logs is a planned enhancement
 * prefers desktop apps over other types of applications
 * can type fast and prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
 
-**Value proposition**: Manage contacts and log interactions locally faster than with a typical mouse-driven GUI application. Log interactions
+**Value proposition**: Manage contacts, follow-ups, and interaction histories locally using fast, typed commands.
 
 ### User stories
 
@@ -385,6 +384,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | user             | delete contact with name, email, phone, or index            | keep my contacts updated                             |
 | `* *`    | experienced user | bulk delete contacts with same company or role              | quickly keep my contacts relevant                    |
 | `* *`    | user             | export my contacts to a CSV file                            | import my contacts to another application easily     |
+| `* * *`  | user             | log an interaction with a contact                            | retain a record of meetings, calls, and emails       |
+| `* *`    | user             | list a contact's interactions or all interaction histories | review past and planned contact activity             |
+| `* *`    | user             | delete a numbered interaction                               | correct an incorrectly recorded event                |
 
 
 ### Use cases
@@ -396,47 +398,26 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. User requests to add a person and provides the person's details.
-2. ContactFind validates the provided details.
-3. ContactFind adds the person to the contact list.
-4. ContactFind informs the user that the person was successfully added.
-5. ContactFind displays newly added contact.
-Use case ends.
+1. User submits an `add` command with the contact's details.
+2. ContactFind validates the command and details.
+3. ContactFind adds the contact and saves the updated list.
+4. ContactFind confirms the addition and displays the new contact.
 
-**Extensions**:
+    Use case ends.
 
-* 2a. There is a missing field in the command.
+**Extensions**
 
-  * 2a1. ContactFind informs the user of the missing information and the required format.
-  * 2a2. ContactFind requests for contact details
-  * 2a3. User enters new details.
-  Steps 2 - 2a3 repeats until successful.
+* 2a. The command has missing fields, invalid syntax, or invalid details.
 
-    Use case resumes at step 3.
+    * 2a1. ContactFind shows an error with the required format or field constraint.
 
-* 2b. The provided command does not follow the required format.
+      User may correct the command and retry from step 1.
 
-  * 2b1. System displays correct format to use.
-  * 2b2. System requests for contact details.
-  * 2b3. User enters command again.
-  Steps 2 - 2b3 repeat until successful.
+* 3a. A contact with the same name already exists.
 
-  Use case resumes at step 3.
+    * 3a1. ContactFind shows a duplicate-contact error.
 
-* 2c. One or more details are invalid.
-
-    * 2c1. ContactFind informs the user of the invalid field and its required format.
-    * 2c2. ContactFind requests for contact details.
-    * 2c3. User enters correct details.
-    Steps 2 to 2c3 repeats until successful.
-
-    Use case resumes at step 3.
-
-* 3a. A contact with the same name already exists in the contact list.
-
-    * 3a1. ContactFind informs the user that the contact already exists.
-
-    Use case resumes at step 1.
+      User may correct the command and retry from step 1.
 
 **Use case: Delete a contact**
 
@@ -497,22 +478,22 @@ Use case ends.
 
 **MSS**
 
-1. User requests to find contacts using one or more search criteria.
-2. ContactFind displays contacts that match every supplied criterion.
+1. User requests to find contacts using one or more supported prefixes and values.
+2. ContactFind displays contacts matching at least one value for each supplied prefix and every different prefix (OR within a field, AND across fields).
 
     Use case ends.
 
 **Extensions**
 
-* 1a. No contacts match the search criteria.
+* 2a. No contacts match the search criteria.
 
-    * 1a1. ContactFind displays an empty contact list.
+    * 2a1. ContactFind displays an empty contact list.
 
       Use case ends.
 
-* 1b. The search criteria are missing or invalid.
+* 1a. The search criteria are missing or invalid, including invalid follow-up dates.
 
-    * 1b1. ContactFind shows an error message.
+    * 1a1. ContactFind shows an error message.
 
       Use case resumes at step 1.
 
@@ -716,13 +697,13 @@ Use case ends.
 
     * 3a1. ContactFind shows an error message
 
-      Use case resumes at step 2.
+      Use case resumes at step 3.
 
 * 3b. The given index is invalid.
 
     * 3b1. ContactFind shows an error message.
 
-      Use case resumes at step 2.
+      Use case resumes at step 3.
 
 **Use case: List contacts**
 
@@ -732,29 +713,6 @@ Use case ends.
 2. ContactFind displays all contacts.
 
     Use case ends.
-
-**Use case: Find contacts**
-
-**MSS**
-
-1. User requests to find contacts using a supported field and one or more keywords.
-2. ContactFind displays contacts whose selected field matches at least one keyword.
-
-    Use case ends.
-
-**Extensions**
-
-* 1a. The command has invalid syntax, an unsupported field, or an invalid follow-up date.
-
-    * 1a1. ContactFind shows an error message with the required format.
-
-      Use case resumes at step 1.
-
-* 2a. No contacts match the search.
-
-    * 2a1. ContactFind displays an empty contact list.
-
-      Use case ends.
 
 **Use case: Add or remove a remark**
 
@@ -845,7 +803,7 @@ Use case ends.
 **MSS**
 
 1. User requests to export the currently displayed contacts.
-2. ContactFind exports all contacts.
+2. ContactFind writes the currently displayed contacts to a CSV file in the `data` folder.
 
     Use case ends.
 
@@ -859,13 +817,13 @@ Use case ends.
 
 * 1b. The user specifies a destination file name.
 
-    * 1b1. ContactFind exports contact with specified file name.
+    * 1b1. ContactFind exports the displayed contacts using the specified file name.
 
-      Use case resumes at step 2.
+      Use case ends.
 
 * 2a. No contacts are currently displayed.
 
-    * 2a1. ContactFind exports an empty contact list.
+    * 2a1. ContactFind creates a CSV file containing only the header row.
 
       Use case ends.
 
@@ -875,16 +833,16 @@ Use case ends.
 1.  Should work on any _mainstream OS_ as long as it has Java `25` or above installed.
 2.  Should be able to hold up to 1000 persons without noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-4. Any command being executed through the CLI should complete within 100 miliseconds with up to 1000 persons in the address book.
+4. Any command being executed through the CLI should complete within 100 milliseconds with up to 1000 persons in the address book.
 5. The application should be ready to use within 5 seconds of launch on a typical modern computer with a mainstream OS.
 6. The system should be usable by a new user without any training or prior experience with the system.
 7. The application must store all data in a human-readable format.
-8. The application store all data on local disk, and not on any remote server or cloud service.
+8. The application stores all data on local disk, and not on any remote server or cloud service.
 9. The application should not require an internet connection to function.
 10. The data stored locally should not exceed 10MB for 1000 persons in the address book.
 11. RAM usage should not exceed 150MB for 1000 persons in the address book.
-12. Write operations to the data file should be atomic, if the application crashes during a write operation, the data file should not be corrupted.
-13. The application should have zero external dependencies, and should not require any installation of additional software or libraries.
+12. Data-file write failures should produce an error message. Writes currently target the destination file directly, so a crash during a write can leave a partial file.
+13. No additional software is required after installing the supported Java runtime.
 
 ### Glossary
 * **API (Application Programming Interface)**: A set of specifications, rules, and methods that components use to communicate and interact with each other without exposing internal implementation details.
@@ -893,7 +851,7 @@ Use case ends.
 * **Command**: An executable action initiated by the user (such as `add`, `delete`, `undo`, `redo`) that modifies the state of the model or queries stored information.
 * **FXML**: An XML-based markup language provided by JavaFX to define the structure and layout of user interface views separately from application logic.
 * **GUI (Graphical User Interface)**: A visual display interface through which users interact with the app via windows, buttons, text fields, and panels.
-* **JavaFX**: The open-source client application platform and GUI framework used to build the AB-3 desktop interface.
+* **JavaFX**: The open-source client application platform and GUI framework used to build the ContactFind desktop interface.
 * **JSON (JavaScript Object Notation)**: A lightweight, human-readable text format used by the `Storage` component to persist address book data and user preferences to disk.
 * **Mainstream OS**: Windows, Linux, Unix, or macOS operating systems capable of running Java standard runtime environments.
 * **MSS (Main Success Scenario)**: The straightforward path in a use case where the user achieves their goal without encountering errors or edge cases.
@@ -902,9 +860,9 @@ Use case ends.
 * **PlantUML**: A tool and domain-specific language used to generate software diagrams (such as class, sequence, and activity diagrams) from plain-text descriptions.
 * **Private contact detail**: A contact attribute (e.g., specific tags, unlisted phone number) intended for restricted access rather than general sharing.
 * **Sequence Diagram**: A UML interaction diagram depicting how components and objects interact across time via method invocations.
-* **State**: A snapshot of all active `Person` entries and settings held in memory at a specific point in time.
+* **State**: A snapshot of address-book data, including its contacts and their details, used by `VersionedAddressBook` for undo and redo. GUI settings, the active filter, and delete-preview scope are not included.
 * **UiPart**: The base abstract class in the UI layer that encapsulates common behavior for visible GUI elements and links them to corresponding `.fxml` files.
-* **VersionedAddressBook**: An extension of `AddressBook` that maintains a history of past application states (`addressBookStateList`) and a pointer (`currentStatePointer`) to support undo and redo operations.
+* **VersionedAddressBook**: An extension of `AddressBook` that maintains a history of address-book states (`addressBookStateList`) and a pointer (`currentStatePointer`) to support undo and redo operations.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1041,13 +999,21 @@ testers are expected to do more *exploratory* testing.
    
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+Back up `data/addressbook.json` before these tests if it contains contacts you want to keep. Run each test from a copy of the application in its own folder.
+
+1. Missing data file
+
+   1. Close ContactFind and remove `data/addressbook.json` from the test folder. Relaunch the app.<br>
+      Expected: ContactFind starts with sample contacts. After a successful command, it creates `data/addressbook.json` with the current contacts.
+
+2. Corrupted data file
 
    1. Close ContactFind and back up `data/addressbook.json`.
    2. Replace its contents with malformed JSON, such as `not valid json`, or valid JSON containing invalid contact data.
    3. Launch ContactFind.
    4. Expected: ContactFind displays a recovery error, preserves the invalid file as `addressbook.json.corrupted` (or a numbered variant), creates a new empty address book, and starts with an empty contact list.
 
-1. _{ more test cases … }_
-          
+3. Persisting contact and interaction data
 
+   1. Start with a valid data file. Enter `clear`, then `add n/Mira Chen p/90000007 e/mira@example.com a/7 Maple Road rl/Analyst com/Orion Bank`, then `interaction 1 d/2026-10-20 ty/CALL nt/Introduced team`. Close and relaunch the app.<br>
+      Expected: Mira and the CALL interaction are restored from `data/addressbook.json`. The previous session's undo history is unavailable after relaunch.
