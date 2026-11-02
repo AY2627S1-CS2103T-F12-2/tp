@@ -247,6 +247,7 @@ Format: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`
 * `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
 * `NOTE` is optional and can be empty. Logging prefixes may appear in any order. Recognised prefixes (`d/`, `ty/`, `nt/`, `del/`) after whitespace are interpreted as prefixes, even within notes.
 * Each interaction is added to the contact's history; existing interactions are kept.
+* Logging or deleting an interaction keeps the current `find` filter, so the displayed contact indexes remain unchanged.
 * Identical interactions are allowed because separate interactions can have the same details.
 * Adding sorts the contact's interactions by date, latest first. Interactions on the same date retain their existing
   order because interaction times are not recorded.
