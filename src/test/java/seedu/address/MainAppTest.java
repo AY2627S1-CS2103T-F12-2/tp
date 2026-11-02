@@ -3,6 +3,7 @@ package seedu.address;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -10,7 +11,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -155,6 +159,32 @@ public class MainAppTest {
         assertTrue(model.getUnfilteredPersonList().isEmpty());
         assertTrue(Files.exists(testFolder.resolve("addressbook.json.corrupted")));
         assertEquals("not valid json", Files.readString(testFolder.resolve("addressbook.json.corrupted")));
+    }
+
+    @Test
+    public void initModelManager_backupFails_preservesInvalidFile() throws Exception {
+        Path dataFolder = testFolder.resolve("readOnlyData");
+        Files.createDirectory(dataFolder);
+        Path addressBookPath = dataFolder.resolve("addressbook.json");
+        Files.writeString(addressBookPath, "not valid json");
+
+        assumeTrue(Files.getFileAttributeView(dataFolder, PosixFileAttributeView.class) != null,
+                "POSIX permissions are required for this test");
+        Set<PosixFilePermission> originalPermissions = Files.getPosixFilePermissions(dataFolder);
+        try {
+            Files.setPosixFilePermissions(dataFolder,
+                    Set.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_EXECUTE));
+            MainApp mainApp = new MainApp();
+            Model model = invokeInitModelManager(mainApp, createStorage(addressBookPath));
+
+            assertTrue(model.getUnfilteredPersonList().isEmpty());
+            assertEquals("Error: The address book file was corrupted or contained invalid data. "
+                    + "The invalid file was preserved, but a new file could not be created.",
+                    getRecoveryMessage(mainApp));
+            assertEquals("not valid json", Files.readString(addressBookPath));
+        } finally {
+            Files.setPosixFilePermissions(dataFolder, originalPermissions);
+        }
     }
 
     private Storage createStorage(Path addressBookPath) {
