@@ -153,7 +153,10 @@ The `Model` component,
 
 <box type="info" seamless>
 
-**Note:** The alternative, arguably more object-oriented, design below keeps a unique list of tags in `AddressBook`, and each `Person` references tags from that list. This lets `AddressBook` maintain one `Tag` object per unique tag instead of each `Person` holding its own `Tag` objects.<br>
+**Note:** The diagram below is a simplified view of the contact data. `AddressBook` owns the
+`UniquePersonList`; each `Person` has its own tags and core contact fields, with an optional
+follow-up date. Tags are therefore unique within a contact's tag set, not managed as a global
+list.<br>
 
 <puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 </box>
@@ -298,7 +301,7 @@ saved histories. Equal-date records retain their relative order because interact
 interactions are preserved because separate events can have identical details. `JsonAdaptedInteraction` handles
 conversion of individual records.
 
-`InteractionsCommand` lists all contacts' histories from the unfiltered list, or one contact's history using the displayed index. Entries are grouped by contact and numbered from 1 in stored order, matching deletion indexes. These numbers are positions and may change after additions or deletions. Names come from the owning contact, so renaming a contact also updates the displayed interaction heading.
+`InteractionsCommand` lists every interaction from the unfiltered list, or one contact's history using the displayed index. Each entry includes its owning contact's name and is numbered from 1 in that contact's stored order, matching deletion indexes. These numbers are positions and may change after additions or deletions. Renaming a contact is reflected in its interaction entries.
 
 ### Export feature
 
@@ -590,7 +593,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1. User requests to view recorded interactions.
-2. ContactFind shows recorded interactions across all contacts, including hidden contacts, grouped by contact and latest first. Numbering starts at 1 for each contact.
+2. ContactFind shows recorded interactions across all contacts, including hidden contacts. Each entry includes its contact's name; entries are latest first within each contact and numbering starts at 1 for each contact.
 
    Use case ends.
 
