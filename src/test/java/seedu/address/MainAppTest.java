@@ -33,12 +33,18 @@ public class MainAppTest {
     public void initModelManager_invalidJson_createsEmptyAddressBookFile() throws Exception {
         Path addressBookPath = testFolder.resolve("addressbook.json");
         Files.writeString(addressBookPath, "not valid json");
+        Path existingBackupPath = testFolder.resolve("addressbook.json.corrupted");
+        Files.writeString(existingBackupPath, "previous backup");
         Storage storage = createStorage(addressBookPath);
 
         Model model = invokeInitModelManager(new MainApp(), storage);
 
         assertTrue(model.getUnfilteredPersonList().isEmpty());
         assertEmptyAddressBookFile(storage);
+        Path backupPath = testFolder.resolve("addressbook.json.corrupted.1");
+        assertTrue(Files.exists(backupPath));
+        assertEquals("not valid json", Files.readString(backupPath));
+        assertEquals("previous backup", Files.readString(existingBackupPath));
     }
 
     @Test
@@ -51,6 +57,9 @@ public class MainAppTest {
 
         assertTrue(model.getUnfilteredPersonList().isEmpty());
         assertEmptyAddressBookFile(storage);
+        Path backupPath = testFolder.resolve("addressbook.json.corrupted");
+        assertTrue(Files.exists(backupPath));
+        assertEquals("{}", Files.readString(backupPath));
     }
 
     @Test

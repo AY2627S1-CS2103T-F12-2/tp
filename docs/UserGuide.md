@@ -418,7 +418,7 @@ ContactFind data is saved automatically as a JSON file `[JAR file location]/data
 <box type="warning" seamless>
 
 **Caution:**
-If your changes make the data file invalid, ContactFind starts with an empty contact list at the next run. The invalid file remains on disk until a command completes successfully (ContactFind then saves the current data). Still, we recommend backing up the file before editing it.<br>
+If your changes make the data file malformed or invalid, ContactFind displays a startup error, preserves the invalid file as `addressbook.json.corrupted` (or a numbered variant), creates a new empty address book, and starts with an empty contact list. We still recommend backing up the file before editing it.<br>
 Furthermore, certain edits can cause ContactFind to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
