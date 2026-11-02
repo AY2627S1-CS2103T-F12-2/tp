@@ -442,35 +442,42 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-* 1c. No contact matches specified keywords.
+* 1c. No contact matches specified keywords n/, p/, e/ or fd/.
 
     * 1c1. ContactFind informs user there is no matching contact.
 
       Use case ends.
 
-* 1d. User requests to delete contacts by exact role or company.
+* 1d. No contact matches specified keywords rl/ or com/.
 
-    * 1d1. ContactFind displays matching contacts without deleting them.
-    * 1d2. User requests to delete all contacts with specified role or company.
-    * 1d3. ContactFind deletes every contact in the preview and shows a confirmation.
-
-      Use case ends.
-
-* 1e. User requests to delete contacts by exact role or company, then deletes one contact in the preview by index, name, phone number, or email address.
-
-    * 1e1. ContactFind deletes that contact and keeps the remaining preview displayed.
+    * 1d1. ContactFind informs user there is no matching contact and 
+      displays an empty list.
 
       Use case ends.
 
-* 1f. User requests to delete contacts by follow-up date.
+* 1e. User requests to delete contacts by exact role or company.
 
-    * 1f1. ContactFind deletes contacts in the current displayed list whose follow-up date exactly matches the given date and shows a confirmation.
+    * 1e1. ContactFind displays matching contacts without deleting them.
+    * 1e2. User requests to delete all contacts with specified role or company.
+    * 1e3. ContactFind deletes every contact in the preview and shows a confirmation.
 
       Use case ends.
 
-* 1g. The command syntax is invalid.
+* 1f. User requests to delete contacts by exact role or company, then deletes one contact in the preview by index, name, phone number, or email address.
 
-    * 1g1. ContactFind shows an error message with the required format.
+    * 1f1. ContactFind deletes that contact and keeps the remaining preview displayed.
+
+      Use case ends.
+
+* 1g. User requests to delete contacts by follow-up date.
+
+    * 1g1. ContactFind deletes contacts in the current displayed list whose follow-up date exactly matches the given date and shows a confirmation.
+
+      Use case ends.
+
+* 1h. The command syntax is invalid.
+
+    * 1h1. ContactFind shows an error message with the required format.
 
       Use case resumes at step 1.
 
@@ -636,7 +643,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1a. The user enters an unknown command.
 
-    * 1a1. ContactFind shows an error message and suggests using the help command.
+    * 1a1. ContactFind shows an error message: Unknown command.
 
       Use case resumes at step 1.
 
