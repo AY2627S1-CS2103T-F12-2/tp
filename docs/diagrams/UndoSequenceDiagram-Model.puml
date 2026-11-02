@@ -17,6 +17,8 @@ VersionedAddressBook -> VersionedAddressBook :resetData(ReadOnlyAddressBook)
 VersionedAddressBook --> Model :
 deactivate VersionedAddressBook
 
+Model -> Model : updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS)
+
 [<-- Model
 deactivate Model
 
