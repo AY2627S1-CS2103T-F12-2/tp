@@ -66,6 +66,10 @@ public class JsonUtil {
             throw new DataLoadingException(e);
         }
 
+        if (jsonFile == null) {
+            throw new DataLoadingException(new IOException("JSON file contains no data."));
+        }
+
         return Optional.of(jsonFile);
     }
 

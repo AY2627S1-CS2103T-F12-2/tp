@@ -173,6 +173,33 @@ public class ContactDashboardPanelTest {
         });
     }
 
+    @Test
+    public void startupRecoveryMessage_isDisplayed() throws Exception {
+        StubLogic logic = new StubLogic(FXCollections.observableArrayList(), new GuiSettings());
+
+        runOnFxThread(() -> {
+            UiManager defaultUiManager = new UiManager(logic, Path.of("build/test-addressbook.json"));
+            assert defaultUiManager != null;
+
+            UiManager uiManager = new UiManager(logic, Path.of("build/test-addressbook.json"),
+                    "recovery message");
+            assert uiManager != null;
+            Stage uiStage = new Stage();
+            uiManager.start(uiStage);
+            uiStage.hide();
+
+            MainWindow mainWindow = new MainWindow(new Stage(), logic, Path.of("build/test-addressbook.json"),
+                    "recovery message");
+            mainWindow.fillInnerParts();
+
+            ResultDisplay resultDisplay = getField(mainWindow, "resultDisplay", ResultDisplay.class);
+            TextArea resultTextArea = getField(resultDisplay, "resultDisplay", TextArea.class);
+            assert resultTextArea.getText().equals("recovery message");
+
+            closeWindow(mainWindow);
+        });
+    }
+
     private static MainWindow createMainWindow(Logic logic) {
         return new MainWindow(new Stage(), logic, Path.of("build/test-addressbook.json"));
     }
