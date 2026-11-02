@@ -153,10 +153,7 @@ The `Model` component,
 
 <box type="info" seamless>
 
-**Note:** The diagram below is a simplified view of the contact data. `AddressBook` owns the
-`UniquePersonList`; each `Person` has its own tags and core contact fields, with an optional
-follow-up date. Tags are therefore unique within a contact's tag set, not managed as a global
-list.<br>
+**Note:** The diagram below is a simplified view of the contact data. `AddressBook` owns the `UniquePersonList`; each `Person` has its own tags and core contact fields, with an optional follow-up date. Tags are therefore unique within a contact's tag set, not managed as a global list.<br>
 
 <puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 </box>
