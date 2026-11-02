@@ -264,9 +264,9 @@ Examples:
 Within each contact, recorded interactions are ordered by date from latest to earliest.
 
 Formats:
-* `interactions` lists interactions for all contacts, including contacts hidden by the current filter. Entries are
-  grouped by contact and numbered from 1 within each contact. It shows `No interactions recorded.` when there are no
-  recorded interactions.
+* `interactions` lists interactions for all contacts, including contacts hidden by the current filter. Each entry
+  includes its contact's name and is numbered from 1 within that contact. It shows `No interactions recorded.` when
+  there are no recorded interactions.
 * `interactions INDEX` lists only the specified contact's interactions. `INDEX` refers to the currently displayed
   contact list, including any active `find` filter. It shows `No interactions recorded with NAME.` when that contact
   has no interactions.
