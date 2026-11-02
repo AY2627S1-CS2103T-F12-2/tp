@@ -1,0 +1,64 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ExportCommandParser" as ExportCommandParser LOGIC_COLOR
+participant "e:ExportCommand" as ExportCommand LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+participant "CsvUtil" as CsvUtil
+participant "FileUtil" as FileUtil
+participant "s:Storage" as Storage
+
+[-> LogicManager : execute("export fn/clients")
+activate LogicManager
+LogicManager -> AddressBookParser : parseCommand("export fn/clients")
+activate AddressBookParser
+AddressBookParser -> ExportCommandParser : parse("fn/clients")
+activate ExportCommandParser
+create ExportCommand
+ExportCommandParser -> ExportCommand : new("clients")
+ExportCommand --> ExportCommandParser : e
+ExportCommandParser --> AddressBookParser : e
+deactivate ExportCommandParser
+AddressBookParser --> LogicManager : e
+deactivate AddressBookParser
+
+LogicManager -> ExportCommand : execute(m)
+activate ExportCommand
+ExportCommand -> Model : getFilteredPersonList()
+activate Model
+Model --> ExportCommand : displayedPersons
+deactivate Model
+loop for each displayed contact
+    ExportCommand -> CsvUtil : toRow(contact fields)
+    CsvUtil --> ExportCommand : CSV row
+end
+ExportCommand -> CsvUtil : writeCsv(data/clients.csv, content)
+activate CsvUtil
+CsvUtil -> FileUtil : createIfMissing(path)
+FileUtil --> CsvUtil
+CsvUtil -> FileUtil : writeToFile(path, content)
+FileUtil --> CsvUtil
+CsvUtil --> ExportCommand
+deactivate CsvUtil
+ExportCommand --> LogicManager : CommandResult
+deactivate ExportCommand
+LogicManager -> Model : getAddressBook()
+activate Model
+Model --> LogicManager : addressBook
+deactivate Model
+LogicManager -> Storage : saveAddressBook(addressBook)
+activate Storage
+Storage --> LogicManager
+deactivate Storage
+[<--LogicManager : CommandResult
+deactivate LogicManager
+@enduml

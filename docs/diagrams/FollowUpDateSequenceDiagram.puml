@@ -13,7 +13,7 @@ end box
 
 box Model MODEL_COLOR_T1
 participant "d:FollowUpDate" as FollowUpDate MODEL_COLOR
-participant "p:FollowUpDatePredicate" as FollowUpDatePredicate MODEL_COLOR
+participant "p:FollowUpDatesPredicate" as FollowUpDatesPredicate MODEL_COLOR
 participant ":Model" as Model MODEL_COLOR
 end box
 
@@ -39,11 +39,11 @@ activate FollowUpDate
 FollowUpDate --> FindCommandParser : date
 deactivate FollowUpDate
 
-create FollowUpDatePredicate
-FindCommandParser -> FollowUpDatePredicate : new(date)
-activate FollowUpDatePredicate
-FollowUpDatePredicate --> FindCommandParser : predicate
-deactivate FollowUpDatePredicate
+create FollowUpDatesPredicate
+FindCommandParser -> FollowUpDatesPredicate : new(List.of(date))
+activate FollowUpDatesPredicate
+FollowUpDatesPredicate --> FindCommandParser : predicate
+deactivate FollowUpDatesPredicate
 
 create FindCommand
 FindCommandParser -> FindCommand : new(predicate)
