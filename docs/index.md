@@ -1,3 +1,8 @@
+---
+  layout: default.md
+  title: ""
+---
+
 # ContactFind
 
 [![CI Status](https://github.com/AY2627S1-CS2103T-F12-2/tp/workflows/Java%20CI/badge.svg)](https://github.com/AY2627S1-CS2103T-F12-2/tp/actions)
