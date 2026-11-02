@@ -31,10 +31,25 @@ deactivate AddressBookParser
 LogicManager -> CategoryCommand : execute(model)
 activate CategoryCommand
 
-CategoryCommand -> Model : setPerson(personToCategorize,\neditedPerson)
+CategoryCommand -> Model : getFilteredPersonList()
 activate Model
-Model --> CategoryCommand
+Model --> CategoryCommand : shownPersons
 deactivate Model
+
+CategoryCommand -> CategoryCommand : personToCategorize = shownPersons.get(index)
+alt category changes
+    CategoryCommand -> Model : setPerson(personToCategorize,\neditedPerson)
+    activate Model
+    Model --> CategoryCommand
+    deactivate Model
+
+    CategoryCommand -> Model : commitAddressBook("category")
+    activate Model
+    Model --> CategoryCommand
+    deactivate Model
+else already in category
+    CategoryCommand --> CategoryCommand : return unchanged result
+end
 
 CategoryCommand --> LogicManager : result
 deactivate CategoryCommand
