@@ -13,7 +13,7 @@ public class ExportCommandParser implements Parser<ExportCommand> {
     public static final String FILE_NAME_VALIDATION_REGEX = "[A-Za-z0-9_-]+";
     public static final String DEFAULT_FILE_NAME = "export";
     public static final String MESSAGE_INVALID_FILE_NAME =
-            "Invalid file name! Use letters, digits, '-' or '_' only, without '.csv'.";
+            "Invalid file name! Use letters, digits, '-' or '_' only.";
 
     @Override
     public ExportCommand parse(String args) throws ParseException {

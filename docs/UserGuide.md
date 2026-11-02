@@ -78,7 +78,7 @@ The follow-up list is integrated into the Overview pane; there is no separate Da
 
 * `INDEX` refers to the index number shown in the displayed contact list. It **must be a positive integer** 1, 2, 3, ...
 
-* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `categories`, `exit`, and `clear`, are ignored.<br>
+* Extraneous parameters for commands that take no parameters, such as `help`, `list`, `categories`, `undo`, `redo`, `exit`, and `clear`, are ignored.<br>
   For example, `help 123` is interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
@@ -247,6 +247,7 @@ Format: `interaction INDEX d/DATE ty/TYPE [nt/NOTE]`
 * `TYPE` must be one of `MEETING`, `CALL`, `EMAIL`, `PRESENTATION` (case-insensitive).
 * `NOTE` is optional and can be empty. Logging prefixes may appear in any order. Recognised prefixes (`d/`, `ty/`, `nt/`, `del/`) after whitespace are interpreted as prefixes, even within notes.
 * Each interaction is added to the contact's history; existing interactions are kept.
+* Logging or deleting an interaction keeps the current `find` filter, so the displayed contact indexes remain unchanged.
 * Identical interactions are allowed because separate interactions can have the same details.
 * Adding sorts the contact's interactions by date, latest first. Interactions on the same date retain their existing
   order because interaction times are not recorded.
@@ -331,6 +332,7 @@ Format: `delete rl/ROLE` or `delete com/COMPANY`
 * Entering any successfully parsed command other than `delete` cancels the active preview, even if the displayed list
   does not change or that command later fails. This treats another command as a change in user intention. Run the
   preview command again before using `delete all`.
+* If no contacts with specified features are found, displays an empty to-be-deleted list.
 
 `delete fd/YYYY-MM-DD` is also a bulk-delete command: it immediately deletes every contact displayed in the current list whose follow-up date exactly matches the date.
 

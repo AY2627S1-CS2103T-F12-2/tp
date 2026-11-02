@@ -274,7 +274,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 #### Implementation
 
-`category INDEX c/CATEGORY` is parsed by `CategoryCommandParser`. `CategoryCommand` selects the person at the displayed index, creates a copy with the new category, and replaces the original through `Model#setPerson`. Other person details are preserved.
+`category INDEX c/CATEGORY` is parsed by `CategoryCommandParser`. `CategoryCommand` selects the person at the displayed index, creates a copy with the new category, and replaces the original through `Model#setPerson`. Other person details and the active filter are preserved. If the updated contact no longer matches that filter, it disappears from the displayed list.
 
 <puml src="diagrams/CategorySequenceDiagram-Logic.puml" width="500" />
 
@@ -290,7 +290,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 `InteractionCommandParser` parses both logging and deletion under the `interaction` command word. It implements `Parser<Command>`, returning `InteractionCommand` for logging or `DeleteInteractionCommand` for `del/`. Duplicate prefixes and mixing deletion with logging fields are rejected. Notes are optional; prefixes can appear in any order. The tokenizer recognizes `d/`, `ty/`, `nt/`, and `del/` after whitespace even within `nt/NOTE`, so such text is parsed as another prefix rather than as literal note text.
 
-Each `Person` owns an immutable list of `Interaction` records containing a date, type, and note. Both commands select a contact from the displayed list, copy its interactions, and replace the contact using `Person#withInteractions` and `Model#setPerson`. Both call `Model#commitAddressBook` for undo/redo; `LogicManager` then saves the address book.
+Each `Person` owns an immutable list of `Interaction` records containing a date, type, and note. Both commands select a contact from the displayed list, copy its interactions, and replace the contact using `Person#withInteractions` and `Model#setPerson`. They preserve the active filter because interaction data does not affect any search predicate. Both call `Model#commitAddressBook` for undo/redo; `LogicManager` then saves the address book.
 
 Logging accepts both past and future dates, allowing interactions to represent completed or planned events. It sorts
 the contact's history by date, latest first. `JsonAdaptedPerson#toModelType` applies the same ordering when loading
@@ -442,35 +442,42 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-* 1c. No contact matches specified keywords.
+* 1c. No contact matches specified keywords n/, p/, e/ or fd/.
 
     * 1c1. ContactFind informs user there is no matching contact.
 
       Use case ends.
 
-* 1d. User requests to delete contacts by exact role or company.
+* 1d. No contact matches specified keywords rl/ or com/.
 
-    * 1d1. ContactFind displays matching contacts without deleting them.
-    * 1d2. User requests to delete all contacts with specified role or company.
-    * 1d3. ContactFind deletes every contact in the preview and shows a confirmation.
-
-      Use case ends.
-
-* 1e. User requests to delete contacts by exact role or company, then deletes one contact in the preview by index, name, phone number, or email address.
-
-    * 1e1. ContactFind deletes that contact and keeps the remaining preview displayed.
+    * 1d1. ContactFind informs user there is no matching contact and 
+      displays an empty list.
 
       Use case ends.
 
-* 1f. User requests to delete contacts by follow-up date.
+* 1e. User requests to delete contacts by exact role or company.
 
-    * 1f1. ContactFind deletes contacts in the current displayed list whose follow-up date exactly matches the given date and shows a confirmation.
+    * 1e1. ContactFind displays matching contacts without deleting them.
+    * 1e2. User requests to delete all contacts with specified role or company.
+    * 1e3. ContactFind deletes every contact in the preview and shows a confirmation.
 
       Use case ends.
 
-* 1g. The command syntax is invalid.
+* 1f. User requests to delete contacts by exact role or company, then deletes one contact in the preview by index, name, phone number, or email address.
 
-    * 1g1. ContactFind shows an error message with the required format.
+    * 1f1. ContactFind deletes that contact and keeps the remaining preview displayed.
+
+      Use case ends.
+
+* 1g. User requests to delete contacts by follow-up date.
+
+    * 1g1. ContactFind deletes contacts in the current displayed list whose follow-up date exactly matches the given date and shows a confirmation.
+
+      Use case ends.
+
+* 1h. The command syntax is invalid.
+
+    * 1h1. ContactFind shows an error message with the required format.
 
       Use case resumes at step 1.
 
@@ -636,7 +643,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1a. The user enters an unknown command.
 
-    * 1a1. ContactFind shows an error message and suggests using the help command.
+    * 1a1. ContactFind shows an error message: Unknown command.
 
       Use case resumes at step 1.
 
