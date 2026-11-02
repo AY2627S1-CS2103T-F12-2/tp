@@ -274,7 +274,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 #### Implementation
 
-`category INDEX c/CATEGORY` is parsed by `CategoryCommandParser`. `CategoryCommand` selects the person at the displayed index, creates a copy with the new category, and replaces the original through `Model#setPerson`. Other person details are preserved.
+`category INDEX c/CATEGORY` is parsed by `CategoryCommandParser`. `CategoryCommand` selects the person at the displayed index, creates a copy with the new category, and replaces the original through `Model#setPerson`. Other person details and the active filter are preserved. If the updated contact no longer matches that filter, it disappears from the displayed list.
 
 <puml src="diagrams/CategorySequenceDiagram-Logic.puml" width="500" />
 
@@ -290,7 +290,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 `InteractionCommandParser` parses both logging and deletion under the `interaction` command word. It implements `Parser<Command>`, returning `InteractionCommand` for logging or `DeleteInteractionCommand` for `del/`. Duplicate prefixes and mixing deletion with logging fields are rejected. Notes are optional; prefixes can appear in any order. The tokenizer recognizes `d/`, `ty/`, `nt/`, and `del/` after whitespace even within `nt/NOTE`, so such text is parsed as another prefix rather than as literal note text.
 
-Each `Person` owns an immutable list of `Interaction` records containing a date, type, and note. Both commands select a contact from the displayed list, copy its interactions, and replace the contact using `Person#withInteractions` and `Model#setPerson`. Both call `Model#commitAddressBook` for undo/redo; `LogicManager` then saves the address book.
+Each `Person` owns an immutable list of `Interaction` records containing a date, type, and note. Both commands select a contact from the displayed list, copy its interactions, and replace the contact using `Person#withInteractions` and `Model#setPerson`. They preserve the active filter because interaction data does not affect any search predicate. Both call `Model#commitAddressBook` for undo/redo; `LogicManager` then saves the address book.
 
 Logging accepts both past and future dates, allowing interactions to represent completed or planned events. It sorts
 the contact's history by date, latest first. `JsonAdaptedPerson#toModelType` applies the same ordering when loading
