@@ -26,7 +26,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/wellbakedquiche.png" width="200px">
 
-[[github](https://github.com/wellbakedquiche)] [[portfolio](team/johndoe.md)]
+[[github](https://github.com/wellbakedquiche)] 
 
 * Role: Developer
 * Responsibilities: Data
@@ -36,7 +36,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/of89p.png" width="200px">
 
 [[github](http://github.com/of89p)]
-[[portfolio](team/johndoe.md)]
 
 ### Claire Phay
 
